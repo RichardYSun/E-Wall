@@ -1,22 +1,29 @@
+import os
+
 import cv2
 
 from game.cv import CVer
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+print(ROOT_DIR + '/test.png')
+tmp = cv2.imread(ROOT_DIR + '/test.png')
 
+def test(G, still=True):
+    def getImg():
+        if not still:
+            ret, frame = cap.read()
+            return frame
+        else:
+            return tmp
 
-def test(G):
     cap = cv2.VideoCapture(0)
 
     cver = CVer()
-
-    ret, frame = cap.read()
-    mp = cver.do_cv(frame)
-
+    mp = cver.do_cv(getImg())
     game = G(mp)
 
     while True:
-        ret, frame = cap.read()
 
-        mp = cver.do_cv(frame)
+        mp = cver.do_cv(getImg())
         game.update_map(mp)
         game.update_game([], 0)
 

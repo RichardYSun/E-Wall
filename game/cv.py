@@ -10,6 +10,5 @@ class CVer:
         pass
 
     def do_cv(self, img) -> CVMap:
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        edge = cv2.Canny(gray, self.lower, self.higher)
+        edge = cv2.Canny(img, self.lower, self.higher)
         return CVMap(edge)
