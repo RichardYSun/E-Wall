@@ -1,7 +1,21 @@
+import cv2
+from game.test import test
+
 class Falling(Game):
+
+    class Circle:
+        def __init__(self, x, y, r):
+            self.x=x
+            self.y=y
+            self.r=r
+
+    def draw_circle(c:Circle):
+        cv2.circle(self.map.edges,CVPoint(c.x, c.y), c.r, 255)
     
     def update_game(self, keys, delta_t:int):
-        pass
+        if self.map is None:
+            return
+        
+
     
-    def update_map(self, cv_map: CVMap):
-        pass
+test(Falling)    
