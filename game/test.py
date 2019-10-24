@@ -5,28 +5,22 @@ import cv2
 def k(x):
     pass
 
-
 cap = cv2.VideoCapture(0)
 controls, lower, higher = 'controls', 'lower', 'higher'
 cv2.namedWindow(controls)
 cv2.createTrackbar(lower, controls, 0, 255, k)
 cv2.createTrackbar(higher, controls, 0, 255, k)
 
-while (True):
-    # Capture frame-by-frame
-    # ret, frame = cap.read()
-    frame = cv2.imread('test.png')
+# Capture frame-by-frame
+# ret, frame = cap.read()
+frame = cv2.imread('test.png')
 
-    # Our operations on the frame come here
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+# Our operations on the frame come here
+gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    edge = cv2.Canny(frame, cv2.getTrackbarPos(lower, controls), cv2.getTrackbarPos(higher, controls))
+edge = cv2.Canny(frame, cv2.getTrackbarPos(lower, controls), cv2.getTrackbarPos(higher, controls))
 
-    # Display the resulting frame
-    cv2.imshow('frame', edge)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+# Display the resulting frame
+cv2.imshow('frame', edge)
 
-# When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
+print(edge)

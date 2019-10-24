@@ -4,8 +4,11 @@ class CVMap:
 
 
 class Game:
+    def __init__(self, initial_map: CVMap):
+        self.map = initial_map
+
     def update_game(self, keys, delta_t: int):
         pass
 
-    def update_map(self, cv_map: CVMap):
-        pass
+    def update_map(self, new_map: CVMap):
+        self.map = new_map
