@@ -1,26 +1,31 @@
-import numpy as np
 import cv2
 
+from game.cv import CVer
+from game.games.TestGame import TestGame
 
-def k(x):
-    pass
 
-cap = cv2.VideoCapture(0)
-controls, lower, higher = 'controls', 'lower', 'higher'
-cv2.namedWindow(controls)
-cv2.createTrackbar(lower, controls, 0, 255, k)
-cv2.createTrackbar(higher, controls, 0, 255, k)
+def test(G):
+    cap = cv2.VideoCapture(0)
 
-# Capture frame-by-frame
-# ret, frame = cap.read()
-frame = cv2.imread('test.png')
+    cver = CVer()
 
-# Our operations on the frame come here
-gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    ret, frame = cap.read()
+    mp = cver.do_cv(frame)
 
-edge = cv2.Canny(frame, cv2.getTrackbarPos(lower, controls), cv2.getTrackbarPos(higher, controls))
+    game = G(mp)
 
-# Display the resulting frame
-cv2.imshow('frame', edge)
+    while True:
+        ret, frame = cap.read()
 
-print(edge)
+        mp = cver.do_cv(frame)
+        game.update_map(mp)
+        game.update_game([], 0)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    # When everything done, release the capture
+    cap.release()
+    cv2.destroyAllWindows()
+
+test(TestGame)
