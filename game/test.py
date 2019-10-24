@@ -1,6 +1,6 @@
 import cv2
 
-from .cv import CVer
+from game.cv import CVer
 
 
 def test(G):

@@ -1,5 +1,5 @@
-from ..framework import Game
-from ..test import test
+from game.framework import Game
+from game.test import test
 import cv2
 
 
@@ -9,4 +9,4 @@ class TestGame(Game):
         cv2.imshow('frame', self.map.edges)
 
 
-
+test(TestGame)
