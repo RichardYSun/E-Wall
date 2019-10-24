@@ -1,6 +1,6 @@
 import cv2
 
-from game.framework import CVMap
+from .framework import CVMap
 
 
 class CVer:

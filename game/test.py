@@ -1,7 +1,7 @@
 import cv2
 
-from game.cv import CVer
-from game.games.TestGame import TestGame
+from .cv import CVer
+from .games.TestGame import TestGame
 
 
 def test(G):
