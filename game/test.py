@@ -1,7 +1,6 @@
 import cv2
 
 from .cv import CVer
-from .games.TestGame import TestGame
 
 
 def test(G):
@@ -27,5 +26,3 @@ def test(G):
     # When everything done, release the capture
     cap.release()
     cv2.destroyAllWindows()
-
-test(TestGame)
