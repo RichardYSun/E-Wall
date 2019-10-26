@@ -22,6 +22,7 @@ def test(G, still=True):
 
     cver = CVer()
     mp = cver.do_cv(get_img())
+    cver.lower=10
     game = G(mp)
     last_time = time.time()
 
