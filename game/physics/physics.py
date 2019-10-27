@@ -5,7 +5,6 @@ from typing import Tuple
 import numpy as np
 from numpy import ndarray
 import cv2
-import math
 
 
 # interface for physics object
@@ -26,7 +25,7 @@ class Circle(PhysicsObject):
         super().__init__(x, y)
         self.r = r
 
-    def img(self, edg: ndarray) -> ndarray:
+    def img(self, edg:ndarray) -> ndarray:
         img = np.zeros(edg.shape, dtype=edg.dtype)
         cv2.circle(img, (int(self.x), int(self.y)), self.r, 255, cv2.FILLED)
         return img
@@ -41,15 +40,8 @@ class Circle(PhysicsObject):
             k = (self.r - m) / m
             return k * -dx, k * -dy
 
-    def angle(self, point: Tuple[float, float]):
-        px, py = point
-        vx, vy = self.x - px, self.y - py
 
-        return math.atan2(vy, vx)
-
-    # base class for physics with a edge map
-
-
+# base class for physics with a edge map
 class Physics:
     edges: np.array
 
