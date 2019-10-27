@@ -9,7 +9,7 @@ class CVer:
     def __init__(self):
         self.canny_lower=100
         self.canny_higher=200
-        self.sobel_thres=0.8
+        self.sobel_thres=0.08
         self.prev=None
 
     def do_cv(self, frame: ndarray) -> CVMap:

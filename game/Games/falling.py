@@ -21,6 +21,7 @@ class Falling(Game):
         super().update_map(new_map)
         self.physics.update_map(new_map.edges)
 
+
     def draw_circle(self, c: Circle):
         cv2.circle(self.map.edges, (int(c.x ), int(c.y )), int(c.r), 255)
 
@@ -43,4 +44,4 @@ class Falling(Game):
         return self.map.edges
 
 
-test(Falling, False)
+test(Falling, None)
