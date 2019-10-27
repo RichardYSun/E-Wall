@@ -43,4 +43,4 @@ class Falling(Game):
         return self.map.edges
 
 
-test(Falling, False)
+test(Falling, True)
