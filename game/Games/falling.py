@@ -1,18 +1,19 @@
 import cv2
 
 from game.framework import Game, CVMap
-from game.physics import Circle, Physics, ShittyPhysics
+from game.physics.physics import Circle
+from game.physics.shittyphysics import ShittyPhysics
 from game.test import test
 
 G = 9.8
-ppm=1
+ppm=50
 
 
 class Falling(Game):
 
     def __init__(self, mp: CVMap):
         super().__init__(mp)
-        self.c = Circle(30, 30, 10)
+        self.c = Circle(200, 10, 10)
         self.physics = ShittyPhysics()
 
     def update_map(self, new_map: CVMap):
@@ -25,15 +26,20 @@ class Falling(Game):
     def update_game(self, keys, delta_t: int):
         # if self.map is None:
         #     return
-        self.c.vy += ppm*G * delta_t
+        c=self.c
+        c.vy += ppm*G * delta_t
 
-        self.c.x += self.c.vx * delta_t
-        self.c.y += self.c.vy * delta_t
+        self.physics.kustify(c)
+        c.x += c.vx * delta_t
+        c.y += c.vy * delta_t
 
-        self.physics.kustify(self.c)
+        if c.y+c.r>=self.map.edges.shape[0]:
+            #print ("re")
+            c.y=self.map.edges.shape[0]-c.r
+            c.vy=0
 
         self.draw_circle(self.c)
         return self.map.edges
 
 
-test(Falling)
+test(Falling, False)

@@ -25,8 +25,9 @@ class Circle(PhysicsObject):
         px, py = point
         dx, dy = px - self.x, py - self.y
         dsqr = (dx * dx + dy * dy)
+
         if dsqr <= (self.r * self.r):
-            m = sqrt(dsqr)
+            m = sqrt(max(dsqr,0.1))
             k = (self.r - m) / m
             return k * -dx, k * -dy
 

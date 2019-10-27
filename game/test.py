@@ -32,6 +32,7 @@ def test(G, still=True):
         t = time.time()
         img = game.update_game([], t - last_time)
         last_time = t
+        img=cv2.flip(img, 1)
         cv2.imshow('frame', img)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
