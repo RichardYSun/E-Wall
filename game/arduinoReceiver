@@ -1,0 +1,7 @@
+import serial
+
+arduinoSerialData = serial.Serial('com11', 9600) #both have to match arduino's values
+
+while (1==1) :
+    if (arduinoSerialData.inWaiting() > 0) :
+        data = arduinoSerialData.readLine()
