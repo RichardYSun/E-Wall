@@ -16,7 +16,7 @@ class BouncePhysics(Physics):
     #takes an object and applies physics to it
     #object will bounce off of surface
     #bounce is the velocity conserved after the object bounces
-    #for example, if bounce is 0.8, the final speed will be 80% of the initial speed
+    #for example, if bounce is 0.8, the final speed will be 80% of the initial speedmd
     def kustify(self, obj: PhysicsObject, bounce):
         img = obj.img(self.edges)
         inter = cv2.bitwise_and(self.edges, img)
