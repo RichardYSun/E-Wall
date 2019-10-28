@@ -1,6 +1,7 @@
 import cv2
 
 from game.framework import Game, CVMap
+from game.physics.bouncephysics import AnglePhysics
 from game.physics.fastphysics import FastPhysics
 from game.physics.physics import Circle
 from game.physics.shittyphysics import ShittyPhysics
@@ -15,7 +16,7 @@ class Falling(Game):
     def __init__(self, mp: CVMap):
         super().__init__(mp)
         self.c = Circle(200, 10, 50)
-        self.physics = FastPhysics()
+        self.physics = AnglePhysics()
 
     def update_map(self, new_map: CVMap):
         super().update_map(new_map)
