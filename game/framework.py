@@ -1,13 +1,12 @@
 from typing import List
 
-
-# represents information gathered from image processing
 from numpy import ndarray
 
 
+# represents information gathered from image processing
 class CVMap:
-    def __init__(self, edges: ndarray):
-        self.edges = edges
+    edges: ndarray
+    lines: ndarray
 
 
 # base class for games

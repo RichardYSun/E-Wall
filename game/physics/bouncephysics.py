@@ -1,8 +1,6 @@
 import cv2
-import numpy as np
-from numpy import ndarray
 import math
-from game.physics.Vector2 import Vector2
+from game.util.Vector2 import Vector2
 
 from game.physics.physics import Physics, PhysicsObject
 
@@ -36,8 +34,8 @@ class BouncePhysics(Physics):
             a = obj.angle(p)
             if d is not None:
                 xx, yy = d
-                # obj.x += xx
-                # obj.y += yy
+                obj.x += xx
+                obj.y += yy
                 cnt += 1
 
                 mag = math.sqrt(xx * xx + yy * yy)
@@ -58,6 +56,7 @@ class BouncePhysics(Physics):
         newAngle = angle + angle - vAngle
 
         # print(str(angle * 180 / math.pi) + " " + str(vAngle * 180 / math.pi) + " " + str(newAngle * 180 / math.pi))
+
 
         obj.vx = velocity.mag() * math.cos(newAngle) * bounce
         obj.vy = velocity.mag() * math.sin(newAngle) * bounce

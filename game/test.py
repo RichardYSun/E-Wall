@@ -6,8 +6,7 @@ import time
 from game.cv import CVer
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-print(ROOT_DIR + '/test.png')
-tmp = cv2.imread(ROOT_DIR + '/test2.bmp')
+tmp = cv2.imread(ROOT_DIR + '/test_images/test2.bmp')
 
 
 def test(G, still=tmp):
