@@ -1,6 +1,6 @@
 import cv2
 import math
-from game.util.Vector2 import Vector2
+from game.physics.Vector2 import Vector2
 
 from game.physics.physics import Physics, PhysicsObject
 
