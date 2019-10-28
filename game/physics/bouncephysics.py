@@ -11,7 +11,7 @@ def force(x):
     return x * x
 
 
-class AnglePhysics(Physics):
+class BouncePhysics(Physics):
     def kustify(self, obj: PhysicsObject):
         img = obj.img(self.edges)
         inter = cv2.bitwise_and(self.edges, img)
