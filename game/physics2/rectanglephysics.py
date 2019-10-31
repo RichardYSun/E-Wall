@@ -23,7 +23,7 @@ class RectanglePhysics(MapPhysics):
         if cnt:
             obj.vx = obj.vy = 0
 
-        for i in lines:
-            if obj.inter(i):
-                close = obj.closest(i)
-                obj.va[close] = 0
+        # for i in lines:
+        #     if obj.inter(i):
+        #         close = obj.closest(i)
+        #         obj.va[close] = 0
