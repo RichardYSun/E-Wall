@@ -1,14 +1,12 @@
 import cv2
 
 from game.framework import Game, CVMap
-from game.physics2.TempPhysics import TempPhysics
 from game.physics2.WallPhysics import WallPhysics
 from game.physics2.objects.Circle import Circle
 from game.physics2.objects.Rectangle import Rectangle
-from game.physics2.objects.rectanglephysics import RectanglePhysics
+from game.physics2.rectanglephysics import RectanglePhysics
 from game.test import test
 from game.util.Vector2 import Vector2
-from game.util.line import Line
 
 G = 1
 ppm = 50

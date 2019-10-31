@@ -24,6 +24,9 @@ class Vector2:
     def mag(self):
         return math.sqrt(self.x * self.x + self.y * self.y)
 
+    def sq_mag(self):
+        return self.x * self.x + self.y * self.y
+
     def __mul__(self, other):
         return Vector2(other * self.x, other * self.y)
 
