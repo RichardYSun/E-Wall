@@ -9,6 +9,9 @@ class Vector2:
     def __lt__(self, other):
         return self.mag() < other.mag()
 
+    def __gt__(self, other):
+        return self.mag() > other.mag()
+
     def dot(self, o):
         return self.x * o.x + self.y * o.y
 
@@ -18,8 +21,11 @@ class Vector2:
     def mag(self):
         return math.sqrt(self.x * self.x + self.y * self.y)
 
-    def mult(self, a):
+    def __mul__(self, a):
         return Vector2(a * self.x, a * self.y)
 
-    def add(a, b):
-        return Vector2(a.x + b.x, a.y + b.y)
+    def __add__(self, a):
+        return Vector2(self.x + a.x, self.y + a.y)
+
+    def __sub__(self, a):
+        return Vector2(self.x - a.x, self.y - a.y)
