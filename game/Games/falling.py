@@ -27,8 +27,6 @@ class Falling(Game):
         cv2.circle(self.map.edges, (int(c.x ), int(c.y )), int(c.r), 255)
 
     def update_game(self, keys, delta_t: int):
-        print (self.map)
-
         # if self.map is None:
         #     return
         c=self.c
@@ -47,4 +45,4 @@ class Falling(Game):
         return self.map.edges
 
 
-test(Falling, None)
+test(Falling)
