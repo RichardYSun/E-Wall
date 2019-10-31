@@ -90,11 +90,6 @@ class CVer:
             lines = self.lsd.detect(res)
             if lines is not None:
                 lines_conv = []
-                w, h = res.shape
-                lines_conv.append(Line(Vector2(0, 0), Vector2(w, 0)))
-                lines_conv.append(Line(Vector2(w, 0), Vector2(w, h)))
-                lines_conv.append(Line(Vector2(w, h), Vector2(0, h)))
-                lines_conv.append(Line(Vector2(0, h), Vector2(0, 0)))
 
                 for line in lines:
                     x1, y1, x2, y2 = line[0]

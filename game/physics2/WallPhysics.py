@@ -20,3 +20,5 @@ class WallPhysics(MapPhysics):
 
             if obj.x + obj.r >= self.map.edges.shape[1]:
                 obj.x = self.map.edges.shape[1] - obj.r
+        elif obj.obj_type==Rectangle.obj_type:
+            obj: Rectangle

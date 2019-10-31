@@ -19,6 +19,8 @@ def test(G, cam=False):
     game = G(img)
     last_time = time.time()
 
+    cnt=0
+    tt=0
     while True:
         img = image_io.get_img()
 
@@ -30,7 +32,13 @@ def test(G, cam=False):
 
         t = time.time()
         game.update_game([], t - last_time)
+        tt+=t-last_time
         last_time = t
+        cnt+=1
+        if tt>1:
+            print(cnt)
+            tt=0
+            cnt=0
 
         image_io.show(mp.game_img)
 

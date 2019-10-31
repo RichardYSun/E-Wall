@@ -11,7 +11,9 @@ class PlatformCharacter(PhysicsObject):
     def __init__(self, x, y):
         super().__init__(x, y)
 
-    # top,bottom,left,right
-    def get_bounds(self) -> Tuple[int, int, int, int]:
+    # width and height from bottom of
+    def get_size(self) -> Tuple[int, int]:
         pass
 
+    def update(self, ):
+        pass
