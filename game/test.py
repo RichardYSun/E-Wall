@@ -23,7 +23,7 @@ def test(G, cam=False):
         img = image_io.get_img()
 
         mp = map_detect.do_cv(img)
-        game_img = mp.edges
+        game_img = np.zeros_like(mp.edges)
         mp.game_img = mp.lsd.drawSegments(game_img, mp.lines)
 
         game.update_map(mp)

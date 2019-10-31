@@ -41,4 +41,4 @@ class Falling(Game):
         self.draw_circle(self.c)
 
 
-test(Falling, True)
+test(Falling, )

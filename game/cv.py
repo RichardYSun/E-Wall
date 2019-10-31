@@ -30,7 +30,7 @@ class CVer:
         self.lsd = cv2.ximgproc.createFastLineDetector()
 
     def do_cv(self, frame: ndarray) -> CVMap:
-        algorithm = ParamWindow.get_int('algorithm', 2, 1)
+        algorithm = ParamWindow.get_int('algorithm', 2, 2)
 
         color_space = ParamWindow.get_int('color space', 1, 0)
         if color_space == hsv:
@@ -69,7 +69,7 @@ class CVer:
             if thresholding == thres_none:
                 res = res.astype(np.uint8)
             elif thresholding == thres:
-                thres_val = ParamWindow.get_int('threshold value', 255, 80)
+                thres_val = ParamWindow.get_int('threshold value', 255, 30)
                 cv2.threshold(res, thres_val, 255, cv2.THRESH_BINARY, dst=res)
                 res = res.astype(np.uint8)
             elif thresholding == thres_gaussian:
