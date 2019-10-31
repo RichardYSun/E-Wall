@@ -23,7 +23,7 @@ class Line:
 
     # gets the shortest distance from the segment to a point as a vector (note that this may not be perp distance)
     def distance(self, pt: Vector2):
-        ret = min((self.st - pt).mag(), (self.ed - pt))
+        ret = min((self.st - pt), (self.ed - pt))
 
         perp: Vector2 = self.perp(pt)
         inter: Vector2 = pt - perp
