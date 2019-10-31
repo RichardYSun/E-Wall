@@ -16,16 +16,13 @@ class Vector2:
         self.y = y
 
     def __lt__(self, other):
-        return self.sq_mag() < other.sq_mag()
+        return self.mag() < other.mag()
 
     def dot(self, o):
         return self.x * o.x + self.y * o.y
 
     def mag(self):
         return math.sqrt(self.x * self.x + self.y * self.y)
-
-    def sq_mag(self):
-        return self.x * self.x + self.y * self.y
 
     def __mul__(self, other):
         return Vector2(other * self.x, other * self.y)

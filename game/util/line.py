@@ -19,7 +19,7 @@ class Line:
     # Gets the perpendicular vector from the line to a point
     def perp(self, pt: Vector2):
         diag = Vector2(pt.x - self.st.x, pt.y - self.st.y)
-        return diag - self.dir * diag.dot(self.dir) * (1 / self.dir.sq_mag())
+        return diag - self.dir * diag.dot(self.dir) * (1 / self.dir.mag() / self.dir.mag())
 
     # gets the shortest distance from the segment to a point as a vector (note that this may not be perp distance)
     def distance(self, pt: Vector2):
@@ -34,4 +34,4 @@ class Line:
 
     # checks if a point on the line represented by the segment is on the segment
     def inside(self, pt: Vector2):
-        return max((self.st - pt).sq_mag(), (self.ed - pt).sq_mag()) <= self.dir.sq_mag()
+        return max((self.st - pt).mag(), (self.ed - pt).mag()) <= self.dir.mag()

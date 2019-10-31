@@ -42,10 +42,10 @@ class Rectangle(PhysicsObject):
 
     def closest(self, l: line):
         mn = Vector2(1e5, 1e5)
-        ret = Vector2(0, 0)
-        for i in self.pts:
-            if self.inside(i - l.distance(i)) and l.distance(i) < mn:
-                mn = l.distance(i)
+        ret = -1
+        for i in range(4):
+            if self.inside(self.pts[i] - l.distance(self.pts[i])) and l.distance(self.pts[i]) < mn:
+                mn = l.distance(self.pts[i])
                 ret = i
         return ret
 
