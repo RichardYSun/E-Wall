@@ -5,6 +5,8 @@ import numpy as np
 from numpy import ndarray
 
 from game.util.ParamWindow import ParamWindow
+from game.util.Vector2 import Vector2
+from game.util.line import Line
 
 canny = 0
 laplacian = 1
@@ -70,10 +72,10 @@ class CVer:
         if lines is not None:
             lines_conv = []
             for line in lines:
-                line = line[0]
-                lines_conv.append(line)
+                x1, y1, x2, y2 = line[0]
+                lines_conv.append(Line(Vector2(x1, y1), Vector2(x2, y2)))
         else:
-            lines_conv = None
+            lines_conv = []
 
         mp = CVMap()
         mp.edges = res
