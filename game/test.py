@@ -12,10 +12,11 @@ def test(G, still=None):
     image_io = ImageIO()
 
     map_detect = CVer()
-    game = G(image_io.get_img())
+    img = image_io.get_img()
+    game = G()
     last_time = time.time()
 
-    game_img=np.zeros((1000,500,3),dtype=np.uint8)
+    game_img = np.zeros_like(img)
 
     while True:
         img = image_io.get_img()
