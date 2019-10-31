@@ -10,6 +10,8 @@ class Tank:
     speed = 0.0
     sprite: cv2.ndarray
     sprite_radius = 32
+    alive = True
+
     def __init__(self, px, py, speed, angle, type: int):
         self.px = px
         self.py = py
