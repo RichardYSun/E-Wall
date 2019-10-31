@@ -4,8 +4,8 @@ from game.util.Vector2 import Vector2
 class Line:
 
     def __init__(self, st: Vector2, ed: Vector2):
-        self.st = st
-        self.ed = ed
+        self.st: Vector2 = st
+        self.ed: Vector2 = ed
 
         # # variables for equation of line ax + by + c = 0
         # self.a = ed.y - st.y
@@ -16,4 +16,14 @@ class Line:
 
     def perp(self, pt: Vector2):
         diag = Vector2(pt.x - self.st.x, pt.y - self.st.y)
-        return Vector2.add(diag, dir.mult(-1 * Vector2.dot(diag, dir) / dir.mag() / dir.mag()))
+        return diag + dir * -1 * Vector2.dot(diag, dir) / dir.mag() / dir.mag()
+
+    def distance(self, pt: Vector2):
+        ret = min((self.st - pt).mag(), (self.ed - pt).mag())
+
+        perp: Vector2 = self.perp(self, pt)
+        inter: Vector2 = pt - perp
+        if max((self.st - inter).mag(), (self.ed - inter).mag()) <= (self.ed - self.st).mag():
+            ret = min(ret, perp.mag())
+
+        return ret
