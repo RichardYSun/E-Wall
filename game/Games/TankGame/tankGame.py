@@ -28,10 +28,10 @@ class TankGame(Game):
     def takeInput(self, keys: [bool]):
         if keys[key.RIGHT]:
             self.tanks[0].angle -= TurnSpeed
-            self.tanks[0].rotateRight()
+            self.tanks[0].rotateRight(TurnSpeed)
         if keys[key.LEFT]:
             self.tanks[0].angle += TurnSpeed
-            self.tanks[0].rotateLeft()
+            self.tanks[0].rotateLeft(TurnSpeed)
         if keys[key.DOWN]:
             self.tanks[0].speed = -PlayerSpeed
         if keys[key.UP]:
@@ -47,31 +47,3 @@ class TankGame(Game):
             tank.draw(game_img)
         for bullet in self.bullets:
             bullet.draw(game_img)
-
-
-class Tank:
-    px, py = 0.0
-    angle = 0.0  # radians
-    speed = 0.0
-    sprite: cv2.ndarray
-
-    def __init__(self, px, py, speed, angle, type: int):
-        self.px = px
-        self.py = py
-        self.angle = angle
-        self.speed = speed
-        if type == 1:
-            sprite = cv2.imread('player.jpg')
-        elif type == 2:
-            sprite = cv2.imread('blue.jpg')
-        elif type == 3:
-            sprite = cv2.imread('red.jpg')
-
-    def rotateRight(self):
-        self.sprite = imutils.rotate_bound(self.image, -TurnSpeed)
-
-    def rotateLeft(self):
-        self.sprite = imutils.rotate_bound(self.image, TurnSpeed)
-
-    def draw(self, game_img: ndarray):
-        game_img[self.px: self.px + self.sprite.shape[0], self.py: self.py + self.sprite.shape[1]] = self.sprite
