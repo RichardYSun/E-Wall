@@ -23,6 +23,7 @@ class Falling(Game):
     def update_map(self, new_map: CVMap):
         super().update_map(new_map)
         self.physics.update_map(new_map)
+        self.wall.update_map(new_map)
 
     def draw_circle(self, c: Circle):
         cv2.circle(self.map.game_img, (int(c.x), int(c.y)), int(c.r), 255)
