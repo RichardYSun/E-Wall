@@ -3,39 +3,30 @@ import os
 import cv2
 import time
 
+from game.ImageIO import ImageIO
 from game.cv import CVer
-
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-tmp = cv2.imread(ROOT_DIR + '/test_images/test2.bmp')
+import numpy as np
 
 
-def test(G, still=tmp):
-    def get_img():
-        if still is None:
-            ret, frame = cap.read()
-            frame = cv2.flip(frame, 1)
-            return frame
-        else:
-            return tmp
+def test(G, still=None):
+    image_io = ImageIO()
 
-    cap = cv2.VideoCapture(0)
-
-    cver = CVer()
-    mp = cver.do_cv(get_img())
-    game = G(mp)
+    map_detect = CVer()
+    game = G(image_io.get_img())
     last_time = time.time()
 
+    game_img=np.zeros((1000,500,3),dtype=np.uint8)
+
     while True:
-        mp = cver.do_cv(get_img())
+        img = image_io.get_img()
+        mp = map_detect.do_cv(img)
         game.update_map(mp)
         t = time.time()
-        img = game.update_game([], t - last_time)
+        img = game.update_game([], t - last_time, game_img)
         last_time = t
-        cv2.imshow('frame', img)
+        image_io.show(img)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    # When everything done, release the capture
-    cap.release()
-    cv2.destroyAllWindows()
+    del image_io
