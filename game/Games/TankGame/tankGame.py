@@ -2,6 +2,7 @@ import cv2
 import math
 import imutils
 import keys as key
+from Games.TankGame.tank import Tank
 from framework import Game, CVMap
 import cv2.ndarray as ndarray
 
@@ -38,12 +39,29 @@ class TankGame(Game):
             self.tanks[0].speed = PlayerSpeed
 
     def movePieces(self):
+        self.deadTanks()
+
         for tank in self.tanks:
-            tank.px += tank.speed * math.cos(tank.angle)
-            tank.py += tank.speed * math.sin(tank.angle)
+            if tank.alive:
+                tank.px += tank.speed * math.cos(tank.angle)
+                tank.py += tank.speed * math.sin(tank.angle)
 
     def drawPieces(self, game_img: ndarray):
         for tank in self.tanks:
             tank.draw(game_img)
         for bullet in self.bullets:
             bullet.draw(game_img)
+
+    def deadTanks(self):
+        for tank in self.tanks:
+            for bullet in self.bullets:
+                if tank.contains(bullet):
+                    tank.alive = False
+                    bullet.alive = False
+        if not self.tanks[0].alive:
+            self.gameOver(0)
+        elif not self.tanks[1].alive:
+            self.gameOver(1)
+
+    def gameOver(self, loser : int):
+        pass
