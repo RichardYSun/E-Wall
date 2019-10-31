@@ -7,6 +7,7 @@ class Bullet:
     speed = 0.5
     image = None
     damge = 9999
+    radius = 9999
 
     def __init__(self, px, py, speed, angle):
         self.px = px

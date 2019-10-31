@@ -47,3 +47,10 @@ class TankGame(Game):
             tank.draw(game_img)
         for bullet in self.bullets:
             bullet.draw(game_img)
+
+    def deadTanks(self):
+        dead = [0, 0]
+
+        for tank in self.tanks:
+            for bullet in self.bullets:
+
