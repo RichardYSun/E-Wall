@@ -17,4 +17,4 @@ class Triangle:
 
         s /= 2
 
-        return math.sqrt(s * (s - l[0]) * (s - l[1]) * (s - l[2]))
+        return math.sqrt(max(0, s * (s - l[0]) * (s - l[1]) * (s - l[2])))
