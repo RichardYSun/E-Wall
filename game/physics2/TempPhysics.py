@@ -10,10 +10,7 @@ class TempPhysics(MapPhysics):
 
         if obj.obj_type == Circle.obj_type:
             obj: Circle
-            for line in self.map.lines:
-                line = line[0]
-                x1, y1, x2, y2 = line
-                l = Line(Vector2(x1, y1), Vector2(x2, y2))
+            for l in self.map.lines_conv:
                 perp = l.distance(Vector2(obj.x, obj.y))
                 mag = perp.mag()
                 dcenter = obj.r - mag

@@ -9,6 +9,7 @@ class CVMap:
     lines: ndarray  # the list of lines detected in the form [[[x1,y1,x2,y2]],[[...]],...]
     game_img: ndarray  # the output image to draw on
     lsd: Any  # the line segment detector
+    lines_conv: ndarray
 
 
 # base class for games
