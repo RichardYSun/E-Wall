@@ -11,7 +11,6 @@ class RectanglePhysics(MapPhysics):
         lines = self.map.lines_conv
         for i in lines:
             if obj.inter(i):
-                print('kust')
                 dist = obj.distance(i)
                 for j in range(4):
-                    obj.pts[j] += dist
+                    obj.pts[j] -= dist

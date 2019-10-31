@@ -8,6 +8,7 @@ from game.physics2.objects.Rectangle import Rectangle
 from game.physics2.objects.rectanglephysics import RectanglePhysics
 from game.test import test
 from game.util.Vector2 import Vector2
+from game.util.line import Line
 
 G = .5
 ppm = 50
@@ -35,7 +36,7 @@ class Falling2(Game):
         c = self.c
         c.vy += ppm * G * delta_t
 
-        #self.wall.update(delta_t)
+        # self.wall.update(delta_t)
         self.physics.update(delta_t)
 
         # c.x += c.vx * delta_t
@@ -46,5 +47,8 @@ class Falling2(Game):
         c.draw(self.map.game_img)
         # self.draw_circle(self.c)
 
+
+kms = Rectangle(50, 50, 100, 100)
+#print(kms.inter(Line(Vector2(55, 0), Vector2(105, 50))))
 
 test(Falling2)
