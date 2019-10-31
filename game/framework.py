@@ -16,7 +16,7 @@ class Game:
 
     # should be implemented by subclasses
     # should return image of game to display
-    def update_game(self, keys: List[bool], delta_t: int):
+    def update_game(self, keys: List[bool], delta_t: int, game_img:ndarray):
         pass
 
     # called when there is a new info from image processing
