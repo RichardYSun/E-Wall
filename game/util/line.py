@@ -21,13 +21,13 @@ class Line:
         diag = Vector2(pt.x - self.st.x, pt.y - self.st.y)
         return diag - self.dir * diag.dot(self.dir) * (1 / self.dir.mag() / self.dir.mag())
 
-    # gets the shortest distance from the segment to a point (note that this may not be perp distance)
+    # gets the shortest distance from the segment to a point as a vector (note that this may not be perp distance)
     def distance(self, pt: Vector2):
-        ret = min((self.st - pt).mag(), (self.ed - pt).mag())
+        ret = min((self.st - pt).mag(), (self.ed - pt))
 
         perp: Vector2 = self.perp(pt)
         inter: Vector2 = pt - perp
         if max((self.st - inter).mag(), (self.ed - inter).mag()) <= self.dir.mag():
-            ret = min(ret, perp.mag())
+            ret = min(ret, perp)
 
         return ret
