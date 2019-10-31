@@ -9,7 +9,7 @@ import numpy as np
 
 
 def test(G, a=None):
-    image_io = ImageIO()
+    image_io = ImageIO(None)
 
     map_detect = CVer()
     img = image_io.get_img()
@@ -23,6 +23,7 @@ def test(G, a=None):
 
         mp = map_detect.do_cv(img)
         mp.game_img = mp.edges
+        mp.game_img = mp.lsd.drawSegments(mp.game_img, mp.lines)
 
         game.update_map(mp)
 

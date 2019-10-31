@@ -16,8 +16,8 @@ class ImageIO:
 
         if img_src is None:
             self.cap = cv2.VideoCapture(0)
-            w = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-            h = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            w = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            h =  int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         else:
             w = img_src.shape[1]
             h = img_src.shape[0]
@@ -31,6 +31,7 @@ class ImageIO:
     def get_img(self):
         if self.img_src is None:
             ret, img = self.cap.read()
+            cv2.flip(img, 1, img)
             if ret is False:
                 raise Exception('could not read image')
         else:
