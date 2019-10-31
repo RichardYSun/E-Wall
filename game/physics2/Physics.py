@@ -6,8 +6,9 @@ from game.physics2.objects.PhysicsObject import PhysicsObject
 
 # applies physics between objects and map
 class MapPhysics:
-    map: CVMap
-    objects: List[PhysicsObject]=[]
+    def __init__(self):
+        self.objects: List[PhysicsObject] = []
+        self.map: CVMap = None
 
     def update_map(self, map: CVMap):
         self.map = map

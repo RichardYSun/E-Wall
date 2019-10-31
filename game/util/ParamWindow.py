@@ -1,18 +1,19 @@
 import cv2
 
+win_name = 'parameters'
 
-class ParamWindow():
-    created = set()
+created = set()
 
-    def __init__(self, win_name):
-        self.win_name = win_name
-        cv2.namedWindow(self.win_name)
+win_name = win_name
+cv2.namedWindow(win_name, cv2.WINDOW_GUI_NORMAL)
 
-    def nothing(self,_):
-        pass
 
-    def get_param(self, name, max_val=255, default_val=0):
-        if name not in self.created:
-            cv2.createTrackbar(name, self.win_name, default_val,max_val, self.nothing)
-            self.created.add( name)
-        return cv2.getTrackbarPos(name, self.win_name)
+def nothing(_):
+    pass
+
+
+def get_int(name, max_val=255, default_val=0):
+    if name not in created:
+        cv2.createTrackbar(name, win_name, default_val, max_val, nothing)
+        created.add(name)
+    return cv2.getTrackbarPos(name, win_name)

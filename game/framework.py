@@ -5,11 +5,12 @@ from numpy import ndarray
 
 # represents information gathered from image processing
 class CVMap:
-    edges: ndarray  # the image with edges detected
-    lines: ndarray  # the list of lines detected in the form [[[x1,y1,x2,y2]],[[...]],...]
-    game_img: ndarray  # the output image to draw on
-    lsd: Any  # the line segment detector
-    lines_conv: ndarray
+    def __init__(self):
+        self.edges: ndarray = None  # the image with edges detected
+        self.lines: ndarray = None  # the list of lines detected in the form [[[x1,y1,x2,y2]],[[...]],...]
+        self.game_img: ndarray = None  # the output image to draw on
+        self.lsd: Any = None  # the line segment detector
+        self.lines_conv: ndarray = None
 
 
 # base class for games

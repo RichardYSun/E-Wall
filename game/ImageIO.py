@@ -11,7 +11,7 @@ tmp = cv2.imread(ROOT_DIR + '/test_images/test2.bmp')
 
 class ImageIO:
 
-    def __init__(self, img_src: ndarray = tmp, proj_w=1000, proj_h=500):
+    def __init__(self, img_src = tmp, proj_w=1000, proj_h=500):
         self.img_src = img_src
 
         if img_src is None:

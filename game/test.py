@@ -19,14 +19,12 @@ def test(G, cam=False):
     game = G(img)
     last_time = time.time()
 
-    game_img = np.zeros_like(img)
-
     while True:
         img = image_io.get_img()
 
         mp = map_detect.do_cv(img)
-        mp.game_img = mp.edges
-        mp.game_img = mp.lsd.drawSegments(mp.game_img, mp.lines)
+        game_img = mp.edges
+        mp.game_img = mp.lsd.drawSegments(game_img, mp.lines)
 
         game.update_map(mp)
 
