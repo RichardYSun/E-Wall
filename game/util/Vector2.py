@@ -9,20 +9,14 @@ class Vector2:
     def __lt__(self, other):
         return self.mag() < other.mag()
 
-    def __gt__(self, other):
-        return self.mag() > other.mag()
-
     def dot(self, o):
         return self.x * o.x + self.y * o.y
-
-    def dot(a, b):
-        return a.x * b.x + a.y * b.y
 
     def mag(self):
         return math.sqrt(self.x * self.x + self.y * self.y)
 
-    def __mul__(self, a):
-        return Vector2(a * self.x, a * self.y)
+    def __mul__(self, other):
+        return Vector2(other * self.x, other * self.y)
 
     def __add__(self, a):
         return Vector2(self.x + a.x, self.y + a.y)
