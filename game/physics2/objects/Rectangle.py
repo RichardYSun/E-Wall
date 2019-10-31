@@ -38,6 +38,7 @@ class Rectangle(PhysicsObject):
     def inter(self, line: Line):
         ret = 0;
         for i in self.pts:
+            print(i.__str__ ()+ " " + (i - line.distance(i)).__str__())
             ret |= self.inside(i - line.distance(i))
         return ret
 
