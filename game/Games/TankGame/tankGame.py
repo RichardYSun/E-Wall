@@ -2,6 +2,7 @@ import cv2
 import math
 import imutils
 import keys as key
+from Games.TankGame.tank import Tank
 from framework import Game, CVMap
 import cv2.ndarray as ndarray
 
@@ -57,4 +58,10 @@ class TankGame(Game):
                 if tank.contains(bullet):
                     tank.alive = False
                     bullet.alive = False
+        if not self.tanks[0].alive:
+            self.gameOver(0)
+        elif not self.tanks[1].alive:
+            self.gameOver(1)
 
+    def gameOver(self, loser : int):
+        pass
