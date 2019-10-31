@@ -42,6 +42,8 @@ class TankGame(Game):
             tank.px += tank.speed * math.cos(tank.angle)
             tank.py += tank.speed * math.sin(tank.angle)
 
+        self.deadTanks()
+
     def drawPieces(self, game_img: ndarray):
         for tank in self.tanks:
             tank.draw(game_img)
@@ -49,8 +51,7 @@ class TankGame(Game):
             bullet.draw(game_img)
 
     def deadTanks(self):
-        dead = [0, 0]
-
-        for tank in self.tanks:
+        for tank in tanks:
             for bullet in self.bullets:
+
 
