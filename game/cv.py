@@ -13,8 +13,7 @@ class CVer:
         self.prev = None
         self.lsd = cv2.ximgproc.createFastLineDetector()
 
-    #def detect_edges(self, frame: ndarray):
-
+    # def detect_edges(self, frame: ndarray):
 
     def do_cv(self, frame: ndarray) -> CVMap:
         # convert to float image
@@ -22,7 +21,7 @@ class CVer:
         frame *= 1.0 / 255
 
         # filter
-        #frame = cv2.GaussianBlur(frame, (5, 5), 0)
+        # frame = cv2.GaussianBlur(frame, (5, 5), 0)
 
         # take sobel x and y
         sx = cv2.Sobel(frame, cv2.CV_64F, 1, 0)
@@ -48,6 +47,7 @@ class CVer:
         mp = CVMap()
         mp.edges = res
         mp.lines = lines
+        mp.lsd = self.lsd
         return mp
 
 # stupid optical flow stuff thats too slow

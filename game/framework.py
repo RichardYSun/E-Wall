@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 
 from numpy import ndarray
 
@@ -7,6 +7,8 @@ from numpy import ndarray
 class CVMap:
     edges: ndarray
     lines: ndarray
+    game_img: ndarray
+    lsd: Any
 
 
 # base class for games
@@ -16,7 +18,7 @@ class Game:
 
     # should be implemented by subclasses
     # should return image of game to display
-    def update_game(self, keys: List[bool], delta_t: int, game_img:ndarray):
+    def update_game(self, keys: List[bool], delta_t: int):
         pass
 
     # called when there is a new info from image processing
