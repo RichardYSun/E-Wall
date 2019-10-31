@@ -1,6 +1,7 @@
 from game.physics2.Physics import MapPhysics
 from game.physics2.objects.Circle import Circle
 from game.physics2.objects.PhysicsObject import PhysicsObject
+from game.physics2.objects.Rectangle import Rectangle
 
 
 class WallPhysics(MapPhysics):
@@ -19,6 +20,3 @@ class WallPhysics(MapPhysics):
 
             if obj.x + obj.r >= self.map.edges.shape[1]:
                 obj.x = self.map.edges.shape[1] - obj.r
-        else:
-            pass
-            #print("warning: WallPhysics not implemented for rectangle")

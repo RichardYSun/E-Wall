@@ -37,7 +37,7 @@ class CVer:
             cv2.cvtColor(frame, cv2.COLOR_BGR2HSV, dst=frame)
 
         # filter
-        blur_radius = ParamWindow.get_int('blur radius', 3, 3)*2+1
+        blur_radius = ParamWindow.get_int('blur radius', 3, 3) * 2 + 1
         if blur_radius > 2:
             cv2.GaussianBlur(frame, (blur_radius, blur_radius), 0, dst=frame)
 
@@ -73,8 +73,8 @@ class CVer:
                 cv2.threshold(res, thres_val, 255, cv2.THRESH_BINARY, dst=res)
                 res = res.astype(np.uint8)
             elif thresholding == thres_gaussian:
-                block_size = ParamWindow.get_int('threshold block size', 5, 5)*2+3
-                C = ParamWindow.get_int('threshold C', 11, 2)-11
+                block_size = ParamWindow.get_int('threshold block size', 5, 5) * 2 + 3
+                C = ParamWindow.get_int('threshold C', 11, 2) - 11
                 res = res.astype(np.uint8)
                 cv2.adaptiveThreshold(res, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, block_size, C,
                                       dst=res)
@@ -86,18 +86,24 @@ class CVer:
 
         # detect lines
         do_lsd = ParamWindow.get_int('do lsd', 1, 1)
-        if do_lsd==1:
+        if do_lsd == 1:
             lines = self.lsd.detect(res)
             if lines is not None:
                 lines_conv = []
+                w, h = res.shape
+                lines_conv.append(Line(Vector2(0, 0), Vector2(w, 0)))
+                lines_conv.append(Line(Vector2(w, 0), Vector2(w, h)))
+                lines_conv.append(Line(Vector2(w, h), Vector2(0, h)))
+                lines_conv.append(Line(Vector2(0, h), Vector2(0, 0)))
+
                 for line in lines:
                     x1, y1, x2, y2 = line[0]
                     lines_conv.append(Line(Vector2(x1, y1), Vector2(x2, y2)))
             else:
                 lines_conv = []
         else:
-            lines=None
-            lines_conv=[]
+            lines = None
+            lines_conv = []
 
         mp = CVMap()
         mp.edges = res
