@@ -8,7 +8,7 @@ from game.cv import CVer
 import numpy as np
 
 
-def test(G):
+def test(G, a=None):
     image_io = ImageIO()
 
     map_detect = CVer()
@@ -22,7 +22,7 @@ def test(G):
         img = image_io.get_img()
 
         mp = map_detect.do_cv(img)
-        mp.game_img = game_img
+        mp.game_img = mp.edges
 
         game.update_map(mp)
 
