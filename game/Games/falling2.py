@@ -10,7 +10,7 @@ from game.test import test
 from game.util.Vector2 import Vector2
 from game.util.line import Line
 
-G = .5
+G = 1
 ppm = 50
 
 
@@ -45,10 +45,9 @@ class Falling2(Game):
             i += Vector2(c.vx * delta_t, c.vy * delta_t)
 
         c.draw(self.map.game_img)
-        # self.draw_circle(self.c)
 
 
 kms = Rectangle(50, 50, 100, 100)
 #print(kms.inter(Line(Vector2(55, 0), Vector2(105, 50))))
 
-test(Falling2)
+test(Falling2, True)
