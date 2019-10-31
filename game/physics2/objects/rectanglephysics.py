@@ -1,10 +1,17 @@
+from typing import List
+
 from game.physics2.Physics import MapPhysics
-from game.physics2.objects import PhysicsObject
+from game.physics2.objects.PhysicsObject import PhysicsObject
+from game.util.Vector2 import Vector2
 
 
 class RectanglePhysics(MapPhysics):
-    def apply_physics(self, obj: PhysicsObject, delta_t):
-        lines = self.edges.lines
-        for i in lines:
-            perp = obj.distance(i)
 
+    def apply_physics(self, obj: PhysicsObject, delta_t):
+        lines = self.map.lines_conv
+        for i in lines:
+            if obj.inter(i):
+                print('kust')
+                dist = obj.distance(i)
+                for j in range(4):
+                    obj.pts[j] += dist

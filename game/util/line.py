@@ -27,7 +27,12 @@ class Line:
 
         perp: Vector2 = self.perp(pt)
         inter: Vector2 = pt - perp
-        if max((self.st - inter).mag(), (self.ed - inter).mag()) <= self.dir.mag():
+        if self.inside(inter):
             ret = min(ret, perp)
 
         return ret
+
+    #checks if a point on the line represented by the segment is on the segment
+    def inside(self, pt: Vector2):
+        return max((self.st - pt).mag(), (self.ed - pt).mag()) <= self.dir.mag()
+

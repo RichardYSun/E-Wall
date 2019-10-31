@@ -23,4 +23,5 @@ class WallPhysics(MapPhysics):
                 obj.x = self.map.edges.shape[1] - obj.r
                 obj.vx = -obj.vx
         else:
-            print("warning: WallPhysics not implemented for rectangle")
+            pass
+            #print("warning: WallPhysics not implemented for rectangle")

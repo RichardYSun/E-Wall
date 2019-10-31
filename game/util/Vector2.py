@@ -35,3 +35,26 @@ class Vector2:
 
     def __truediv__(self, other):
         return Vector2(self.x / other, self.y / other)
+
+    def __iadd__(self, other):
+        self.x += other.x
+        self.y += other.y
+        return self
+
+    def __isub__(self, other):
+        self.x -= other.x
+        self.y -= other.y
+        return self
+
+    def __imul__(self, other):
+        self.x *= other
+        self.y *= other
+        return self
+
+    def __idiv__(self, other):
+        self.x /= other
+        self.y /= other
+        return self
+
+    def __str__(self):
+        return str(int(self.x)) + " " + str(int(self.y))

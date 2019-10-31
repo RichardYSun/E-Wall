@@ -1,22 +1,50 @@
 import math
+
+import cv2
+
 from game.physics2.objects.PhysicsObject import PhysicsObject
 from game.util import line
+from game.util.Triangle import Triangle
 from game.util.Vector2 import Vector2
+from game.util.line import Line
 
 
 class Rectangle(PhysicsObject):
+    obj_type = 2
+
     def __init__(self, x, y, l, h, a=0):
         super().__init__(x, y)
-        self.pts.append(Vector2(x - l / 2 * math.cos(a), y - h / 2 * math.sin(a)))
-        self.pts.append(Vector2(x - l / 2 * math.cos(a), y + h / 2 * math.sin(a)))
-        self.pts.append(Vector2(x + l / 2 * math.cos(a), y - h / 2 * math.sin(a)))
-        self.pts.append(Vector2(x + l / 2 * math.cos(a), y + h / 2 * math.sin(a)))
+        self.pts = []
+        self.pts.append(Vector2(x - l / 2, y - h / 2))
+        self.pts.append(Vector2(x - l / 2, y + h / 2))
+        self.pts.append(Vector2(x + l / 2, y + h / 2))
+        self.pts.append(Vector2(x + l / 2, y - h / 2))
+        self.area = l * h
 
     def distance(self, l: line):
-        ret = 0
+        ret = Vector2(1e5, 1e5)
         for i in self.pts:
-            ret = min(ret, l.perp(i))
+            if self.inside(i - l.distance(i)):
+                ret = min(ret, l.distance(i))
         return ret
+
+    def inside(self, pt: Vector2):
+        a = 0
+        for i in range(4):
+            a += Triangle(pt, self.pts[i], self.pts[(i + 1) % 4]).area()
+
+        return abs(a - self.area) < 1e-6
+
+    def inter(self, line: Line):
+        ret = 0;
+        for i in self.pts:
+            ret |= self.inside(i - line.distance(i))
+        return ret
+
+    def draw(self, img):
+        for i in range(4):
+            cv2.line(img, (int(self.pts[i].x), int(self.pts[i].y)),
+                     (int(self.pts[(i + 1) % 4].x), int(self.pts[(i + 1) % 4].y)), 255, 2)
 
 # def points(self):
 #     x = [-self.l / 2, self.l / 2]
