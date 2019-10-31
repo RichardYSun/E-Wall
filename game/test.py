@@ -8,8 +8,11 @@ from game.cv import CVer
 import numpy as np
 
 
-def test(G, a=None):
-    image_io = ImageIO(None)
+def test(G, cam=False):
+    if cam:
+        image_io = ImageIO(None)
+    else:
+        image_io = ImageIO()
 
     map_detect = CVer()
     img = image_io.get_img()
