@@ -16,7 +16,7 @@ class Vector2:
         self.y = y
 
     def __lt__(self, other):
-        return self.mag() < other.mag()
+        return self.sq_mag() < other.sq_mag()
 
     def dot(self, o):
         return self.x * o.x + self.y * o.y

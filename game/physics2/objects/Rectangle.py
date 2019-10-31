@@ -38,8 +38,9 @@ class Rectangle(PhysicsObject):
     def distance(self, l: line):
         ret = Vector2(1e5, 1e5)
         for i in self.pts:
-            if self.inside(i - l.distance(i)):
-                ret = min(ret, l.distance(i))
+            d = l.distance(i)
+            if self.inside(i - d):
+                ret = min(ret, d)
         return ret
 
     def closest(self, l: line):
