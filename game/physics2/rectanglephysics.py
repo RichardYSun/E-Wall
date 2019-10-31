@@ -26,4 +26,3 @@ class RectanglePhysics(MapPhysics):
         # for i in lines:
         #     if obj.inter(i):
         #         close = obj.closest(i)
-        #         obj.va[close] = 0

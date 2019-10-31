@@ -45,7 +45,4 @@ class Falling2(Game):
         c.draw(self.map.game_img)
 
 
-kms = Rectangle(50, 50, 100, 100)
-#print(kms.inter(Line(Vector2(55, 0), Vector2(105, 50))))
-
-test(Falling2, True)
+test(Falling2)

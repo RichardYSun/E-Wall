@@ -22,8 +22,6 @@ class Rectangle(PhysicsObject):
         self.pts.append(Vector2(x + l / 2, y + h / 2))
         self.pts.append(Vector2(x + l / 2, y - h / 2))
         self.area = l * h
-        self.h = h
-        self.l = l
 
     # rotates angle by theta radians about pt
     def rotate(self, theta, pt):
@@ -38,43 +36,31 @@ class Rectangle(PhysicsObject):
     def distance(self, l: line):
         ret = Vector2(1e5, 1e5)
         for i in self.pts:
-            d = l.distance(i)
-            if self.inside(i - d):
-                ret = min(ret, d)
+            if self.inside(i - l.distance(i)):
+                ret = min(ret, l.distance(i))
         return ret
 
     def closest(self, l: line):
         mn = Vector2(1e5, 1e5)
-        ret = -1
-        for i in range(4):
-            if self.inside(self.pts[i] - l.distance(self.pts[i])) and l.distance(self.pts[i]) < mn:
-                mn = l.distance(self.pts[i])
+        ret = Vector2(0, 0)
+        for i in self.pts:
+            if self.inside(i - l.distance(i)) and l.distance(i) < mn:
+                mn = l.distance(i)
                 ret = i
         return ret
 
     def inside(self, pt: Vector2):
         a = 0
         for i in range(4):
-            pts = [pt, self.pts[i], self.pts[(i + 1) % 4]]
+            a += Triangle(pt, self.pts[i], self.pts[(i + 1) % 4]).area()
 
-            # Applies heron's formula
-            s = 0
-            l = []
-            for i in range(3):
-                l.append((self.pts[i] - self.pts[(i + 1) % 3]).mag())
-                s += l[i]
-
-            s /= 2
-
-            a += s * (s - l[0]) * (s - l[1]) * (s - l[2])
-
-        return abs(a - self.area * self.area) < 1e-6
+        return abs(a - self.area) < 1e-6
 
     def inter(self, line: Line):
+        ret = 0;
         for i in self.pts:
-            if self.inside(i - line.distance(i)):
-                return 1
-        return 0
+            ret |= self.inside(i - line.distance(i))
+        return ret
 
     def draw(self, img):
         for i in range(4):
