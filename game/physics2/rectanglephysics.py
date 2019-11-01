@@ -2,6 +2,7 @@ import math
 from typing import List
 
 import cv2
+import numpy as np
 
 from game.physics2.Physics import MapPhysics
 from game.physics2.objects.PhysicsObject import PhysicsObject
@@ -36,8 +37,23 @@ class RectanglePhysics(MapPhysics):
         off = 1e9
 
         for x in range(-R, R + 1):
+            if xmx + x > edges.shape[1]:
+                break;
             for y in range(-R, R + 1):
-                cnt = cv2.countNonZero(edges[ymn + y:ymx + y, xmn + x:xmx + x])
+                if ymx + y > edges.shape[0]:
+                    break;
+
+                mat = np.zeros((ymx - ymn, xmx - xmn), dtype=edges.dtype)
+                pts = np.array((
+                    (obj.pts[0].x - (xmn + x), obj.pts[0].y - (ymn + y)),
+                    (obj.pts[1].x - (xmn + x), obj.pts[1].y - (ymn + y)),
+                    (obj.pts[2].x - (xmn + x), obj.pts[2].y - (ymn + y)),
+                    (obj.pts[3].x - (xmn + x), obj.pts[3].y - (ymn + y))
+                ), dtype=int)
+                cv2.fillConvexPoly(mat, pts, 255)
+                rect = cv2.bitwise_and(mat, edges[ymn + y:ymx + y, xmn + x:xmx + x])
+
+                cnt = cv2.countNonZero(rect)
                 if cnt < mn or (cnt == mn and abs(x) + abs(y) < off):
                     off = abs(x) + abs(y)
                     mn = cnt
@@ -45,6 +61,8 @@ class RectanglePhysics(MapPhysics):
 
         for i in range(4):
             obj.pts[i] += best
+
+        # inter=cv2.findNonZero(edges[])
 
         if off != 0:
             obj.vx = obj.vy = 0
