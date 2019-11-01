@@ -22,6 +22,8 @@ class Rectangle(PhysicsObject):
         self.pts.append(Vector2(x + l / 2, y + h / 2))
         self.pts.append(Vector2(x + l / 2, y - h / 2))
         self.area = l * h
+        self.l = l
+        self.h = h
 
     # rotates angle by theta radians about pt
     def rotate(self, theta, pt):
