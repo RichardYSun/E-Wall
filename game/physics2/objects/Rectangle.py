@@ -10,7 +10,7 @@ from game.util.line import Line
 
 
 class Rectangle(PhysicsObject):
-    va = [0, 0, 0, 0]
+    va = 0
 
     obj_type = 2
 
@@ -26,14 +26,19 @@ class Rectangle(PhysicsObject):
         self.h = h
 
     # rotates angle by theta radians about pt
-    def rotate(self, theta, pt):
+    def rotate(self, theta: float, pt: Vector2):
         for i in range(4):
-            if i != pt:
-                dif = self.pts[i] - self.pts[pt]
-                angle = math.atan2(dif.y, dif.x)
-                angle += theta
-                new_dif = Vector2(dif.mag() * math.cos(angle), dif.mag() * math.sin(angle))
-                self.pts[i] = pt + new_dif
+            dif = self.pts[i] - pt
+            angle = math.atan2(dif.y, dif.x)
+            angle += theta
+            new_dif = Vector2(dif.mag() * math.cos(angle), dif.mag() * math.sin(angle))
+            self.pts[i] = pt + new_dif
+
+    def edges(self):
+        ret = []
+        for i in range(4):
+            ret.append(Line(self.pts[(i + 1) % 4], self.pts[i]))
+        return ret
 
     def distance(self, l: line):
         ret = Vector2(1e5, 1e5)

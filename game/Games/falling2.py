@@ -16,7 +16,7 @@ class Falling2(Game):
 
     def __init__(self, mp: CVMap):
         super().__init__(mp)
-        self.c = Rectangle(100, 100, 50, 50)
+        self.c = Rectangle(200, 100, 50, 50)
         self.physics = RectanglePhysics()
         self.wall = WallPhysics()
         self.physics.objects.append(self.c)
@@ -45,4 +45,4 @@ class Falling2(Game):
         c.draw(self.map.game_img)
 
 
-test(Falling2, True)
+test(Falling2, None)

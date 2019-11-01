@@ -27,6 +27,13 @@ class Vector2:
     def sq_mag(self):
         return self.x * self.x + self.y * self.y
 
+    ##projects this vector onto another
+    def proj(self, other):
+        return self * (self.dot(other) / self.sq_mag())
+
+    def cross(self, other):
+        return abs(self.x * other.y - self.y * other.x)
+
     def __mul__(self, other):
         return Vector2(other * self.x, other * self.y)
 
