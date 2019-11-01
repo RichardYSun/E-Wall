@@ -6,7 +6,7 @@ import os
 from game.util.AreaSelectWindow import AreaSelectWindow
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-tmp = cv2.imread(ROOT_DIR + '/test_images/test2.bmp')
+tmp = cv2.imread(ROOT_DIR + '/test_images/test3.bmp')
 
 
 class ImageIO:
