@@ -45,4 +45,4 @@ class Falling2(Game):
         c.draw(self.map.game_img)
 
 
-test(Falling2, True)
+test(Falling2)

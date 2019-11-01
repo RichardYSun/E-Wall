@@ -22,6 +22,8 @@ class Rectangle(PhysicsObject):
         self.pts.append(Vector2(x + l / 2, y + h / 2))
         self.pts.append(Vector2(x + l / 2, y - h / 2))
         self.area = l * h
+        self.l = l
+        self.h = h
 
     # rotates angle by theta radians about pt
     def rotate(self, theta, pt):
@@ -36,8 +38,9 @@ class Rectangle(PhysicsObject):
     def distance(self, l: line):
         ret = Vector2(1e5, 1e5)
         for i in self.pts:
-            if self.inside(i - l.distance(i)):
-                ret = min(ret, l.distance(i))
+            d = l.distance(i)
+            if self.inside(i - d):
+                ret = min(ret, d)
         return ret
 
     def closest(self, l: line):
@@ -52,15 +55,18 @@ class Rectangle(PhysicsObject):
     def inside(self, pt: Vector2):
         a = 0
         for i in range(4):
-            a += Triangle(pt, self.pts[i], self.pts[(i + 1) % 4]).area()
+            x1, y1 = self.pts[i].x, self.pts[i].y
+            x2, y2 = self.pts[(i + 1) % 4].x, self.pts[(i + 1) % 4].y
+            x3, y3 = pt.x, pt.y
+            a += 0.5 * abs((x1 * y2 + x2 * y3 + x3 * y1) - (x1 * y3 + x2 * y1 + x3 * y2))
 
-        return abs(a - self.area) < 1e-6
+        return abs(a - self.area) < 1e-3
 
     def inter(self, line: Line):
-        ret = 0;
         for i in self.pts:
-            ret |= self.inside(i - line.distance(i))
-        return ret
+            if self.inside(i - line.distance(i)):
+                return 1
+        return 0
 
     def draw(self, img):
         for i in range(4):
