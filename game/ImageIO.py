@@ -6,21 +6,21 @@ import os
 from game.util.AreaSelectWindow import AreaSelectWindow
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-tmp = cv2.imread(ROOT_DIR + '/test_images/test3.bmp')
 
 
 class ImageIO:
 
-    def __init__(self, img_src = tmp, proj_w=1000, proj_h=500):
-        self.img_src = img_src
+    def __init__(self, img_name='test2', proj_w=1000, proj_h=500):
 
-        if img_src is None:
+        if img_name is None:
+            self.img_src=None
             self.cap = cv2.VideoCapture(0)
             w = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-            h =  int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            h = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         else:
-            w = img_src.shape[1]
-            h = img_src.shape[0]
+            self.img_src = cv2.imread(ROOT_DIR + '/test_images/' + img_name + '.bmp')
+            w = self.img_src.shape[1]
+            h = self.img_src.shape[0]
 
         self.projector_window = AreaSelectWindow(proj_w, proj_h, 'projector window', (255, 0, 0))
         self.cam_window = AreaSelectWindow(w, h, 'camera window', (255, 0, 0))

@@ -79,6 +79,11 @@ class CVer:
                 cv2.adaptiveThreshold(res, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, block_size, C,
                                       dst=res)
 
+            if thresholding!=thres_none:
+                use_morph=ParamWindow.get_int('use morph', 1,0)
+                if use_morph==1:
+                    pass
+
         else:
             canny_lower = ParamWindow.get_int('canny lower', 255, 100)
             canny_higher = ParamWindow.get_int('canny higher', 255, 200)

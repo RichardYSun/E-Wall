@@ -10,11 +10,8 @@ import numpy as np
 from game.util import ParamWindow
 
 
-def test(G, cam=False):
-    if cam:
-        image_io = ImageIO(None)
-    else:
-        image_io = ImageIO()
+def test(G, cam='test2'):
+    image_io = ImageIO(cam)
 
     map_detect = CVer()
     img = image_io.get_img()
