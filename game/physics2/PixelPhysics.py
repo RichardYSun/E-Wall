@@ -6,10 +6,12 @@ from game.physics2.objects.PhysicsObject import PhysicsObject
 from game.physics2.objects.PixelObject import PixelObject
 from game.util.Vector2 import Vector2
 
-R = 10
 
+class PixelPhysics(MapPhysics):
 
-class RectanglePhysics(MapPhysics):
+    def __init__(self, R=10):
+        super().__init__()
+        self.R = R
 
     def apply_physics(self, obj: PhysicsObject, delta_t):
         edges = self.map.edges
@@ -24,6 +26,8 @@ class RectanglePhysics(MapPhysics):
 
             mat = np.zeros(edges.shape, dtype=edges.dtype)
             obj.draw_hitbox(mat)
+
+            R = self.R
 
             for x in range(-R, R + 1):
                 if xmx + x > edges.shape[1]:

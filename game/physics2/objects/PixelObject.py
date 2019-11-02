@@ -10,7 +10,3 @@ class PixelObject(PhysicsObject):
 
     def get_bounds(self):
         pass
-
-    def translate(self, move: Vector2):
-        self.x += move.x
-        self.y += move.y

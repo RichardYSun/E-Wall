@@ -1,4 +1,7 @@
 # represents a physical object
+from game.util.Vector2 import Vector2
+
+
 class PhysicsObject:
     obj_type: int
 
@@ -10,3 +13,8 @@ class PhysicsObject:
     # called upon unsolvable physics situation
     def kill(self):
         pass
+
+
+    def translate(self, move: Vector2):
+        self.x += move.x
+        self.y += move.y
