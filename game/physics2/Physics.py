@@ -1,7 +1,7 @@
 from typing import List
 
 from game.framework import CVMap
-from game.physics2.objects.PhysicsObject import PhysicsObject
+from game.physics2.objects.physicsobject import PhysicsObject
 
 
 # applies physics between objects and map

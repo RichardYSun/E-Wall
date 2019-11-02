@@ -3,9 +3,9 @@ import cv2
 from game.framework import Game, CVMap
 from game.physics2.bouncephysics import BouncePhysics
 from game.physics2.WallPhysics import WallPhysics
-from game.physics2.objects.Circle import Circle
+from game.physics2.objects.circle import Circle
 from game.physics2.objects.Rectangle import Rectangle
-from game.physics2.PixelPhysics import PixelPhysics
+from game.physics2.pixelphysics import PixelPhysics
 from game.test import test
 from game.util.Vector2 import Vector2
 

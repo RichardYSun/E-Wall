@@ -3,7 +3,7 @@ import cv2
 from game.framework import Game, CVMap
 from game.physics2.TempPhysics import TempPhysics
 from game.physics2.WallPhysics import WallPhysics
-from game.physics2.objects.Circle import Circle
+from game.physics2.objects.circle import Circle
 from game.test import test
 
 G = 9.8
