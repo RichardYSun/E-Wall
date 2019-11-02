@@ -57,4 +57,3 @@ class TankGame(Game):
                 if tank.contains(bullet):
                     tank.alive = False
                     bullet.alive = False
-
