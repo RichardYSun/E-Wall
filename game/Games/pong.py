@@ -15,7 +15,7 @@ class Pong(Game):
     def __init__(self, mp: GameContext):
         super().__init__(mp)  # make sure to call superclass initializer
 
-        # we will use three physics in this game: StandardPhysics, PixelPhysics, WallPhysics
+        # we will use three physics modules in this game: StandardPhysics, PixelPhysics, WallPhysics
         # StandardPhysics makes objects move and applies gravity if needed
         self.std_physics = StandardPhysics(gravity=None)  # in this game we don't want gravity
         self.pixel_physics = PixelPhysics()  # PixelPhysics handles collisions of the camera image with the game objects
@@ -24,14 +24,17 @@ class Pong(Game):
         self.wall_physics.left = False
         self.wall_physics.right = False
 
-        # we create the ball
+        # create the ball
         # Vector2(mp.width / 2, mp.height / 2) means the ball is in the center of the screen
         # 20 is the radius
         self.ball = Circle(Vector2(mp.width / 2, mp.height / 2), 20)
         self.ball.collision_type = COLLISION_BOUNCE  # this makes the ball bouncy
         self.ball.vel = Vector2(200, 200)  # make the ball begin moving
-        self.pixel_physics.objects.append(self.ball)  # apply pixel physics to ball
-        self.wall_physics.objects.append(self.ball)  # apply wall physics to ball
+
+        # we must add the ball to each physics module we want it to follow
+        self.std_physics.objects.append(self.ball)  # we want the ball to move
+        self.pixel_physics.objects.append(self.ball)  # we want the ball to bounce off stuff in the frame
+        self.wall_physics.objects.append(self.ball)  # we want the ball to bounce off walls
 
         self.score = (0, 0)
 
@@ -55,7 +58,7 @@ class Pong(Game):
         if xmn < 0:  # player 1 wins
             self.ball.pos.x = self.map.width / 2  # reset ball to center
             self.ball.vel = Vector2(200, 200)  # reset ball velocity
-            self.score[0]+=1  # increment score
+            self.score[0] += 1  # increment score
         if xmx > self.map.width:  # player 2 wins
             self.ball.pos.x = self.map.width / 2  # reset ball to center
             self.ball.vel = Vector2(200, 200)  # reset ball velocity
