@@ -27,7 +27,7 @@ class Vector2:
     def sq_mag(self):
         return self.x * self.x + self.y * self.y
 
-    ##projects this vector onto another
+    ##projects the other vector onto the current one
     def proj(self, other):
         return self * (self.dot(other) / self.sq_mag())
 

@@ -1,6 +1,7 @@
 import cv2
 
 from game.framework import Game, CVMap
+from game.physics2.bouncephysics import BouncePhysics
 from game.physics2.WallPhysics import WallPhysics
 from game.physics2.objects.Circle import Circle
 from game.physics2.objects.Rectangle import Rectangle
@@ -19,7 +20,7 @@ class Falling2(Game):
         self.r = Rectangle(200, 100, 50, 50)
         self.r1 = Rectangle(100, 100, 50, 50)
         self.c = Circle(100, 100, 50)
-        self.physics = PixelPhysics()
+        self.physics = BouncePhysics()
         self.wall = WallPhysics()
         self.physics.objects.append(self.r)
         self.physics.objects.append(self.r1)
@@ -45,4 +46,4 @@ class Falling2(Game):
         self.c.draw_hitbox(self.map.game_img)
 
 
-test(Falling2, None)
+test(Falling2)
