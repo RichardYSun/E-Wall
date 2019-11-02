@@ -1,14 +1,16 @@
 import cv2
+import numpy as ndarray
 import imutils
 import math
 from Games.TankGame.bullet import Bullet
 
 
 class Tank:
-    px, py = 0.0
+    px = 0.0
+    py = 0.0
     angle = 0.0  # radians
     speed = 0.0
-    sprite: cv2.ndarray
+    sprite: ndarray
     sprite_radius = 32
     alive = True
 
@@ -33,5 +35,5 @@ class Tank:
     def contains(self, bullet: Bullet) -> bool:
         return math.sqrt(math.pow(self.px - bullet.px, 2) + math.pow(self.py - bullet.py, 2)) < (self.sprite_radius + bullet.radius)
 
-    def draw(self, game_img: cv2.ndarray):
+    def draw(self, game_img: ndarray):
         game_img[self.px: self.px + self.sprite.shape[0], self.py: self.py + self.sprite.shape[1]] = self.sprite
