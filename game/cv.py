@@ -105,7 +105,7 @@ class CVer:
             lines = None
             lines_conv = []
 
-        mp = CVMap()
+        mp = CVMap(res.shape[1],res.shape[0])
         mp.edges = res
         mp.lines = lines
         mp.lines_conv = lines_conv

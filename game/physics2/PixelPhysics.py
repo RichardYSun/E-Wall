@@ -45,7 +45,7 @@ class PixelPhysics(MapPhysics):
                         mn = cnt
                         best = Vector2(x, y)
 
-            obj.translate(best)
 
             if off != 0:
-                obj.vx = obj.vy = 0
+                # collision = cv2.bitwise_and(mat[ymn:ymx, xmn:xmx],edges[ymn:ymx, xmn:xmx])
+                obj.on_collision(best)

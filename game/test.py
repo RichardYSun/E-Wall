@@ -15,7 +15,7 @@ def test(G, cam='test2'):
 
     map_detect = CVer()
     img = image_io.get_img()
-    game = G(img)
+    game = G(map_detect.do_cv(img))
     last_time = time.time()
 
     cnt = 0

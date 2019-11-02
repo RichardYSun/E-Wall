@@ -5,7 +5,9 @@ from numpy import ndarray
 
 # represents information gathered from image processing
 class CVMap:
-    def __init__(self):
+    def __init__(self,width,height):
+        self.width:int=width
+        self.height:int=height
         self.edges: ndarray = None  # the image with edges detected
         self.lines: ndarray = None  # the list of lines detected in the form [[[x1,y1,x2,y2]],[[...]],...]
         self.game_img: ndarray = None  # the output image to draw on

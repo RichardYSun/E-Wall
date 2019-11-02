@@ -10,3 +10,7 @@ class PixelObject(PhysicsObject):
 
     def get_bounds(self):
         pass
+
+    def on_collision(self, offset:Vector2):
+        self.vx=self.vy=0
+        self.translate(offset)
