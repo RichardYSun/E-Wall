@@ -46,4 +46,4 @@ class Falling2(Game):
         self.c.draw_hitbox(self.map.game_img)
 
 
-test(Falling2)
+test(Falling2, None)

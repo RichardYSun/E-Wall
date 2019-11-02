@@ -38,13 +38,15 @@ class PixelPhysics:
                                            edges[ymn + y:ymx + y, xmn + x:xmx + x])
 
                     cnt = cv2.countNonZero(rect)
-                    if cnt < mn or (cnt == mn and abs(x) + abs(y) < off):
-                        off = abs(x) + abs(y)
+                    if cnt < mn or (cnt == mn and x * x + y * y < off):
+                        off = x * x + y * y
                         mn = cnt
                         best = Vector2(x, y)
 
-            if best.sq_mag()!=0:
+            if best.sq_mag() != 0:
                 obj.on_collision(best)
+
+            return best
 
     # def apply_physics(self, obj: PhysicsObject, delta_t):
     #     edges = self.map.edges
