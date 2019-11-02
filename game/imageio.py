@@ -3,7 +3,7 @@ from numpy import ndarray
 import numpy as np
 import os
 
-from game.util.AreaSelectWindow import AreaSelectWindow
+from game.util.areaselectwindow import AreaSelectWindow
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 

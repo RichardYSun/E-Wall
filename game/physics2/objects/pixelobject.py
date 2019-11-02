@@ -2,7 +2,7 @@ from game.physics2.collisiontypes import COLLISION_NONE
 from game.physics2.objects.physicsobject import PhysicsObject
 from numpy import ndarray
 
-from game.util.Vector2 import Vector2
+from game.util.vector2 import Vector2
 
 class PixelObject(PhysicsObject):
     collision_escape_radius = 10

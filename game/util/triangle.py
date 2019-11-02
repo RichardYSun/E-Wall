@@ -1,7 +1,7 @@
 import math
 from typing import List
 
-from game.util import Vector2
+from game.util import vector2
 
 
 class Triangle:
