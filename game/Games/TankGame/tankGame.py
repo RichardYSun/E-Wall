@@ -4,7 +4,7 @@ import imutils
 import keys as key
 from Games.TankGame.tank import Tank
 from framework import Game, CVMap
-import cv2.ndarray as ndarray
+import numpy as ndarray
 
 TurnSpeed = 0.1
 PlayerSpeed = 0.1
