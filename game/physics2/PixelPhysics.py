@@ -1,21 +1,19 @@
 import cv2
 import numpy as np
 
+from game.framework import CVMap
 from game.physics2.Physics import MapPhysics
 from game.physics2.objects.PhysicsObject import PhysicsObject
 from game.physics2.objects.PixelObject import PixelObject
 from game.util.Vector2 import Vector2
 
 
-class PixelPhysics(MapPhysics):
+class PixelPhysics:
 
     def __init__(self, R=10):
-        super().__init__()
         self.R = R
 
-    def apply_physics(self, obj: PhysicsObject, delta_t):
-        edges = self.map.edges
-
+    def teleport(self, obj: PhysicsObject, edges: CVMap):
         if isinstance(obj, PixelObject):
             # obj: PixelObject
             xmn, xmx, ymn, ymx = obj.get_bounds()
@@ -45,7 +43,14 @@ class PixelPhysics(MapPhysics):
                         mn = cnt
                         best = Vector2(x, y)
 
-
             if off != 0:
-                # collision = cv2.bitwise_and(mat[ymn:ymx, xmn:xmx],edges[ymn:ymx, xmn:xmx])
                 obj.on_collision(best)
+
+    # def apply_physics(self, obj: PhysicsObject, delta_t):
+    #     edges = self.map.edges
+    #
+    #
+    #
+    #         if off != 0:
+    #             # collision = cv2.bitwise_and(mat[ymn:ymx, xmn:xmx],edges[ymn:ymx, xmn:xmx])
+    #             obj.on_collision(best)
