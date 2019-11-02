@@ -3,6 +3,7 @@ import cv2
 from game.game import Game, GameContext
 from game.physics2.collisiontypes import COLLISION_BOUNCE
 from game.physics2.objects.circle import Circle
+from game.physics2.objects.rectangle import Rectangle
 from game.physics2.pixelphysics import PixelPhysics
 from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
@@ -27,7 +28,7 @@ class Pong(Game):
         # create the ball
         # Vector2(mp.width / 2, mp.height / 2) means the ball is in the center of the screen
         # 20 is the radius
-        self.ball = Circle(Vector2(mp.width / 2, mp.height / 2), 20)
+        self.ball = Rectangle(Vector2(100,100),50,70)
         self.ball.collision_type = COLLISION_BOUNCE  # this makes the ball bouncy
         self.ball.vel = Vector2(200, 200)  # make the ball begin moving
 

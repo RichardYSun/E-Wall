@@ -9,6 +9,6 @@ class StandardPhysics(Physics):
         self.gravity = gravity
 
     def apply_physics(self, obj: PhysicsObject, delta_t):
-        if self.gravity is None:
+        if self.gravity is not None:
             obj.vel += self.gravity * delta_t * self.map.pixels_per_meter
-        obj.pos += delta_t * obj.vel
+        obj.pos += obj.vel*delta_t
