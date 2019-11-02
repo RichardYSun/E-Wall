@@ -2,10 +2,11 @@ import cv2
 
 
 class AreaSelectWindow:
-    down=False
 
     def __init__(self, w, h, name, color, thickness=1, click=10):
         cv2.namedWindow(name, cv2.WINDOW_AUTOSIZE)
+
+        self.down=False
 
         self.t = 0
         self.l = 0

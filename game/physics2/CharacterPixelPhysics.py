@@ -5,7 +5,7 @@ from game.util.Vector2 import Vector2
 from game.util.line import Line
 
 
-class TempPhysics(MapPhysics):
+class CharacterPixelPhysics(MapPhysics):
     def apply_physics(self, obj: PhysicsObject, delta_t):
 
         if obj.obj_type == Circle.obj_type:

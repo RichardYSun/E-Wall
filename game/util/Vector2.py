@@ -16,13 +16,23 @@ class Vector2:
         self.y = y
 
     def __lt__(self, other):
-        return self.mag() < other.mag()
+        return self.sq_mag() < other.sq_mag()
 
     def dot(self, o):
         return self.x * o.x + self.y * o.y
 
     def mag(self):
         return math.sqrt(self.x * self.x + self.y * self.y)
+
+    def sq_mag(self):
+        return self.x * self.x + self.y * self.y
+
+    ##projects the other vector onto the current one
+    def proj(self, other):
+        return self * (self.dot(other) / self.sq_mag())
+
+    def cross(self, other):
+        return abs(self.x * other.y - self.y * other.x)
 
     def __mul__(self, other):
         return Vector2(other * self.x, other * self.y)
@@ -35,3 +45,26 @@ class Vector2:
 
     def __truediv__(self, other):
         return Vector2(self.x / other, self.y / other)
+
+    def __iadd__(self, other):
+        self.x += other.x
+        self.y += other.y
+        return self
+
+    def __isub__(self, other):
+        self.x -= other.x
+        self.y -= other.y
+        return self
+
+    def __imul__(self, other):
+        self.x *= other
+        self.y *= other
+        return self
+
+    def __idiv__(self, other):
+        self.x /= other
+        self.y /= other
+        return self
+
+    def __str__(self):
+        return str(int(self.x)) + " " + str(int(self.y))
