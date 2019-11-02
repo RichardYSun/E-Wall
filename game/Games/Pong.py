@@ -2,6 +2,7 @@ import cv2
 
 from game.framework import Game, CVMap
 from game.physics2.WallPhysics import WallPhysics
+from game.physics2.bouncephysics import BouncePhysics
 from game.physics2.objects.Circle import Circle
 from game.physics2.objects.Rectangle import Rectangle
 from game.physics2.PixelPhysics import PixelPhysics
@@ -32,7 +33,7 @@ class Pong(Game):
         self.ball = PongBall(mp.width / 2, mp.height / 2, 20)
         self.ball.vx = 0
         self.ball.vy = -200
-        self.physics = PixelPhysics()
+        self.physics = BouncePhysics()
         self.physics.objects.append(self.ball)
 
     def update_map(self, new_map: CVMap):
