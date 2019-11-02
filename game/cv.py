@@ -1,11 +1,11 @@
 import cv2
 
-from game.framework import CVMap
+from game.game import CVMap
 import numpy as np
 from numpy import ndarray
 
 from game.util import ParamWindow
-from game.util.Vector2 import Vector2
+from game.util.vector2 import Vector2
 from game.util.line import Line
 
 # algorithm

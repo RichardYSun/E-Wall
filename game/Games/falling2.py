@@ -1,13 +1,13 @@
 import cv2
 
-from game.framework import Game, CVMap
+from game.game import Game, CVMap
 from game.physics2.bouncephysics import BouncePhysics
-from game.physics2.WallPhysics import WallPhysics
+from game.physics2.wallphysics import WallPhysics
 from game.physics2.objects.circle import Circle
-from game.physics2.objects.Rectangle import Rectangle
+from game.physics2.objects.rectangle import Rectangle
 from game.physics2.pixelphysics import PixelPhysics
 from game.test import test
-from game.util.Vector2 import Vector2
+from game.util.vector2 import Vector2
 
 G = 1
 ppm = 50

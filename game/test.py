@@ -3,7 +3,7 @@ import os
 import cv2
 import time
 
-from game.ImageIO import ImageIO
+from game.imageio import ImageIO
 from game.cv import CVer
 import numpy as np
 

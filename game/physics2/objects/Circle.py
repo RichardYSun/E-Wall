@@ -3,8 +3,8 @@ import cv2
 from game.physics2.objects.physicsobject import PhysicsObject
 from numpy import ndarray
 
-from game.physics2.objects.PixelObject import PixelObject
-from game.util.Vector2 import Vector2
+from game.physics2.objects.pixelobject import PixelObject
+from game.util.vector2 import Vector2
 
 
 class Circle(PixelObject):

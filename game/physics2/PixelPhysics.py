@@ -1,15 +1,15 @@
 import cv2
 import numpy as np
 
-from game.framework import CVMap
+from game.game import CVMap
 from game.physics2.collisiontypes import COLLISION_STICK, COLLISION_SLIDE, COLLISION_BOUNCE
-from game.physics2.Physics import MapPhysics
+from game.physics2.physics import Physics
 from game.physics2.objects.physicsobject import PhysicsObject
-from game.physics2.objects.PixelObject import PixelObject
-from game.util.Vector2 import Vector2
+from game.physics2.objects.pixelobject import PixelObject
+from game.util.vector2 import Vector2
 
 
-class PixelPhysics(MapPhysics):
+class PixelPhysics(Physics):
 
     def apply_physics(self, obj: PhysicsObject, delta_t):
         if not isinstance(obj, PixelObject):

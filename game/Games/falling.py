@@ -1,8 +1,8 @@
 import cv2
 
-from game.framework import Game, CVMap
+from game.game import Game, CVMap
 from game.physics2.TempPhysics import TempPhysics
-from game.physics2.WallPhysics import WallPhysics
+from game.physics2.wallphysics import WallPhysics
 from game.physics2.objects.circle import Circle
 from game.test import test
 

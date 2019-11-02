@@ -1,11 +1,10 @@
 from typing import List
 
-from game.framework import CVMap
+from game.game import CVMap
 from game.physics2.objects.physicsobject import PhysicsObject
 
 
-# applies physics between objects and map
-class MapPhysics:
+class Physics:
     def __init__(self):
         self.objects: List[PhysicsObject] = []
         self.map: CVMap = None

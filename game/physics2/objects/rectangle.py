@@ -3,10 +3,10 @@ import math
 import cv2
 
 from game.physics2.objects.physicsobject import PhysicsObject
-from game.physics2.objects.PixelObject import PixelObject
+from game.physics2.objects.pixelobject import PixelObject
 from game.util import line
-from game.util.Triangle import Triangle
-from game.util.Vector2 import Vector2
+from game.util.triangle import Triangle
+from game.util.vector2 import Vector2
 from game.util.line import Line
 import numpy as np
 from numpy import ndarray
