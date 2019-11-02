@@ -43,7 +43,7 @@ class PixelPhysics:
                         mn = cnt
                         best = Vector2(x, y)
 
-            if off != 0:
+            if best.sq_mag()!=0:
                 obj.on_collision(best)
 
     # def apply_physics(self, obj: PhysicsObject, delta_t):

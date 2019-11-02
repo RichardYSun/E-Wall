@@ -18,8 +18,6 @@ class PongBall(Circle):
         self.x += offset.x
         self.y += offset.y
         vel = Vector2(self.vx, self.vy)
-        if vel.sq_mag()==0:
-            return
         projed = offset.proj(vel)
         vel = vel - projed * 2.0
         self.vx = vel.x
@@ -31,7 +29,7 @@ class Pong(Game):
     def __init__(self, mp: CVMap):
         super().__init__(mp)
         self.ball = PongBall(mp.width / 2, mp.height / 2, 20)
-        self.ball.vx = 0
+        self.ball.vx = 200
         self.ball.vy = -200
         self.physics = BouncePhysics()
         self.physics.objects.append(self.ball)
@@ -49,6 +47,14 @@ class Pong(Game):
         if ymn >= self.map.height:
             self.ball.translate(Vector2(self.map.height - ymx - 1, 0))
             self.ball.vy *= -1
+        if xmn < 0:
+            self.ball.x = self.map.width / 2
+            self.ball.vx = 200
+            self.ball.vy = -200
+        if xmx > self.map.width:
+            self.ball.x = self.map.width / 2
+            self.ball.vx = -200
+            self.ball.vy = -200
 
         self.physics.update(delta_t)
 
