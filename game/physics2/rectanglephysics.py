@@ -36,6 +36,15 @@ class RectanglePhysics(MapPhysics):
         mn = 1e9
         off = 1e9
 
+        mat = np.zeros(edges.shape, dtype=edges.dtype)
+        pts = np.array((
+            (obj.pts[0].x, obj.pts[0].y),
+            (obj.pts[1].x, obj.pts[1].y),
+            (obj.pts[2].x, obj.pts[2].y),
+            (obj.pts[3].x, obj.pts[3].y)
+        ), dtype=int)
+        cv2.fillConvexPoly(mat, pts, 255)
+
         for x in range(-R, R + 1):
             if xmx + x > edges.shape[1]:
                 break;
@@ -43,15 +52,7 @@ class RectanglePhysics(MapPhysics):
                 if ymx + y > edges.shape[0]:
                     break;
 
-                mat = np.zeros((ymx - ymn, xmx - xmn), dtype=edges.dtype)
-                pts = np.array((
-                    (obj.pts[0].x - (xmn + x), obj.pts[0].y - (ymn + y)),
-                    (obj.pts[1].x - (xmn + x), obj.pts[1].y - (ymn + y)),
-                    (obj.pts[2].x - (xmn + x), obj.pts[2].y - (ymn + y)),
-                    (obj.pts[3].x - (xmn + x), obj.pts[3].y - (ymn + y))
-                ), dtype=int)
-                cv2.fillConvexPoly(mat, pts, 255)
-                rect = cv2.bitwise_and(mat, edges[ymn + y:ymx + y, xmn + x:xmx + x])
+                rect = cv2.bitwise_and(mat[ymn + y:ymx + y, xmn + x:xmx + x], edges[ymn + y:ymx + y, xmn + x:xmx + x])
 
                 cnt = cv2.countNonZero(rect)
                 if cnt < mn or (cnt == mn and abs(x) + abs(y) < off):

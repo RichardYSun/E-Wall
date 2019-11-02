@@ -17,9 +17,11 @@ class Falling2(Game):
     def __init__(self, mp: CVMap):
         super().__init__(mp)
         self.c = Rectangle(200, 100, 50, 50)
+        self.c1 = Rectangle(100, 100, 50, 50)
         self.physics = RectanglePhysics()
         self.wall = WallPhysics()
         self.physics.objects.append(self.c)
+        self.physics.objects.append(self.c1)
         self.wall.objects.append(self.c)
 
     def update_map(self, new_map: CVMap):
@@ -34,6 +36,9 @@ class Falling2(Game):
         c = self.c
         c.vy += ppm * G * delta_t
 
+        c1 = self.c1
+        c1.vy += ppm * G * delta_t
+
         # self.wall.update(delta_t)
         self.physics.update(delta_t)
 
@@ -42,7 +47,11 @@ class Falling2(Game):
         for i in c.pts:
             i += Vector2(c.vx * delta_t, c.vy * delta_t)
 
+        for i in c1.pts:
+            i += Vector2(c1.vx * delta_t, c1.vy * delta_t)
+
         c.draw(self.map.game_img)
+        c1.draw(self.map.game_img)
 
 
 test(Falling2, None)
