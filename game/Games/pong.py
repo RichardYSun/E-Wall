@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from game.game import Game, CVMap
+from game.game import Game, GameContext
 from game.physics2.collisiontypes import COLLISION_BOUNCE
 from game.physics2.objects.circle import Circle
 from game.physics2.pixelphysics import PixelPhysics
@@ -15,7 +15,7 @@ ppm = 50
 
 class Pong(Game):
 
-    def __init__(self, mp: CVMap):
+    def __init__(self, mp: GameContext):
         super().__init__(mp)  # make sure to call superclass initializer
 
         # we will use two physics in this game
@@ -37,7 +37,7 @@ class Pong(Game):
         self.score = (0, 0)
 
     # this is called when there is a new frame available from camera
-    def update_map(self, new_map: CVMap):
+    def update_map(self, new_map: GameContext):
         super().update_map(new_map)  # make sure to call super
 
         # make sure to call update_map for all the physics you're using

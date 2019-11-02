@@ -1,6 +1,6 @@
 import cv2
 
-from game.game import CVMap
+from game.game import GameContext
 import numpy as np
 from numpy import ndarray
 
@@ -29,7 +29,7 @@ class CVer:
         self.prev = None
         self.lsd = cv2.ximgproc.createFastLineDetector()
 
-    def do_cv(self, frame: ndarray) -> CVMap:
+    def do_cv(self, frame: ndarray) -> GameContext:
         algorithm = ParamWindow.get_int('algorithm', 2, 2)
 
         color_space = ParamWindow.get_int('color space', 1, 0)
@@ -105,7 +105,7 @@ class CVer:
             lines = None
             lines_conv = []
 
-        mp = CVMap(res.shape[1],res.shape[0])
+        mp = GameContext(res.shape[1], res.shape[0])
         mp.edges = res
         mp.lines = lines
         mp.lines_conv = lines_conv

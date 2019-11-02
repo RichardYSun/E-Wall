@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from game.game import CVMap
+from game.game import GameContext
 from game.physics2.collisiontypes import COLLISION_STICK, COLLISION_SLIDE, COLLISION_BOUNCE
 from game.physics2.physics import Physics
 from game.physics2.objects.physicsobject import PhysicsObject

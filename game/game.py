@@ -2,7 +2,8 @@ from typing import List, Any
 
 from numpy import ndarray
 
-class CVMap:
+
+class GameContext:
     def __init__(self, width, height):
         self.width: int = width
         self.height: int = height
@@ -16,7 +17,7 @@ class CVMap:
 
 # base class for games
 class Game:
-    def __init__(self, initial_map: CVMap):
+    def __init__(self, initial_map: GameContext):
         self.map = initial_map
 
     # should be implemented by subclasses
@@ -24,6 +25,6 @@ class Game:
         pass
 
     # called when there is a new info from image processing
-    def update_map(self, new_map: CVMap):
+    def update_map(self, new_map: GameContext):
         self.map = new_map
         pass

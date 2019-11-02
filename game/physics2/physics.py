@@ -1,15 +1,15 @@
 from typing import List
 
-from game.game import CVMap
+from game.game import GameContext
 from game.physics2.objects.physicsobject import PhysicsObject
 
 
 class Physics:
     def __init__(self):
         self.objects: List[PhysicsObject] = []
-        self.map: CVMap = None
+        self.map: GameContext = None
 
-    def update_map(self, map: CVMap):
+    def update_map(self, map: GameContext):
         self.map = map
 
     def update(self, delta_t: float):
