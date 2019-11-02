@@ -22,8 +22,8 @@ class PlatformCharacter(PhysicsObject):
 
         self.bounce = 0
         self.edge = 0
-        self.ww = w
-        self.hh = h
+        self.ww = 0
+        self.hh = 0
 
     def update(self, map: CVMap, delta_t: float):
         x, y = int(self.x), int(self.y)

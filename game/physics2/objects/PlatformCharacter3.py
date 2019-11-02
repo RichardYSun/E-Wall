@@ -9,7 +9,8 @@ from game.physics2.objects.PhysicsObject import PhysicsObject
 G = 9.8
 PPM = 50
 
-class PlatformCharacter2(PhysicsObject):
+
+class PlatformCharacter3(PhysicsObject):
     obj_type = 3
 
     def __init__(self, x, y, w, h):
@@ -29,17 +30,23 @@ class PlatformCharacter2(PhysicsObject):
         w, h = self.w, self.h
         sub = map.edges[sy:sy + h, sx:sx + w]
 
-        self.vy += PPM * G * delta_t
-
-        ax,ay=0,0
-        cnt=0
+        ax, ay = 0.0, 0.0
+        cnt = 0
         for x in range(w):
             for y in range(h):
-                if sub[y,x]==0:
-                    cnt+=1
-                    ax+=x
-                    ay+=y
+                print(x,y)
+                if sub[y, x] == 0:
+                    cnt += 1
+                    ax += x
+                    ay += y
 
+        ny = ay / cnt + self.y - h / 2
+        self.x = ax / cnt + self.x - w / 2
+        self.vy += PPM * G * delta_t
+        if ny < self.y:
+            self.vy = 0
+
+        self.y = ny
 
         self.x = self.x + self.vx * delta_t
         self.y = self.y + self.vy * delta_t

@@ -3,13 +3,16 @@ import math
 import cv2
 
 from game.physics2.objects.PhysicsObject import PhysicsObject
+from game.physics2.objects.PixelObject import PixelObject
 from game.util import line
 from game.util.Triangle import Triangle
 from game.util.Vector2 import Vector2
 from game.util.line import Line
+import numpy as np
+from numpy import ndarray
 
 
-class Rectangle(PhysicsObject):
+class Rectangle(PixelObject):
     va = 0
 
     obj_type = 2
@@ -77,6 +80,34 @@ class Rectangle(PhysicsObject):
         for i in range(4):
             cv2.line(img, (int(self.pts[i].x), int(self.pts[i].y)),
                      (int(self.pts[(i + 1) % 4].x), int(self.pts[(i + 1) % 4].y)), 255, 2)
+
+    def get_bounds(self):
+        xmn = ymn = 1e9
+        xmx = ymx = 0
+
+        for i in range(4):
+            xmn = min(xmn, int(self.pts[i].x))
+            xmx = max(xmx, int(self.pts[i].x))
+            ymn = min(ymn, int(self.pts[i].y))
+            ymx = max(ymx, int(self.pts[i].y))
+
+        xmx += 1
+        ymx += 1
+
+        return xmn, xmx, ymn, ymx
+
+    def draw_hitbox(self, img: ndarray):
+        pts = np.array((
+            (self.pts[0].x, self.pts[0].y),
+            (self.pts[1].x, self.pts[1].y),
+            (self.pts[2].x, self.pts[2].y),
+            (self.pts[3].x, self.pts[3].y)
+        ), dtype=int)
+        cv2.fillConvexPoly(img, pts, 255)
+
+    def translate(self, move: Vector2):
+        for i in range(4):
+            self.pts[i] += move
 
 # def points(self):
 #     x = [-self.l / 2, self.l / 2]
