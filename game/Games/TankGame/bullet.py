@@ -3,7 +3,7 @@ import math
 import cv2
 import numpy as ndarray
 import imutils
-from physics2.objects.Circle import Circle
+from physics2.objects.circle import Circle
 from physics2.collisiontypes import COLLISION_BOUNCE
 from physics2.objects.rectangle import Rectangle
 from util.vector2 import Vector2
