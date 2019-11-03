@@ -2,5 +2,12 @@ UP = 1
 DOWN = 2
 LEFT = 3
 RIGHT = 0
-A = 5
-B = 6
+ENTER = 4
+
+CV_MAPPING = {
+    ord('w'): UP,
+    ord('a'): LEFT,
+    ord('s'): DOWN,
+    ord('d'): RIGHT,
+    ord('z'): ENTER
+}

@@ -24,6 +24,14 @@ class Game:
     def update_game(self, keys: List[bool], delta_t: int):
         pass
 
+    # called when key is pushed down
+    def key_down(self, key: int):
+        pass
+
+    # called when key comes back up
+    def key_up(self, key: int):
+        pass
+
     # called when there is a new info from image processing
     def update_map(self, new_map: GameContext):
         self.map = new_map

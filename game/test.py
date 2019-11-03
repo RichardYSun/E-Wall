@@ -7,6 +7,7 @@ from game.imageio import ImageIO
 from game.cv import CVer
 import numpy as np
 
+from game.keys import CV_MAPPING
 from game.util import ParamWindow
 
 
@@ -46,7 +47,12 @@ def test(G, cam='test2'):
 
         image_io.show(mp.game_img)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        res = cv2.waitKey(1)
+        if res != -1:
+            if res in CV_MAPPING:
+                game.key_down(CV_MAPPING[res])
+                game.key_up(CV_MAPPING[res])
+            elif res == ord('q'):
+                break
 
     del image_io
