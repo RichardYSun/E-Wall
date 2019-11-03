@@ -1,27 +1,20 @@
+import math
+
 import cv2
 import numpy as ndarray
 import imutils
+from physics2.objects.circle import Circle
+from physics2.collisiontypes import COLLISION_BOUNCE
+from physics2.objects.rectangle import Rectangle
+from util.vector2 import Vector2
+
 
 class Bullet:
-    px = 0.0
-    py = 0.0
-    angle = 0.0
-    speed = 0.5
-    image = None
-    damage = 9999.0
-    radius = 10.0
     alive = True
+    hitBox: Circle
+    timer = 200
 
-    def __init__(self, px, py, speed, angle):
-        self.px = px
-        self.py = py
-        self.angle = angle
-        self.speed = speed
-
-        image = cv2.imread('bulletBill.png', 1)
-
-    def draw(self, img: ndarray):
-        img[self.px: self.px + self.image.shape[0], self.py: self.py + self.image.shape[1]] = self.image
-
-    def bounce(self, bouncedAngle):
-        image = imutils.rotate_bound(self.image, bouncedAngle - self.angle)
+    def __init__(self, hitBox: Circle, speed, angle):
+        self.hitBox = hitBox
+        self.hitBox.collision_type = COLLISION_BOUNCE
+        self.hitBox.vel = Vector2(speed * math.cos(angle), speed*math.sin(angle))
