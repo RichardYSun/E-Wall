@@ -8,6 +8,7 @@ from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
 from game.test import test
 from game.util.vector2 import Vector2
+import game.keys as keys
 
 
 class Pong(Game):
@@ -38,6 +39,8 @@ class Pong(Game):
 
         self.score = (0, 0)
 
+        self.start = 0
+
     # this is called when there is a new frame available from camera
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)  # make sure to call super
@@ -47,22 +50,30 @@ class Pong(Game):
         self.wall_physics.update_map(new_map)
         self.std_physics.update_map(new_map)
 
-    def update_game(self, keys, delta_t: int):
-        # make sure to call update for all physics the game is using
-        self.pixel_physics.update(delta_t)
-        self.wall_physics.update(delta_t)
-        self.std_physics.update(delta_t)
+    def key_down(self, key: int):
+        if key == keys.ENTER:
+            self.start = 1
 
-        # detect win conditions
-        xmn, xmx, ymn, ymx = self.ball.get_bounds()
-        if xmn < 0:  # player 1 wins
-            self.ball.pos.x = self.map.width / 2  # reset ball to center
-            self.ball.vel = Vector2(200, 200)  # reset ball velocity
-            self.score[0] += 1  # increment score
-        if xmx > self.map.width:  # player 2 wins
-            self.ball.pos.x = self.map.width / 2  # reset ball to center
-            self.ball.vel = Vector2(200, 200)  # reset ball velocity
-            self.score = (self.score[0], self.score[1] + 1)  # increment score
+    def update_game(self, keys, delta_t: int):
+        if self.start:
+
+            # make sure to call update for all physics the game is using
+            self.pixel_physics.update(delta_t)
+            self.wall_physics.update(delta_t)
+            self.std_physics.update(delta_t)
+
+            # detect win conditions
+            xmn, xmx, ymn, ymx = self.ball.get_bounds()
+            if xmn < 0:  # player 1 wins
+                self.ball.pos.x = self.map.width / 2  # reset ball to center
+                self.ball.vel = Vector2(200, 200)  # reset ball velocity
+                self.score[0] += 1  # increment score
+                self.start = 0
+            if xmx > self.map.width:  # player 2 wins
+                self.ball.pos.x = self.map.width / 2  # reset ball to center
+                self.ball.vel = Vector2(200, 200)  # reset ball velocity
+                self.score = (self.score[0], self.score[1] + 1)  # increment score
+                self.start = 0
 
         # as a precaution, always draw stuff at the END of the update function
         self.ball.draw_hitbox(self.map.game_img)
@@ -79,5 +90,4 @@ class Pong(Game):
         cv2.putText(self.map.game_img, str(self.score[0]) + " " + str(self.score[1]), pos, font, font_scale, colour,
                     thickness, cv2.LINE_AA)
 
-
-#test(Pong, None)
+# test(Pong, None)

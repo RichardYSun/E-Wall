@@ -9,5 +9,5 @@ CV_MAPPING = {
     ord('a'): LEFT,
     ord('s'): DOWN,
     ord('d'): RIGHT,
-    ord('z'): ENTER
+    13: ENTER
 }
