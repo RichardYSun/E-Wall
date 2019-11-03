@@ -1,34 +1,34 @@
 import cv2
 
 from game import Game, GameContext
-from physics2.collisiontypes import COLLISION_BOUNCE
-from physics2.objects.Circle import Circle
-from physics2.PixelPhysics import PixelPhysics
-from physics2.standardphysics import StandardPhysics
-from physics2.wallphysics import WallPhysics
-from test import test
-from util.vector2 import Vector2
-from util.line import Line
+from game.physics2.collisiontypes import COLLISION_BOUNCE
+from game.physics2.objects.Circle import Circle
+from game.physics2.PixelPhysics import PixelPhysics
+from game.physics2.standardphysics import StandardPhysics
+from game.physics2.wallphysics import WallPhysics
+from game.util.vector2 import Vector2
+from game.util.line import Line
 
 from Games.TankGame.bullet import Bullet
 from Games.TankGame.tank import Tank
 import keys as key
 
-
 TurnSpeed = 0.1
 PlayerSpeed = 5
+BulletSpeed = 15
+BulletCooldown = 30
 
 class TankGame2(Game):
 
-    def __init__(self, mp : GameContext):
+    def __init__(self, mp: GameContext):
         super().__init__(mp)
 
-        self.std_physics = StandardPhysics(gravity = None)
+        self.std_physics = StandardPhysics(gravity=None)
         self.pixel_physics = PixelPhysics()
         self.wall_physics = WallPhysics()
 
-        self.spawn1 = Vector2(mp.width / 4, mp.height /2)
-        self.spawn2 = Vector2(mp.width * 3/4, mp.height/2)
+        self.spawn1 = Vector2(mp.width / 4, mp.height / 2)
+        self.spawn2 = Vector2(mp.width * 3 / 4, mp.height / 2)
 
         self.players = []
         self.bullets = []
@@ -41,7 +41,9 @@ class TankGame2(Game):
             self.pixel_physics.objects.append(tank)
             self.wall_physics.objects.append(tank)
 
-    def update_map(self, new_map : GameContext):
+        self.bulletCooldowns = [0, 0]
+
+    def update_map(self, new_map: GameContext):
         super().update_map(new_map)
 
         self.pixel_physics.update_map(new_map)
@@ -63,17 +65,23 @@ class TankGame2(Game):
         for bullet in self.bullets:
             bullet.hitBox.draw_hitbox(self.map.game_img)
 
+        for cooldown in self.bulletCooldowns:
+            cooldown += 1
+
+
     def checkShot(self):
         for tank in self.players:
             for bullet in self.bullets:
-                if tank.hitBox.distance(Line(bullet.hitBox.x, bullet.hitBox.y,1,1)) < bullet.hitBox.r:
+                if tank.hitBox.distance(Line(bullet.hitBox.x, bullet.hitBox.y, 1, 1)) < bullet.hitBox.r:
                     tank.alive = False
                     bullet.alive = False
                     self.remove(bullet)
                     self.remove(tank)
 
     def remove(self, obj):
-        pass
+        self.std_physics.objects.remove(obj);
+        self.pixel_physics.objects.remove(obj);
+        self.wall_physics.objects.remove(obj);
 
     def takeInput(self, keys: [bool]):
         if keys[key.RIGHT]:
@@ -90,4 +98,14 @@ class TankGame2(Game):
         else:
             self.players[0].setSpeed(0)
 
+        # ATM, only player 1 controls implemented, so set the "enter" key for player 1
+        if keys[key.ENTER]:
+            if self.bulletCooldowns[0] >= BulletCooldown:
+                bulletSpawn = Vector2(self.players[0].hitBox.pts[1].x, self.players[0].hitBox.pts[1].y)
+                bullet = Bullet(Circle(bulletSpawn, 3), BulletSpeed, self.players[0].angle)
 
+                self.std_physics.objects.append(bullet)
+                self.pixel_physics.objects.append(bullet)
+                self.wall_physics.objects.append(bullet)
+
+                self.bulletCooldowns[0] = 0

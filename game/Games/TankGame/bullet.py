@@ -12,6 +12,7 @@ from util.vector2 import Vector2
 class Bullet:
     alive = True
     hitBox: Circle
+    timer = 200
 
     def __init__(self, hitBox: Circle, speed, angle):
         self.hitBox = hitBox
