@@ -1,12 +1,14 @@
 import cv2
+import numpy as ndarray
 import imutils
 
 class Bullet:
-    px, py = 0.0
+    px = 0.0
+    py = 0.0
     angle = 0.0
     speed = 0.5
     image = None
-    damge = 9999.0
+    damage = 9999.0
     radius = 10.0
     alive = True
 
@@ -18,7 +20,7 @@ class Bullet:
 
         image = cv2.imread('bulletBill.png', 1)
 
-    def draw(self, img: cv2.ndarray):
+    def draw(self, img: ndarray):
         img[self.px: self.px + self.image.shape[0], self.py: self.py + self.image.shape[1]] = self.image
 
     def bounce(self, bouncedAngle):

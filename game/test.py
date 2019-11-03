@@ -3,7 +3,7 @@ import os
 import cv2
 import time
 
-from game.ImageIO import ImageIO
+from game.imageio import ImageIO
 from game.cv import CVer
 import numpy as np
 
@@ -27,10 +27,10 @@ def test(G, cam='test2'):
 
         show_edges = ParamWindow.get_int('show edges', 1, 1)
         if show_edges == 1:
-            game_img = mp.edges
+            mp.game_img = mp.edges
         else:
-            game_img = np.zeros_like(mp.edges)
-        mp.game_img = mp.lsd.drawSegments(game_img, mp.lines)
+            mp.game_img = np.zeros_like(mp.edges)
+        mp.game_img = mp.lsd.drawSegments(mp.game_img, mp.lines)
 
         game.update_map(mp)
 

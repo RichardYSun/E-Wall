@@ -1,13 +1,13 @@
 import cv2
 
-from game.framework import Game, CVMap
+from game.game import Game, GameContext
 from game.physics2.bouncephysics import BouncePhysics
-from game.physics2.WallPhysics import WallPhysics
-from game.physics2.objects.Circle import Circle
-from game.physics2.objects.Rectangle import Rectangle
-from game.physics2.PixelPhysics import PixelPhysics
+from game.physics2.wallphysics import WallPhysics
+from game.physics2.objects.circle import Circle
+from game.physics2.objects.rectangle import Rectangle
+from game.physics2.pixelphysics import PixelPhysics
 from game.test import test
-from game.util.Vector2 import Vector2
+from game.util.vector2 import Vector2
 
 G = 1
 ppm = 50
@@ -15,7 +15,7 @@ ppm = 50
 
 class Falling2(Game):
 
-    def __init__(self, mp: CVMap):
+    def __init__(self, mp: GameContext):
         super().__init__(mp)
         self.r = Rectangle(200, 100, 50, 50)
         self.r1 = Rectangle(100, 100, 50, 50)
@@ -26,7 +26,7 @@ class Falling2(Game):
         self.physics.objects.append(self.r1)
         self.physics.objects.append(self.c)
 
-    def update_map(self, new_map: CVMap):
+    def update_map(self, new_map: GameContext):
         super().update_map(new_map)
         self.physics.update_map(new_map)
         self.wall.update_map(new_map)

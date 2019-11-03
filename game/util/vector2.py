@@ -34,6 +34,16 @@ class Vector2:
     def cross(self, other):
         return abs(self.x * other.y - self.y * other.x)
 
+    def as_tuple(self):
+        return self.x, self.y
+
+    def as_int_tuple(self):
+        return int(self.x),int(self.y)
+
+    def __iter__(self):
+        yield self.x
+        yield self.y
+
     def __mul__(self, other):
         return Vector2(other * self.x, other * self.y)
 
@@ -68,3 +78,6 @@ class Vector2:
 
     def __str__(self):
         return str(int(self.x)) + " " + str(int(self.y))
+
+    def perp_vector(self):
+        return Vector2(self.y,-self.x)

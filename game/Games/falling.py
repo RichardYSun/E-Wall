@@ -1,9 +1,9 @@
 import cv2
 
-from game.framework import Game, CVMap
+from game.game import Game, GameContext
 from game.physics2.TempPhysics import TempPhysics
-from game.physics2.WallPhysics import WallPhysics
-from game.physics2.objects.Circle import Circle
+from game.physics2.wallphysics import WallPhysics
+from game.physics2.objects.circle import Circle
 from game.test import test
 
 G = 9.8
@@ -12,7 +12,7 @@ ppm = 50
 
 class Falling(Game):
 
-    def __init__(self, mp: CVMap):
+    def __init__(self, mp: GameContext):
         super().__init__(mp)
         self.c = Circle(200, 10, 50)
         self.physics = TempPhysics()
@@ -20,7 +20,7 @@ class Falling(Game):
         self.physics.objects.append(self.c)
         self.wall.objects.append(self.c)
 
-    def update_map(self, new_map: CVMap):
+    def update_map(self, new_map: GameContext):
         super().update_map(new_map)
         self.physics.update_map(new_map)
         self.wall.update_map(new_map)

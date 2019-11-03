@@ -1,4 +1,4 @@
-from game.util.Vector2 import Vector2
+from game.util.vector2 import Vector2
 
 
 # class representing a line segment

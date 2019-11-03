@@ -2,11 +2,11 @@ import math
 
 import cv2
 
-from game.physics2.objects.PhysicsObject import PhysicsObject
-from game.physics2.objects.PixelObject import PixelObject
+from game.physics2.objects.physicsobject import PhysicsObject
+from game.physics2.objects.pixelobject import PixelObject
 from game.util import line
-from game.util.Triangle import Triangle
-from game.util.Vector2 import Vector2
+from game.util.triangle import Triangle
+from game.util.vector2 import Vector2
 from game.util.line import Line
 import numpy as np
 from numpy import ndarray
@@ -17,8 +17,9 @@ class Rectangle(PixelObject):
 
     obj_type = 2
 
-    def __init__(self, x, y, l, h, a=0):
-        super().__init__(x, y)
+    def __init__(self, pos, l, h, a=0):
+        super().__init__(pos)
+        x, y = pos.x, pos.y
         self.pts = []
         self.pts.append(Vector2(x - l / 2, y - h / 2))
         self.pts.append(Vector2(x - l / 2, y + h / 2))
