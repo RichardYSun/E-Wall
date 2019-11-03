@@ -2,8 +2,8 @@ import cv2
 
 from game import Game, GameContext
 from physics2.collisiontypes import COLLISION_BOUNCE
-from physics2.objects.Circle import Circle
-from physics2.PixelPhysics import PixelPhysics
+from physics2.objects.circle import Circle
+from physics2.pixelphysics import PixelPhysics
 from physics2.standardphysics import StandardPhysics
 from physics2.wallphysics import WallPhysics
 from test import test
