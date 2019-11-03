@@ -80,4 +80,4 @@ class Pong(Game):
                     thickness, cv2.LINE_AA)
 
 
-test(Pong, None)
+#test(Pong, None)

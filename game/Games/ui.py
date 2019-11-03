@@ -15,16 +15,16 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 games: List[Game] = [Pong]
 
+
 class ui(Game):
 
     def __init__(self, mp: GameContext):
         super().__init__(mp)
         self.selection = 0
         self.background = cv2.imread(ROOT_DIR + '/../img/selection.png')
+        self.background = cv2.resize(self.background, None, fx=0.75, fy=0.75)
         self.arrow = cv2.imread(ROOT_DIR + '/../img/arrow.png')
-        print(self.arrow.shape)
         self.arrow = cv2.resize(self.arrow, None, fx=0.25, fy=0.25)
-        print(self.arrow.shape)
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -35,21 +35,23 @@ class ui(Game):
     def draw_ui(self):
         background = np.copy(self.background)
 
-        self.draw_arrow(background, (120 + 100 * self.selection, 220))
+        self.draw_arrow(background, (180 + 100 * self.selection, 280))
 
         cv2.imshow('selection screen', background)
 
     def start_game(self):
-        test(games[self.selection])
+        cv2.destroyWindow('selection screen')
+        test(games[self.selection], None)
 
-    def update_game(self, keys: List[bool], delta_t: int):
-        if keys.UP:
+    def key_down(self, key: int):
+        if key == keys.UP:
             self.selection = (self.selection + 1) % NUM_GAMES
-        if keys.DOWN:
+        if key == keys.DOWN:
             self.selection = (self.selection - 1) % NUM_GAMES
-        if 1:
+        if key == keys.ENTER:
             self.start_game()
 
+    def update_game(self, keys: List[bool], delta_t: int):
         self.draw_ui()
 
 
