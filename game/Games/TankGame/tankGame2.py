@@ -10,10 +10,10 @@ from game.physics2.wallphysics import WallPhysics
 from game.test import test
 from game.util.line import Line
 from game.util.vector2 import Vector2
+import math
+import cv2
 
-TurnSpeed = 0.1
-PlayerSpeed = 5
-BulletSpeed = 15
+BulletSpeed = 100
 BulletCooldown = 30
 
 class TankGame2(Game):
@@ -31,13 +31,12 @@ class TankGame2(Game):
         self.players = []*2
         self.bullets = []
 
-        self.players.append(Tank(Rectangle(self.spawn1, 40, 40)))
-        self.players.append(Tank(Rectangle(self.spawn2, 40, 40)))
+        self.players.append(Tank(Rectangle(self.spawn1, 20, 20)))
+        self.players.append(Tank(Rectangle(self.spawn2, 20, 20)))
 
-        bulletSpawn = Vector2(self.players[0].hitBox.pts[1].x, self.players[0].hitBox.pts[1].y)
+        bulletSpawn = Vector2(self.players[0].hitBox.pos.x, self.players[0].hitBox.pos.y)
         bullet = Bullet(Circle(bulletSpawn, 8), BulletSpeed, self.players[0].angle)
         self.bullets.append(bullet)
-
         self.std_physics.objects.append(bullet.hitBox)
         self.pixel_physics.objects.append(bullet.hitBox)
         self.wall_physics.objects.append(bullet.hitBox)
@@ -49,6 +48,14 @@ class TankGame2(Game):
 
         self.bulletCooldowns = [0, 0]
 
+        self.up1 = False;
+        self.left1 = False;
+        self.down1 = False;
+        self.right1 = False;
+        self.up2 = False;
+        self.left2 = False;
+        self.down2 = False;
+        self.right2 = False;
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -64,12 +71,23 @@ class TankGame2(Game):
         self.std_physics.update(delta_t)
 
         self.checkShot()
-        # self.takeInput(keys_down)
 
         for tank in self.players:
             tank.hitBox.draw_hitbox(self.map.game_img)
+            cv2.line(self.map.game_img, (int(tank.hitBox.pos.x), int(tank.hitBox.pos.y)), (int(tank.hitBox.pos.x + 12*math.cos(tank.angle)),
+                        int(tank.hitBox.pos.y + 12*math.sin(tank.angle))), (69,42,210), 4)
 
         for bullet in self.bullets:
+            bullet.timer -= 1
+
+            if bullet.timer < 0:
+                bullet.alive = False
+                #self.remove(bullet)
+                bullet.hitBox.pos.x = -50
+                bullet.hitBox.pos.y = -50
+                bullet.alive = False
+                bullet.angle = 0
+
             bullet.hitBox.draw_hitbox(self.map.game_img)
 
         for cooldown in self.bulletCooldowns:
@@ -89,27 +107,27 @@ class TankGame2(Game):
         self.pixel_physics.objects.remove(obj)
         self.wall_physics.objects.remove(obj)
 
-    def takeInput(self, key_down: [bool]):
-        if key_down[keys.RIGHT]:
-            self.players[0].angle -= TurnSpeed
-            self.players[0].rotateRight()
-        if key_down[keys.LEFT]:
-            self.players[0].angle += TurnSpeed
+    def key_down(self, key_down: int):
+        if key_down == keys.RIGHT:
+            self.players[0].angle += self.players[0].turnSpeed
             self.players[0].rotateLeft()
+        if key_down == keys.LEFT:
+            self.players[0].angle -= self.players[0].turnSpeed
+            self.players[0].rotateRight()
 
-        if key_down[keys.UP]:
+        if key_down == keys.UP:
             self.players[0].setSpeed(1)
-        elif key_down[keys.DOWN]:
+        elif key_down == keys.DOWN:
             self.players[0].setSpeed(-1)
         else:
             self.players[0].setSpeed(0)
 
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
-        if key_down[key_down.ENTER]:
-            if self.bulletCooldowns[0] >= BulletCooldown:
-                bulletSpawn = Vector2(self.players[0].hitBox.pts[1].x, self.players[0].hitBox.pts[1].y)
-                bullet = Bullet(Circle(bulletSpawn, 3), BulletSpeed, self.players[0].angle)
-
+        if key_down == keys.ENTER:
+         #  if self.bulletCooldowns[0] >= BulletCooldown:
+                bulletSpawn = Vector2(self.players[0].hitBox.pos.x, self.players[0].hitBox.pos.y)
+                bullet = Bullet(Circle(bulletSpawn, 8), BulletSpeed, self.players[0].angle)
+                self.bullets.append(bullet)
                 self.std_physics.objects.append(bullet.hitBox)
                 self.pixel_physics.objects.append(bullet.hitBox)
                 self.wall_physics.objects.append(bullet.hitBox)
