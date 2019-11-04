@@ -21,6 +21,7 @@ def test(G, cam='test2'):
 
     cnt = 0
     tt = 0
+    k = [False, False, False, False, False]
     while True:
         img = image_io.get_img()
 
@@ -36,7 +37,7 @@ def test(G, cam='test2'):
         game.update_map(mp)
 
         t = time.time()
-        game.update_game([], t - last_time)
+        game.update_game(k, t - last_time)
         tt += t - last_time
         last_time = t
         cnt += 1

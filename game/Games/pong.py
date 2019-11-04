@@ -90,4 +90,4 @@ class Pong(Game):
         cv2.putText(self.map.game_img, str(self.score[0]) + " " + str(self.score[1]), pos, font, font_scale, colour,
                     thickness, cv2.LINE_AA)
 
-# test(Pong, None)
+test(Pong, None)

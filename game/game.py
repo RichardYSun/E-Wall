@@ -21,7 +21,7 @@ class Game:
         self.map = initial_map
 
     # should be implemented by subclasses
-    def update_game(self, keys: List[bool], delta_t: int):
+    def update_game(self, keys_down: List[bool], delta_t: int):
         pass
 
     # called when key is pushed down
