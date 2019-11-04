@@ -1,11 +1,11 @@
-import cv2
-import numpy as ndarray
-import imutils
 import math
-from Games.TankGame.bullet import Bullet
-from physics2.collisiontypes import COLLISION_SLIDE
-from physics2.objects.rectangle import Rectangle
-from util.vector2 import Vector2
+
+import cv2
+from numpy import ndarray
+
+from game.physics2.collisiontypes import COLLISION_SLIDE
+from game.physics2.objects.rectangle import Rectangle
+from game.util.vector2 import Vector2
 
 PlayerSpeed = 5.0
 TurnSpeed = 0.1

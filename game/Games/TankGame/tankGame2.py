@@ -1,17 +1,14 @@
-import cv2
-
-from game import Game, GameContext
-from game.physics2.collisiontypes import COLLISION_BOUNCE
-from game.physics2.objects.Circle import Circle
-from game.physics2.PixelPhysics import PixelPhysics
+from game import keys
+from game.Games.TankGame.bullet import Bullet
+from game.Games.TankGame.tank import Tank
+from game.game import Game, GameContext
+from game.physics2.objects.circle import Circle
+from game.physics2.pixelphysics import PixelPhysics
 from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
-from game.util.vector2 import Vector2
+from game.test import test
 from game.util.line import Line
-
-from Games.TankGame.bullet import Bullet
-from Games.TankGame.tank import Tank
-import keys as key
+from game.util.vector2 import Vector2
 
 TurnSpeed = 0.1
 PlayerSpeed = 5
@@ -50,14 +47,14 @@ class TankGame2(Game):
         self.wall_physics.update_map(new_map)
         self.std_physics.update_map(new_map)
 
-    def update_game(self, keys, delta_t: int):
+    def update_game(self, keys_down, delta_t: int):
         # make sure to call update for all physics the game is using
         self.pixel_physics.update(delta_t)
         self.wall_physics.update(delta_t)
         self.std_physics.update(delta_t)
 
         self.checkShot()
-        self.takeInput(keys)
+        self.takeInput(keys_down)
 
         for tank in self.players:
             tank.hitBox.draw_hitbox(self.map.game_img)
@@ -83,23 +80,23 @@ class TankGame2(Game):
         self.pixel_physics.objects.remove(obj);
         self.wall_physics.objects.remove(obj);
 
-    def takeInput(self, keys: [bool]):
-        if keys[key.RIGHT]:
+    def takeInput(self, key_down: [bool]):
+        if key_down[keys.RIGHT]:
             self.players[0].angle -= TurnSpeed
             self.players[0].rotateRight()
-        if keys[key.LEFT]:
+        if key_down[keys.LEFT]:
             self.players[0].angle += TurnSpeed
             self.players[0].rotateLeft()
 
-        if keys[key.UP]:
+        if key_down[keys.UP]:
             self.players[0].setSpeed(1)
-        elif keys[key.DOWN]:
+        elif key_down[keys.DOWN]:
             self.players[0].setSpeed(-1)
         else:
             self.players[0].setSpeed(0)
 
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
-        if keys[key.ENTER]:
+        if key_down[key_down.ENTER]:
             if self.bulletCooldowns[0] >= BulletCooldown:
                 bulletSpawn = Vector2(self.players[0].hitBox.pts[1].x, self.players[0].hitBox.pts[1].y)
                 bullet = Bullet(Circle(bulletSpawn, 3), BulletSpeed, self.players[0].angle)
@@ -109,3 +106,5 @@ class TankGame2(Game):
                 self.wall_physics.objects.append(bullet)
 
                 self.bulletCooldowns[0] = 0
+
+test(TankGame2)
