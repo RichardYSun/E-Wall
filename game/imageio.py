@@ -14,7 +14,7 @@ class ImageIO:
 
         if img_name is None:
             self.img_src=None
-            self.cap = cv2.VideoCapture(1)
+            self.cap = cv2.VideoCapture(0)
             w = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             h = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         else:
