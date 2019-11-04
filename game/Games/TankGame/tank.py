@@ -1,11 +1,11 @@
-import cv2
-import numpy as ndarray
-import imutils
 import math
-from Games.TankGame.bullet import Bullet
-from physics2.collisiontypes import COLLISION_SLIDE
-from physics2.objects.rectangle import Rectangle
-from util.vector2 import Vector2
+
+import cv2
+from numpy import ndarray
+
+from game.physics2.collisiontypes import COLLISION_SLIDE
+from game.physics2.objects.rectangle import Rectangle
+from game.util.vector2 import Vector2
 
 PlayerSpeed = 5.0
 TurnSpeed = 0.1
@@ -17,18 +17,12 @@ class Tank:
     alive = True
     hitBox : [Rectangle] = None
 
-    def __init__(self, hitBox: Rectangle, type: int):
+    def __init__(self, hitBox: Rectangle):
         self.hitBox = hitBox
         self.hitBox.collision_type = COLLISION_SLIDE
         self.angle = 0.0
         self.speed = 0.0
         self.hitBox.vel = Vector2(0,0)
-        if type == 1:
-            self.sprite = cv2.imread('player.jpg')
-        elif type == 2:
-            self.sprite = cv2.imread('blue.jpg')
-        elif type == 3:
-            self.sprite = cv2.imread('red.jpg')
 
     def setSpeed(self, speed :int):
         if speed == 0:
