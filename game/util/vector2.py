@@ -29,7 +29,7 @@ class Vector2:
 
     ##projects the other vector onto the current one
     def proj(self, other):
-        return self * (self.dot(other) / self.sq_mag())
+        return self * (self.dot(other) // self.sq_mag())
 
     def cross(self, other):
         return abs(self.x * other.y - self.y * other.x)

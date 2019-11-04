@@ -2,6 +2,7 @@ import math
 
 import cv2
 
+from game.physics2.objects.circle import Circle
 from game.physics2.objects.pixelobject import PixelObject
 from game.util import line
 from game.util.vector2 import Vector2
@@ -32,6 +33,19 @@ class Rectangle(PixelObject):
             angle += theta
             new_dif = Vector2(dif.mag() * math.cos(angle), dif.mag() * math.sin(angle))
             self.pts[i] = pt + new_dif
+
+    # warning: does not work if you don't rotate about centre
+    def circle_collision(self, other: Circle):
+        dir = self.pos - other.pos
+        return self.inside(dir * (other.r // dir.mag()))
+
+    def inside(self, pt: Vector2):
+        a = 0
+        for i in range(4):
+            x1, y1 = self.pts[i].x, self.pts[i].y
+            x2, y2 = self.pts[(i + 1) % 4].x, self.pts[(i + 1) % 4].y
+            x3, y3 = pt.x, pt.y
+            a += 0.5 * abs((x1 * y2 + x2 * y3 + x3 * y1) - (x1 * y3 + x2 * y1 + x3 * y2))
 
     def draw(self, img):
         for i in range(4):
