@@ -3,6 +3,7 @@ from game.Games.TankGame.bullet import Bullet
 from game.Games.TankGame.tank import Tank
 from game.game import Game, GameContext
 from game.physics2.objects.circle import Circle
+from game.physics2.objects.rectangle import Rectangle
 from game.physics2.pixelphysics import PixelPhysics
 from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
@@ -27,16 +28,16 @@ class TankGame2(Game):
         self.spawn1 = Vector2(mp.width / 4, mp.height / 2)
         self.spawn2 = Vector2(mp.width * 3 / 4, mp.height / 2)
 
-        self.players = []
+        self.players = []*2
         self.bullets = []
 
-        self.players[0] = Tank(self.spawn1, 40, 40)
-        self.players[1] = Tank(self.spawn2, 40, 40)
+        self.players.append(Tank(Rectangle(self.spawn1, 40, 40)))
+        self.players.append(Tank(Rectangle(self.spawn2, 40, 40)))
 
         for tank in self.players:
-            self.std_physics.objects.append(tank)
-            self.pixel_physics.objects.append(tank)
-            self.wall_physics.objects.append(tank)
+            self.std_physics.objects.append(tank.hitBox)
+            self.pixel_physics.objects.append(tank.hitBox)
+            self.wall_physics.objects.append(tank.hitBox)
 
         self.bulletCooldowns = [0, 0]
 
@@ -54,7 +55,7 @@ class TankGame2(Game):
         self.std_physics.update(delta_t)
 
         self.checkShot()
-        self.takeInput(keys_down)
+        # self.takeInput(keys_down)
 
         for tank in self.players:
             tank.hitBox.draw_hitbox(self.map.game_img)
@@ -64,7 +65,6 @@ class TankGame2(Game):
 
         for cooldown in self.bulletCooldowns:
             cooldown += 1
-
 
     def checkShot(self):
         for tank in self.players:
@@ -101,10 +101,10 @@ class TankGame2(Game):
                 bulletSpawn = Vector2(self.players[0].hitBox.pts[1].x, self.players[0].hitBox.pts[1].y)
                 bullet = Bullet(Circle(bulletSpawn, 3), BulletSpeed, self.players[0].angle)
 
-                self.std_physics.objects.append(bullet)
-                self.pixel_physics.objects.append(bullet)
-                self.wall_physics.objects.append(bullet)
+                self.std_physics.objects.append(bullet.hitBox)
+                self.pixel_physics.objects.append(bullet.hitBox)
+                self.wall_physics.objects.append(bullet.hitBox)
 
                 self.bulletCooldowns[0] = 0
 
-test(TankGame2)
+test(TankGame2, None)

@@ -17,18 +17,12 @@ class Tank:
     alive = True
     hitBox : [Rectangle] = None
 
-    def __init__(self, hitBox: Rectangle, type: int):
+    def __init__(self, hitBox: Rectangle):
         self.hitBox = hitBox
         self.hitBox.collision_type = COLLISION_SLIDE
         self.angle = 0.0
         self.speed = 0.0
         self.hitBox.vel = Vector2(0,0)
-        if type == 1:
-            self.sprite = cv2.imread('player.jpg')
-        elif type == 2:
-            self.sprite = cv2.imread('blue.jpg')
-        elif type == 3:
-            self.sprite = cv2.imread('red.jpg')
 
     def setSpeed(self, speed :int):
         if speed == 0:
