@@ -30,7 +30,7 @@ class ui(Game):
         super().update_map(new_map)
 
     def draw_arrow(self, background, off):
-        np.copyto(background[off[0]:self.arrow.shape[0] + off[0], off[1]:self.arrow.shape[1 ] + off[1]], self.arrow)
+        np.copyto(background[off[0]:self.arrow.shape[0] + off[0], off[1]:self.arrow.shape[1] + off[1]], self.arrow)
 
     def draw_ui(self):
         background = np.copy(self.background)

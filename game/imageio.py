@@ -13,8 +13,8 @@ class ImageIO:
     def __init__(self, img_name='test2', proj_w=1000, proj_h=500):
 
         if img_name is None:
-            self.img_src=None
-            self.cap = cv2.VideoCapture(0)
+            self.img_src = None
+            self.cap = cv2.VideoCapture(1)
             w = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             h = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         else:
@@ -26,18 +26,20 @@ class ImageIO:
         self.cam_window = AreaSelectWindow(w, h, 'camera window', (255, 0, 0))
 
     def show(self, img: ndarray):
+        img = cv2.resize(img, (1000, 500))
         self.projector_window.show(img)
 
     def get_img(self):
         if self.img_src is None:
             ret, img = self.cap.read()
-            cv2.flip(img, 1, img)
+            # cv2.flip(img, 1, img)
             if ret is False:
                 raise Exception('could not read image')
         else:
             img = np.copy(self.img_src)
 
         sub = self.cam_window.get_sub_image(img)
+        sub = cv2.resize(sub, (500, 250))
 
         self.cam_window.show(img)
 
