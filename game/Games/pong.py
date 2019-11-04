@@ -67,7 +67,7 @@ class Pong(Game):
             if xmn < 0:  # player 1 wins
                 self.ball.pos.x = self.map.width / 2  # reset ball to center
                 self.ball.vel = Vector2(200, 200)  # reset ball velocity
-                self.score[0] += 1  # increment score
+                self.score = (self.score[0] + 1, self.score[1])  # increment score
                 self.start = 0
             if xmx > self.map.width:  # player 2 wins
                 self.ball.pos.x = self.map.width / 2  # reset ball to center
