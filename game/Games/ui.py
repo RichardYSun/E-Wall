@@ -25,6 +25,7 @@ class ui(Game):
         self.background = cv2.resize(self.background, None, fx=0.75, fy=0.75)
         self.arrow = cv2.imread(ROOT_DIR + '/../img/arrow.png')
         self.arrow = cv2.resize(self.arrow, None, fx=0.25, fy=0.25)
+        self.start = 0
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -48,7 +49,8 @@ class ui(Game):
             self.selection = (self.selection + 1) % NUM_GAMES
         if key == keys.DOWN:
             self.selection = (self.selection - 1) % NUM_GAMES
-        if key == keys.ENTER:
+        if key == keys.ENTER and not self.start:
+            self.start = 1
             self.start_game()
 
     def update_game(self, keys: List[bool], delta_t: int):

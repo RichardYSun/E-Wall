@@ -1,3 +1,5 @@
+import pygame
+
 UP = 1
 DOWN = 2
 LEFT = 3
@@ -10,4 +12,12 @@ CV_MAPPING = {
     ord('s'): DOWN,
     ord('d'): RIGHT,
     13: ENTER
+}
+
+PY_MAPPING = {
+    pygame.K_w: UP,
+    pygame.K_a: LEFT,
+    pygame.K_s: DOWN,
+    pygame.K_d: RIGHT,
+    pygame.K_RETURN: ENTER
 }

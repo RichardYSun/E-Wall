@@ -38,7 +38,7 @@ class Vector2:
         return self.x, self.y
 
     def as_int_tuple(self):
-        return int(self.x),int(self.y)
+        return int(self.x), int(self.y)
 
     def __iter__(self):
         yield self.x
@@ -80,4 +80,4 @@ class Vector2:
         return str(int(self.x)) + " " + str(int(self.y))
 
     def perp_vector(self):
-        return Vector2(self.y,-self.x)
+        return Vector2(self.y, -self.x)
