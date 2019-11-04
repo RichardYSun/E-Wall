@@ -77,6 +77,7 @@ class Rectangle(PixelObject):
         cv2.fillConvexPoly(img, pts, 255)
 
     def translate(self, move: Vector2):
+        self.pos += move
         for i in range(4):
             self.pts[i] += move
 

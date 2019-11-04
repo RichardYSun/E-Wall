@@ -34,12 +34,21 @@ class TankGame2(Game):
         self.players.append(Tank(Rectangle(self.spawn1, 40, 40)))
         self.players.append(Tank(Rectangle(self.spawn2, 40, 40)))
 
+        bulletSpawn = Vector2(self.players[0].hitBox.pts[1].x, self.players[0].hitBox.pts[1].y)
+        bullet = Bullet(Circle(bulletSpawn, 8), BulletSpeed, self.players[0].angle)
+        self.bullets.append(bullet)
+
+        self.std_physics.objects.append(bullet.hitBox)
+        self.pixel_physics.objects.append(bullet.hitBox)
+        self.wall_physics.objects.append(bullet.hitBox)
+
         for tank in self.players:
             self.std_physics.objects.append(tank.hitBox)
             self.pixel_physics.objects.append(tank.hitBox)
             self.wall_physics.objects.append(tank.hitBox)
 
         self.bulletCooldowns = [0, 0]
+
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -69,16 +78,16 @@ class TankGame2(Game):
     def checkShot(self):
         for tank in self.players:
             for bullet in self.bullets:
-                if tank.hitBox.distance(Line(bullet.hitBox.x, bullet.hitBox.y, 1, 1)) < bullet.hitBox.r:
+                if tank.hitBox.circle_collision(bullet.hitBox):
                     tank.alive = False
                     bullet.alive = False
                     self.remove(bullet)
                     self.remove(tank)
 
     def remove(self, obj):
-        self.std_physics.objects.remove(obj);
-        self.pixel_physics.objects.remove(obj);
-        self.wall_physics.objects.remove(obj);
+        self.std_physics.objects.remove(obj)
+        self.pixel_physics.objects.remove(obj)
+        self.wall_physics.objects.remove(obj)
 
     def takeInput(self, key_down: [bool]):
         if key_down[keys.RIGHT]:

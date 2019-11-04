@@ -50,15 +50,19 @@ class PlatformCharacter(PixelObject):
                 self.vx = -self.walk_speed
             elif down[keys.RIGHT]:
                 self.vx = self.walk_speed
-            else:
+            else:  # reset walking
                 self.vx = 0
                 self.walk_state = 0
                 self.walk_time = 0
-
-
-
         else:
             pass
+
+    def update_walk(self, delta_t: float):
+        self.walk_time += delta_t
+        if self.walk_time >= self.walk_rate * 4:
+            self.walk_time = 0
+        self.walk_state = self.walk_time / self.walk_rate
+        
 
     def draw(self, game_img: ndarray):
         p = self.pos
