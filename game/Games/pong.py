@@ -10,6 +10,8 @@ from game.test import test
 from game.util.vector2 import Vector2
 import game.keys as keys
 
+BALL_VEL = Vector2(200, 200)
+
 
 class Pong(Game):
 
@@ -30,7 +32,7 @@ class Pong(Game):
         # 20 is the radius
         self.ball = Circle(Vector2(mp.width / 2, mp.height / 2), 20)
         self.ball.collision_type = COLLISION_BOUNCE  # this makes the ball bouncy
-        self.ball.vel = Vector2(200, 200)  # make the ball begin moving
+        self.ball.vel = BALL_VEL  # make the ball begin moving
 
         # we must add the ball to each physics module we want it to follow
         self.std_physics.objects.append(self.ball)  # we want the ball to move
@@ -66,12 +68,12 @@ class Pong(Game):
             xmn, xmx, ymn, ymx = self.ball.get_bounds()
             if xmn < 0:  # player 1 wins
                 self.ball.pos.x = self.map.width / 2  # reset ball to center
-                self.ball.vel = Vector2(200, 200)  # reset ball velocity
+                self.ball.vel = BALL_VEL  # reset ball velocity
                 self.score = (self.score[0] + 1, self.score[1])  # increment score
                 self.start = 0
             if xmx > self.map.width:  # player 2 wins
                 self.ball.pos.x = self.map.width / 2  # reset ball to center
-                self.ball.vel = Vector2(200, 200)  # reset ball velocity
+                self.ball.vel = BALL_VEL  # reset ball velocity
                 self.score = (self.score[0], self.score[1] + 1)  # increment score
                 self.start = 0
 
@@ -82,9 +84,10 @@ class Pong(Game):
 
     def draw_score(self):
         font = cv2.FONT_HERSHEY_SIMPLEX
-        pos = (self.map.height // 2, 200)
+        pos = (int(self.map.width * 0.45), self.map.height // 2)
+
         colour = (0, 255, 0)
-        font_scale = 2
+        font_scale = self.map.height // 250
         thickness = 2
 
         cv2.putText(self.map.game_img, str(self.score[0]) + " " + str(self.score[1]), pos, font, font_scale, colour,
