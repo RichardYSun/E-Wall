@@ -1,3 +1,5 @@
+import keyboard
+
 UP = 1
 DOWN = 2
 LEFT = 3
@@ -10,4 +12,11 @@ CV_MAPPING = {
     ord('s'): DOWN,
     ord('d'): RIGHT,
     13: ENTER
+}
+
+KEYBOARD_MAPPING={
+    'up arrow': UP,
+    'left arrow': LEFT,
+    'down arrow': DOWN,
+    'right arrow': RIGHT,
 }

@@ -5,8 +5,7 @@ import os
 
 from game.util import ParamWindow
 from game.util.areaselectwindow import AreaSelectWindow
-
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+from game.util.imreader import imread
 
 
 class ImageIO:
@@ -19,7 +18,7 @@ class ImageIO:
             w = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             h = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         else:
-            self.img_src = cv2.imread(ROOT_DIR + '/test_images/' + img_name + '.bmp')
+            self.img_src = imread('test\\' + img_name + '.bmp')
             w = self.img_src.shape[1]
             h = self.img_src.shape[0]
 

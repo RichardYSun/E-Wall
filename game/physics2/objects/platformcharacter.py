@@ -7,6 +7,7 @@ from game.physics2 import collisiontypes
 from game.physics2.objects.pixelobject import PixelObject
 from numpy import ndarray
 import cv2
+import numpy as np
 
 GROUNDED = 1
 FALLING = 2
@@ -25,8 +26,8 @@ class PlatformCharacter(PixelObject):
     def __init__(self, pos):
         super().__init__(pos)
         self.rest_left = cv2.flip(self.rest_right, 1)
-        self.walk1_left = cv2.flip(self.walk1_right, 1)
-        self.walk2_left = cv2.flip(self.walk2_right, 1)
+        self.walk_right = [self.rest_right, self.walk1_right, self.rest_right, self.walk2_right]
+        self.walk_left = [cv2.flip(x, 1) for x in self.walk_right]
         self.walk_state = 0
         self.walk_time = 0
         self.cur_img = self.rest_right
@@ -46,12 +47,21 @@ class PlatformCharacter(PixelObject):
             self.state = GROUNDED
 
         if self.state == GROUNDED:
+            if prev_state != GROUNDED:
+                self.vel.x = 0
+                self.walk_state = 0
+                self.walk_time = 0
+
             if down[keys.LEFT]:
-                self.vx = -self.walk_speed
+                self.vel.x = -self.walk_speed
+                self.update_walk(delta_t)
+                self.cur_img = self.walk_left[self.walk_state]
             elif down[keys.RIGHT]:
-                self.vx = self.walk_speed
+                self.vel.x = self.walk_speed
+                self.update_walk(delta_t)
+                self.cur_img = self.walk_right[self.walk_state]
             else:  # reset walking
-                self.vx = 0
+                self.vel.x = 0
                 self.walk_state = 0
                 self.walk_time = 0
         else:
@@ -62,20 +72,21 @@ class PlatformCharacter(PixelObject):
         if self.walk_time >= self.walk_rate * 4:
             self.walk_time = 0
         self.walk_state = self.walk_time / self.walk_rate
-        
 
     def draw(self, game_img: ndarray):
-        p = self.pos
-        c = self.cur_img
-        game_img[p.x:p.x + c.shape[0], p.y:p.y + c.shape[0]] = c
+        x, y = self.pos.as_int_tuple()
+        c=self.cur_img
+        c = c[:min(c.shape[0],game_img.shape[0]-y), :min(c.shape[1],game_img.shape[1]-x), :3]
+        game_img[y:y + c.shape[0], x:x + c.shape[1]] = c
 
     def draw_hitbox(self, img: ndarray):
-        p = self.pos
+        x, y = self.pos.as_int_tuple()
         c = self.cur_img
         c = cv2.extractChannel(c, 3)  # extract alpha channel
-        img[p.x:p.x + c.shape[0], p.y:p.y + c.shape[0]] = c
+        c=c[:min(c.shape[0],img.shape[0]-y), :min(c.shape[1],img.shape[1]-x)]
+        img[y:y + c.shape[0], x:x + c.shape[1]] = c
 
     def get_bounds(self):
-        p = self.pos
+        x, y = self.pos.as_int_tuple()
         s = self.cur_img.shape
-        return p.x, p.x + s[0], p.y, p.y + s[1]
+        return x, x + s[1], y, y + s[0]
