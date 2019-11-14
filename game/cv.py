@@ -29,7 +29,7 @@ class CVer:
         self.prev = None
         self.lsd = cv2.ximgproc.createFastLineDetector()
 
-    def do_cv(self, frame: ndarray) -> GameContext:
+    def do_cv(self, frame: ndarray, mp: GameContext):
         algorithm = ParamWindow.get_int('algorithm', 2, 2)
 
         color_space = ParamWindow.get_int('color space', 1, 0)
@@ -79,9 +79,9 @@ class CVer:
                 cv2.adaptiveThreshold(res, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, block_size, C,
                                       dst=res)
 
-            if thresholding!=thres_none:
-                use_morph=ParamWindow.get_int('use morph', 1,0)
-                if use_morph==1:
+            if thresholding != thres_none:
+                use_morph = ParamWindow.get_int('use morph', 1, 0)
+                if use_morph == 1:
                     pass
 
         else:
@@ -105,12 +105,12 @@ class CVer:
             lines = None
             lines_conv = []
 
-        mp = GameContext(res.shape[1], res.shape[0])
+        mp.width = res.shape[1]
+        mp.height = res.shape[0]
         mp.edges = res
         mp.lines = lines
         mp.lines_conv = lines_conv
         mp.lsd = self.lsd
-        return mp
 
 # stupid optical flow stuff thats too slow
 

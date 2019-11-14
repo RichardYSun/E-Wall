@@ -44,8 +44,6 @@ class Pong(Game):
 
         self.start = 0
 
-        self.surface = pygame.display.get_surface()
-
     # this is called when there is a new frame available from camera
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)  # make sure to call super
@@ -81,20 +79,22 @@ class Pong(Game):
 
         # as a precaution, always draw stuff at the END of the update function
         # self.ball.draw_hitbox(self.map.game_img)
-        self.surface.fill((255, 255, 255))
+        surface = self.map.surface
 
-        self.ball.draw_hitbox(self.surface)
+        surface.fill((255, 255, 255))
 
-        self.draw_score()
+        self.ball.draw(surface)
 
-    def draw_score(self):
+        self.draw_score(surface)
+
+    def draw_score(self, surface):
         # font = cv2.FONT_HERSHEY_SIMPLEX
         # pos = (int(self.map.width * 0.45), self.map.height // 2)
         colour = (0, 255, 0)
-        font = pygame.font.SysFont('arial', self.surface.get_width() // 10)
+        font = pygame.font.SysFont('arial', surface.get_width() // 10)
         text = font.render('GeeksForGeeks', True, colour)
         textRect = text.get_rect()
-        textRect.center = (int(self.surface.get_width() * 0.45), self.surface.get_height() // 2)
+        textRect.center = (self.map.cc(Vector2(int(surface.get_width() * 0.45), surface.get_height() // 2)))
 
         # font_scale = self.map.height // 250
         # thickness = 2
@@ -102,7 +102,7 @@ class Pong(Game):
         # cv2.putText(self.map.game_img, str(self.score[0]) + " " + str(self.score[1]), pos, font, font_scale, colour,
         #             thickness, cv2.LINE_AA)
 
-        self.surface.blit(text, textRect)
+        surface.blit(text, textRect)
 
 
 test(Pong, None)

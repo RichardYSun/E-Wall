@@ -1,18 +1,37 @@
-from typing import List, Any
+from typing import List, Any, Tuple
 
+import pygame
 from numpy import ndarray
+
+from game.util.vector2 import Vector2
 
 
 class GameContext:
-    def __init__(self, width, height):
-        self.width: int = width
-        self.height: int = height
+    def __init__(self, use_pygame=True):
+        self.width: int = None
+        self.height: int = None
+
         self.edges: ndarray = None  # the image with edges detected
         self.lines: ndarray = None  # the list of lines detected in the form [[[x1,y1,x2,y2]],[[...]],...]
         self.game_img: ndarray = None  # the output image to draw on
         self.lsd: Any = None  # the line segment detector
         self.lines_conv: ndarray = None
         self.pixels_per_meter = 50  # conversion for pixels to real physics
+        if use_pygame:
+            self.surface = pygame.display.get_surface()
+            self.pysize = self.surface.get_size()
+
+    # return scaling factor from real to pygame horizontal
+    def sx(self):
+        return self.pysize[0] / self.width
+
+    # return scaling factor from real to pygame vertical
+    def sy(self):
+        return self.pysize[1] / self.height
+
+    # convert game coords to pygame coords
+    def cc(self, coord: Vector2) -> Tuple[float, float]:
+        return coord.x * self.sx(), coord.y * self.sy()
 
 
 # base class for games

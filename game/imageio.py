@@ -10,7 +10,7 @@ from game.util.moreimutils import imread
 
 class ImageIO:
 
-    def __init__(self, img_name='test2', proj_w=1000, proj_h=500):
+    def __init__(self, img_name='test2'):
 
         if img_name is None:
             self.img_src = None
@@ -22,14 +22,7 @@ class ImageIO:
             w = self.img_src.shape[1]
             h = self.img_src.shape[0]
 
-        self.projector_window = AreaSelectWindow(proj_w, proj_h, 'projector window', (255, 0, 0))
         self.cam_window = AreaSelectWindow(w, h, 'camera window', (255, 0, 0))
-
-    def show(self, img: ndarray):
-        proj_w = ParamWindow.get_int('proj width', 2000, 1000)
-        proj_h = ParamWindow.get_int('proj height', 2000, 500)
-        img = cv2.resize(img, (proj_w, proj_h))
-        self.projector_window.show(img)
 
     def get_img(self):
         if self.img_src is None:
@@ -52,5 +45,4 @@ class ImageIO:
 
     def __del__(self):
         del self.cam_window
-        del self.projector_window
         self.cap.release()
