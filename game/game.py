@@ -30,8 +30,8 @@ class GameContext:
         return self.pysize[1] / self.height
 
     # convert game vector coords to pygame coords
-    def cc(self, coord: Vector2) -> Tuple[float, float]:
-        return coord.x * self.sx(), coord.y * self.sy()
+    def cc(self, coord: Vector2) -> Tuple[int, int]:
+        return int(coord.x * self.sx()), int(coord.y * self.sy())
 
 # base class for games
 class Game:

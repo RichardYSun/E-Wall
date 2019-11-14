@@ -11,7 +11,7 @@ from game.keys import PY_MAPPING
 
 def test(G, cam='test2', use_pygame=True):
     pygame.init()
-    pygame.display.set_mode((600, 600))
+    pygame.display.set_mode((800, 600))
 
     image_io = ImageIO(cam)
 

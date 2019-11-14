@@ -19,8 +19,8 @@ class Circle(PixelObject):
     def draw_hitbox(self, img: ndarray):
         cv2.circle(img, self.pos.as_int_tuple(), self.r, 255, cv2.FILLED)
 
-    def draw(self, surface):
-        pygame.draw.circle(surface, self.colour, self.pos.as_int_tuple(), self.r, 0)
+    def draw(self, surface, draw_map):
+        pygame.draw.circle(surface, self.colour, draw_map.cc(self.pos), self.r, 0)
 
     def get_bounds(self):
         x, y = self.pos.as_int_tuple()

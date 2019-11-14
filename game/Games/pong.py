@@ -1,4 +1,5 @@
 import cv2
+import numpy
 
 from game.game import Game, GameContext
 from game.physics2.collisiontypes import COLLISION_BOUNCE
@@ -83,18 +84,29 @@ class Pong(Game):
 
         surface.fill((255, 255, 255))
 
-        self.ball.draw(surface)
+        # self.map.edges = numpy.resize(self.map.edges, surface.get_size())
+        #
+        # pygame.surfarray.blit_array(surface, self.map.edges)
+        # pixels = pygame.surfarray.make_surface(numpy.resize(self.map.edges, surface.get_size()))
+        pixels = pygame.transform.flip(
+            pygame.transform.scale(pygame.surfarray.make_surface(numpy.rot90(self.map.edges)), surface.get_size()), 1,
+            0)
+        surface.blit(pixels, (0, 0))
+
+        self.ball.draw(surface, self.map)
 
         self.draw_score(surface)
+
+        pygame.display.update()
 
     def draw_score(self, surface):
         # font = cv2.FONT_HERSHEY_SIMPLEX
         # pos = (int(self.map.width * 0.45), self.map.height // 2)
         colour = (0, 255, 0)
-        font = pygame.font.SysFont('arial', surface.get_width() // 10)
-        text = font.render('GeeksForGeeks', True, colour)
+        font = pygame.font.SysFont('arial', surface.get_width() // 5)
+        text = font.render(str(self.score[0]) + " " + str(self.score[1]), True, colour)
         textRect = text.get_rect()
-        textRect.center = (self.map.cc(Vector2(int(surface.get_width() * 0.45), surface.get_height() // 2)))
+        textRect.center = (surface.get_width() // 2, surface.get_height() // 2)
 
         # font_scale = self.map.height // 250
         # thickness = 2
