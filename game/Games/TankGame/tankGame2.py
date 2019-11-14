@@ -107,16 +107,10 @@ class TankGame2(Game):
         for tank in self.players:
             for bullet in self.bullets:
                 if tank.hitBox.circle_collision(bullet.hitBox):
-                    if bullet.inside:
-                        continue
-
                     tank.alive = False
                     bullet.alive = False
                     self.remove(bullet)
                     #self.remove(tank)
-                else:
-                    if bullet.inside:
-                        bullet.inside = False
 
     def remove(self, obj: Bullet):
         self.std_physics.objects.remove(obj.hitBox)
@@ -176,7 +170,8 @@ class TankGame2(Game):
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
         if key_down == keys.FIRE1:
            if self.bulletCooldowns[0] >= BulletCooldown:
-                bulletSpawn = Vector2(self.players[0].hitBox.pos.x, self.players[0].hitBox.pos.y)
+                bulletSpawn = Vector2(self.players[0].hitBox.pos.x + 20*math.cos(self.players[0].angle),
+                                      self.players[0].hitBox.pos.y + 20*math.sin(self.players[0].angle))
                 bullet = Bullet(Circle(bulletSpawn, 8), BulletSpeed, self.players[0].angle)
                 self.bullets.append(bullet)
                 self.std_physics.objects.append(bullet.hitBox)
