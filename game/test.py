@@ -28,7 +28,7 @@ def test(G, cam='test2'):
     cnt = 0
     tt = 0
 
-    keys_down = [False] * 5
+    keys_down = [False] * 10
 
     while True:
         img = image_io.get_img()

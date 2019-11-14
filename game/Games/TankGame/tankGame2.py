@@ -14,7 +14,7 @@ import math
 import cv2
 
 BulletSpeed = 100
-BulletCooldown = 30
+BulletCooldown = 1
 
 class TankGame2(Game):
 
@@ -89,7 +89,7 @@ class TankGame2(Game):
 
         for i in range(len(self.bullets), 0):
             if not self.bullets[i].alive:
-                self.remove(self.bullets[i].hitBox)
+                self.remove(self.bullets[i])
 
         for i in range(len(self.bulletCooldowns)):
             self.bulletCooldowns[i] += delta_t
@@ -103,10 +103,11 @@ class TankGame2(Game):
                     self.remove(bullet)
                     self.remove(tank)
 
-    def remove(self, obj):
-        self.std_physics.objects.remove(obj)
-        self.pixel_physics.objects.remove(obj)
-        self.wall_physics.objects.remove(obj)
+    def remove(self, obj: Bullet):
+        self.std_physics.objects.remove(obj.hitBox)
+        self.pixel_physics.objects.remove(obj.hitBox)
+        self.wall_physics.objects.remove(obj.hitBox)
+        self.bullets.remove(obj)
 
     def checkKeys(self, delta_t):
         if self.right1:
@@ -131,7 +132,7 @@ class TankGame2(Game):
 
         if self.up2:
             self.players[1].setSpeed(1)
-        elif self.down1:
+        elif self.down2:
             self.players[1].setSpeed(-1)
         else:
             self.players[1].setSpeed(0)
@@ -199,5 +200,5 @@ class TankGame2(Game):
         if key_up == keys.UP2:
             self.up2 = False
         elif key_up == keys.DOWN2:
-            self.down2= False
+            self.down2 = False
 test(TankGame2, None)
