@@ -71,7 +71,7 @@ class TankGame2(Game):
         self.std_physics.update(delta_t)
 
         self.checkShot()
-        self.checkKeys()
+        self.checkKeys(delta_t)
 
         for tank in self.players:
             tank.hitBox.draw_hitbox(self.map.game_img)
@@ -93,7 +93,6 @@ class TankGame2(Game):
 
         for i in range(len(self.bulletCooldowns)):
             self.bulletCooldowns[i] += delta_t
-            print(self.bulletCooldowns[i])
 
     def checkShot(self):
         for tank in self.players:
@@ -109,13 +108,13 @@ class TankGame2(Game):
         self.pixel_physics.objects.remove(obj)
         self.wall_physics.objects.remove(obj)
 
-    def checkKeys(self):
+    def checkKeys(self, delta_t):
         if self.right1:
-            self.players[0].angle += self.players[0].turnSpeed
-            self.players[0].rotateLeft()
+            self.players[0].angle += self.players[0].turnSpeed*delta_t
+            self.players[0].rotateLeft(delta_t)
         if self.left1:
-            self.players[0].angle -= self.players[0].turnSpeed
-            self.players[0].rotateRight()
+            self.players[0].angle -= self.players[0].turnSpeed*delta_t
+            self.players[0].rotateRight(delta_t)
 
         if self.up1:
             self.players[0].setSpeed(1)
