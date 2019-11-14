@@ -8,14 +8,14 @@ from game.physics2.wallphysics import WallPhysics
 from game.test import test
 import cv2
 
-from game.util.imreader import imread
+from game.util.moreimutils import imread
 from game.util.vector2 import Vector2
 
 
 class Character(PlatformCharacter):
-    rest_right = imread('sunnysplatformer/walk0.png', cv2.IMREAD_UNCHANGED,  (30,120))
-    walk1_right = imread('sunnysplatformer/walk1.png', cv2.IMREAD_UNCHANGED, (30,120))
-    walk2_right = imread('sunnysplatformer/walk3.png', cv2.IMREAD_UNCHANGED, (30,120))
+    rest_right = imread('sunnysplatformer/walk1.png', cv2.IMREAD_UNCHANGED,  (30,120))
+    walk1_right = imread('sunnysplatformer/walk0.png', cv2.IMREAD_UNCHANGED, (30,120))
+    walk2_right = imread('sunnysplatformer/walk2.png', cv2.IMREAD_UNCHANGED, (30,120))
 
 
 class SunnysPlatformer(Game):
@@ -27,7 +27,7 @@ class SunnysPlatformer(Game):
         self.pixel_physics = PixelPhysics()
         self.wall_physics = WallPhysics()
 
-        self.c = Character(Vector2(mp.width / 2, 0))
+        self.c = Character(Vector2(mp.width / 2, 50))
         self.std_physics.objects.append(self.c)
         self.pixel_physics.objects.append(self.c)
         self.wall_physics.objects.append(self.c)
@@ -43,9 +43,11 @@ class SunnysPlatformer(Game):
         pass
 
     def update_game(self, keys_down: List[bool], delta_t: int):
+
+        self.std_physics.update(delta_t)
         self.wall_physics.update(delta_t)
         self.pixel_physics.update(delta_t)
-        self.std_physics.update(delta_t)
+        self.wall_physics.update(delta_t)
 
         self.c.update(delta_t, keys_down)
 

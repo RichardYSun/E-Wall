@@ -5,7 +5,7 @@ import os
 
 from game.util import ParamWindow
 from game.util.areaselectwindow import AreaSelectWindow
-from game.util.imreader import imread
+from game.util.moreimutils import imread
 
 
 class ImageIO:

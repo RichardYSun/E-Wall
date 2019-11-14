@@ -1,3 +1,4 @@
+from game.physics2.collisiontypes import COLLISION_BOUNCE
 from game.physics2.physics import Physics
 from game.physics2.objects.circle import Circle
 from game.physics2.objects.physicsobject import PhysicsObject
@@ -19,13 +20,26 @@ class WallPhysics(Physics):
             xmn, xmx, ymn, ymx = obj.get_bounds()
             if self.top and ymn < 0:
                 obj.translate(Vector2(0, -ymn + 1))
-                obj.vel.y *= -1
-            if self.bottom and ymn >= self.map.height:
-                obj.translate(Vector2(0, self.map.height - ymx - 1))
-                obj.vel.y *= -1
+                if obj.collision_type == COLLISION_BOUNCE:
+                    obj.vel.y *= -1
+                else:
+                    obj.vel.y = 0
+            obj.touching_bottom = self.bottom and ymx >= self.map.height
+            if obj.touching_bottom:
+                obj.translate(Vector2(0, self.map.height - ymx))
+                if obj.collision_type == COLLISION_BOUNCE:
+                    obj.vel.y *= -1
+                else:
+                    obj.vel.y = 0
             if self.left and xmn < 0:
                 obj.translate(Vector2(-xmn + 1, 0))
-                obj.vel.x *= -1
-            if self.right and xmn >= self.map.width:
+                if obj.collision_type == COLLISION_BOUNCE:
+                    obj.vel.x *= -1
+                else:
+                    obj.vel.x = 0
+            if self.right and xmx >= self.map.width:
                 obj.translate(Vector2(self.map.width - xmx - 1, 0))
-                obj.vel.x *= -1
+                if obj.collision_type == COLLISION_BOUNCE:
+                    obj.vel.x *= -1
+                else:
+                    obj.vel.x = 0

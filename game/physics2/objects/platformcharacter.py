@@ -21,7 +21,7 @@ class PlatformCharacter(PixelObject):
     cur_img: ndarray
     walk_rate = 0.25
     flat_normal = math.pi / 6
-    walk_speed = 1
+    walk_speed = 35
 
     def __init__(self, pos):
         super().__init__(pos)
@@ -37,20 +37,28 @@ class PlatformCharacter(PixelObject):
     def update(self, delta_t: float, down: List[bool]):
         v = self.collision_escape_vector
         prev_state = self.state
-        if v.sq_mag() == 0:
-            if self.vel.y > 0:
-                self.state = FALLING
-            else:
-                self.state = JUMPED
+        if self.touching_bottom:
+            self.state=GROUNDED
         else:
-            ang = atan2(v.x, v.y)
-            self.state = GROUNDED
+            if v.sq_mag() == 0:
+                if self.vel.y > 0:
+                    self.state = FALLING
+                else:
+                    self.state = JUMPED
+            else:
+                ang = atan2(v.x, v.y)
+                self.state = GROUNDED
 
+        if prev_state == GROUNDED and self.state!=GROUNDED:
+            self.vel.x = 0
+            self.walk_state = 0
+            self.walk_time = 0
+            self.cur_img = self.walk_left[self.walk_state]
         if self.state == GROUNDED:
             if prev_state != GROUNDED:
                 self.vel.x = 0
-                self.walk_state = 0
-                self.walk_time = 0
+                self.walk_state = 1
+                self.walk_time = self.walk_rate
 
             if down[keys.LEFT]:
                 self.vel.x = -self.walk_speed
@@ -64,6 +72,7 @@ class PlatformCharacter(PixelObject):
                 self.vel.x = 0
                 self.walk_state = 0
                 self.walk_time = 0
+                self.cur_img = self.walk_left[self.walk_state]
         else:
             pass
 
@@ -71,19 +80,18 @@ class PlatformCharacter(PixelObject):
         self.walk_time += delta_t
         if self.walk_time >= self.walk_rate * 4:
             self.walk_time = 0
-        self.walk_state = self.walk_time / self.walk_rate
+        self.walk_state = int(self.walk_time / self.walk_rate)
 
     def draw(self, game_img: ndarray):
         x, y = self.pos.as_int_tuple()
-        c=self.cur_img
-        c = c[:min(c.shape[0],game_img.shape[0]-y), :min(c.shape[1],game_img.shape[1]-x), :3]
+        c = self.cur_img
+        c = c[:, :, :3]
         game_img[y:y + c.shape[0], x:x + c.shape[1]] = c
 
     def draw_hitbox(self, img: ndarray):
         x, y = self.pos.as_int_tuple()
         c = self.cur_img
         c = cv2.extractChannel(c, 3)  # extract alpha channel
-        c=c[:min(c.shape[0],img.shape[0]-y), :min(c.shape[1],img.shape[1]-x)]
         img[y:y + c.shape[0], x:x + c.shape[1]] = c
 
     def get_bounds(self):
