@@ -29,7 +29,8 @@ class CVer:
         self.prev = None
         self.lsd = cv2.ximgproc.createFastLineDetector()
 
-    def do_cv(self, frame: ndarray, mp: GameContext):
+    def do_cv(self, mp: GameContext):
+        frame = mp.cam_img
         algorithm = ParamWindow.get_int('algorithm', 2, 2)
 
         color_space = ParamWindow.get_int('color space', 1, 0)
@@ -105,8 +106,6 @@ class CVer:
             lines = None
             lines_conv = []
 
-        mp.width = res.shape[1]
-        mp.height = res.shape[0]
         mp.edges = res
         mp.lines = lines
         mp.lines_conv = lines_conv
