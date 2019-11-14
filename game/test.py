@@ -17,7 +17,9 @@ def test(G, cam='test2', use_pygame=True):
 
     map_detect = CVer()
     img = image_io.get_img()
-    game = G(map_detect.do_cv(img, GameContext(use_pygame)))
+    stupid = GameContext(use_pygame)
+    map_detect.do_cv(img, stupid)
+    game = G(stupid)
     last_time = time.time()
 
     cnt = 0
