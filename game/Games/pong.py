@@ -58,7 +58,6 @@ class Pong(Game):
 
     def update_game(self, keys, delta_t: int):
         if self.start:
-
             # make sure to call update for all physics the game is using
             self.pixel_physics.update(delta_t)
             self.wall_physics.update(delta_t)

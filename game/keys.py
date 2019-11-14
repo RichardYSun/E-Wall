@@ -1,4 +1,4 @@
-import keyboard
+import pygame
 
 UP = 1
 DOWN = 2
@@ -14,9 +14,10 @@ CV_MAPPING = {
     13: ENTER
 }
 
-KEYBOARD_MAPPING={
-    'up arrow': UP,
-    'left arrow': LEFT,
-    'down arrow': DOWN,
-    'right arrow': RIGHT,
+PY_MAPPING = {
+    pygame.K_w: UP,
+    pygame.K_a: LEFT,
+    pygame.K_s: DOWN,
+    pygame.K_d: RIGHT,
+    pygame.K_RETURN: ENTER
 }
