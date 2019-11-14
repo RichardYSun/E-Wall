@@ -1,23 +1,37 @@
 import pygame
 
-UP = 1
-DOWN = 2
-LEFT = 3
-RIGHT = 0
-ENTER = 4
+UP1 = 1
+DOWN1 = 2
+LEFT1 = 3
+RIGHT1 = 0
+FIRE1 = 4
+
+UP2 = 6
+DOWN2 = 7
+LEFT2 = 8
+RIGHT2 = 5
+FIRE2 = 9
+
 
 CV_MAPPING = {
-    ord('w'): UP,
-    ord('a'): LEFT,
-    ord('s'): DOWN,
-    ord('d'): RIGHT,
-    13: ENTER
+    ord('w'): UP1,
+    ord('a'): LEFT1,
+    ord('s'): DOWN1,
+    ord('d'): RIGHT1,
+    13: FIRE1
+
 }
 
 PY_MAPPING = {
-    pygame.K_w: UP,
-    pygame.K_a: LEFT,
-    pygame.K_s: DOWN,
-    pygame.K_d: RIGHT,
-    pygame.K_RETURN: ENTER
+    pygame.K_w: UP1,
+    pygame.K_a: LEFT1,
+    pygame.K_s: DOWN1,
+    pygame.K_d: RIGHT1,
+    pygame.K_SPACE: FIRE1,
+
+    pygame.K_UP: UP2,
+    pygame.K_LEFT: LEFT2,
+    pygame.K_DOWN: DOWN2,
+    pygame.K_RIGHT: RIGHT2,
+    pygame.K_RETURN: FIRE2
 }

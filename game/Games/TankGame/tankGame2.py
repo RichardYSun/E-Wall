@@ -89,8 +89,7 @@ class TankGame2(Game):
 
         for i in range(len(self.bullets), 0):
             if not self.bullets[i].alive:
-                self.remove(bullet[i])
-                self.bulletCooldowns[i] = None
+                self.remove(self.bullets[i])
 
         for cooldown in self.bulletCooldowns:
             cooldown += 1
