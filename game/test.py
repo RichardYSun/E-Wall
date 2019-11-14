@@ -28,7 +28,7 @@ def test(G, cam='test2'):
     cnt = 0
     tt = 0
 
-    keys_down = [False] * 5
+    keys_down = [False] * 10
 
     while True:
         img = image_io.get_img()
@@ -68,10 +68,10 @@ def test(G, cam='test2'):
             if event.type == pygame.KEYDOWN:
                 if event.key in PY_MAPPING:
                     game.key_down(PY_MAPPING[event.key])
-                    keys_down[PY_MAPPING[event.key]] = 1
+                    keys_down[PY_MAPPING[event.key]] = True
             if event.type == pygame.KEYUP:
                 if event.key in PY_MAPPING:
-                    game.key_down(PY_MAPPING[event.key])
-                    keys_down[PY_MAPPING[event.key]] = 0
+                    game.key_up(PY_MAPPING[event.key])
+                    keys_down[PY_MAPPING[event.key]] = False
 
     del image_io
