@@ -83,13 +83,14 @@ class TankGame2(Game):
 
             if bullet.timer < 0:
                 bullet.alive = False
-                #self.remove(bullet)
-                bullet.hitBox.pos.x = -50
-                bullet.hitBox.pos.y = -50
-                bullet.alive = False
-                bullet.angle = 0
+                continue
 
             bullet.hitBox.draw_hitbox(self.map.game_img)
+
+        for i in range(len(self.bullets), 0):
+            if not self.bullets[i].alive:
+                self.remove(bullet[i])
+                self.bulletCooldowns[i] = None
 
         for cooldown in self.bulletCooldowns:
             cooldown += 1
@@ -136,7 +137,7 @@ class TankGame2(Game):
 
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
         if key_down == keys.ENTER:
-         #  if self.bulletCooldowns[0] >= BulletCooldown:
+           if self.bulletCooldowns[0] >= BulletCooldown:
                 bulletSpawn = Vector2(self.players[0].hitBox.pos.x, self.players[0].hitBox.pos.y)
                 bullet = Bullet(Circle(bulletSpawn, 8), BulletSpeed, self.players[0].angle)
                 self.bullets.append(bullet)
