@@ -45,6 +45,9 @@ class GameContext:
             surface = self.surface
         surface.blit(img, self.cc(dest), special_flags=flags)
 
+    # convert game vector coords to pygame coordss
+    def cc(self, coord: Vector2) -> Tuple[int, int]:
+        return int(coord.x * self.sx()), int(coord.y * self.sy())
 
 # base class for games
 class Game:
