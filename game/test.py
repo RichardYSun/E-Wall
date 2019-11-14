@@ -17,8 +17,8 @@ def test(G, cam='test2', use_pygame=True):
 
     map_detect = CVer()
     img = image_io.get_img()
-    stupid = GameContext(use_pygame)
-    map_detect.do_cv(img, stupid)
+    stupid = GameContext(img)
+    map_detect.do_cv(stupid)
     game = G(stupid)
     last_time = time.time()
 
@@ -30,8 +30,8 @@ def test(G, cam='test2', use_pygame=True):
     while True:
         img = image_io.get_img()
 
-        ctx = GameContext(use_pygame)
-        map_detect.do_cv(img, ctx)
+        ctx = GameContext(img)
+        map_detect.do_cv(ctx)
 
         game.update_map(ctx)
 
