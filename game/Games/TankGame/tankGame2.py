@@ -14,7 +14,7 @@ import math
 import cv2
 
 BulletSpeed = 100
-BulletCooldown = 30
+BulletCooldown = 1
 
 class TankGame2(Game):
 
@@ -89,11 +89,11 @@ class TankGame2(Game):
 
         for i in range(len(self.bullets), 0):
             if not self.bullets[i].alive:
-                self.remove(bullet[i])
-                self.bulletCooldowns[i] = None
+                self.remove(self.bullets[i].hitBox)
 
-        for cooldown in self.bulletCooldowns:
-            cooldown += 1
+        for i in range(len(self.bulletCooldowns)):
+            self.bulletCooldowns[i] += delta_t
+            print(self.bulletCooldowns[i])
 
     def checkShot(self):
         for tank in self.players:
