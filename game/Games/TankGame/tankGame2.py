@@ -101,7 +101,7 @@ class TankGame2(Game):
                     tank.alive = False
                     bullet.alive = False
                     self.remove(bullet)
-                    self.remove(tank)
+                    #self.remove(tank)
 
     def remove(self, obj: Bullet):
         self.std_physics.objects.remove(obj.hitBox)
