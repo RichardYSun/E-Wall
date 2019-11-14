@@ -122,20 +122,43 @@ class TankGame2(Game):
             self.players[0].setSpeed(-1)
         else:
             self.players[0].setSpeed(0)
+        if self.right2:
+            self.players[1].angle += self.players[1].turnSpeed*delta_t
+            self.players[1].rotateLeft(delta_t)
+        if self.left2:
+            self.players[1].angle -= self.players[1].turnSpeed*delta_t
+            self.players[1].rotateRight(delta_t)
+
+        if self.up2:
+            self.players[1].setSpeed(1)
+        elif self.down1:
+            self.players[1].setSpeed(-1)
+        else:
+            self.players[1].setSpeed(0)
 
     def key_down(self, key_down: int):
-        if key_down == keys.RIGHT:
+        if key_down == keys.RIGHT1:
             self.right1 = True
-        if key_down == keys.LEFT:
+        if key_down == keys.LEFT1:
             self.left1 = True
 
-        if key_down == keys.UP:
+        if key_down == keys.UP1:
             self.up1 = True
-        elif key_down == keys.DOWN:
+        elif key_down == keys.DOWN1:
             self.down1 = True
 
+        if key_down == keys.RIGHT2:
+            self.right2 = True
+        if key_down == keys.LEFT2:
+            self.left2 = True
+
+        if key_down == keys.UP2:
+            self.up2 = True
+        elif key_down == keys.DOWN2:
+            self.down2 = True
+
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
-        if key_down == keys.ENTER:
+        if key_down == keys.FIRE1:
            if self.bulletCooldowns[0] >= BulletCooldown:
                 bulletSpawn = Vector2(self.players[0].hitBox.pos.x, self.players[0].hitBox.pos.y)
                 bullet = Bullet(Circle(bulletSpawn, 8), BulletSpeed, self.players[0].angle)
@@ -146,14 +169,35 @@ class TankGame2(Game):
 
                 self.bulletCooldowns[0] = 0
 
+        if key_down == keys.FIRE2:
+           if self.bulletCooldowns[1] >= BulletCooldown:
+                bulletSpawn = Vector2(self.players[1].hitBox.pos.x, self.players[1].hitBox.pos.y)
+                bullet = Bullet(Circle(bulletSpawn, 8), BulletSpeed, self.players[1].angle)
+                self.bullets.append(bullet)
+                self.std_physics.objects.append(bullet.hitBox)
+                self.pixel_physics.objects.append(bullet.hitBox)
+                self.wall_physics.objects.append(bullet.hitBox)
+
+                self.bulletCooldowns[1] = 0
+
     def key_up(self, key_up: int):
-        if key_up == keys.RIGHT:
+        if key_up == keys.RIGHT1:
             self.right1 = False
-        if key_up == keys.LEFT:
+        if key_up == keys.LEFT1:
             self.left1 = False
 
-        if key_up == keys.UP:
+        if key_up == keys.UP1:
             self.up1 = False
-        elif key_up == keys.DOWN:
+        elif key_up == keys.DOWN1:
             self.down1 = False
+
+        if key_up == keys.RIGHT2:
+            self.right2 = False
+        if key_up == keys.LEFT2:
+            self.left2 = False
+
+        if key_up == keys.UP2:
+            self.up2 = False
+        elif key_up == keys.DOWN2:
+            self.down2= False
 test(TankGame2, None)
