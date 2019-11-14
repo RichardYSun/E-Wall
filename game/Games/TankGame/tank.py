@@ -7,8 +7,8 @@ from game.physics2.collisiontypes import COLLISION_SLIDE
 from game.physics2.objects.rectangle import Rectangle
 from game.util.vector2 import Vector2
 
-PlayerSpeed = 30.0
-TurnSpeed = 0.1
+PlayerSpeed = 50.0
+TurnSpeed = 2.5
 class Tank:
     speed = 0.0
     angle = 0.0
@@ -34,8 +34,8 @@ class Tank:
         elif speed == -1:
             self.hitBox.vel = Vector2(-PlayerSpeed * math.cos(self.angle), -PlayerSpeed * math.sin(self.angle))
 
-    def rotateRight(self):
-        self.hitBox.rotate(-TurnSpeed, Vector2(self.hitBox.pos.x, self.hitBox.pos.y))
+    def rotateRight(self, delta_t):
+        self.hitBox.rotate(-TurnSpeed*delta_t, Vector2(self.hitBox.pos.x, self.hitBox.pos.y))
 
-    def rotateLeft(self):
-        self.hitBox.rotate(TurnSpeed, Vector2(self.hitBox.pos.x, self.hitBox.pos.y))
+    def rotateLeft(self, delta_t):
+        self.hitBox.rotate(TurnSpeed*delta_t, Vector2(self.hitBox.pos.x, self.hitBox.pos.y))
