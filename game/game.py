@@ -1,15 +1,18 @@
-from typing import List, Any, Tuple
+from typing import List, Any, Tuple, Union
 
 import pygame
 from numpy import ndarray
 
 from game.util.vector2 import Vector2
 
+Coordinate = Union[Vector2, Tuple[float, float]]
+
 
 class GameContext:
     def __init__(self, cam_img: ndarray, use_pygame=True):
+        self.width: int = cam_img.shape[1]  # width of game
+        self.height: int = cam_img.shape[0]  # height of game
         self.cam_img = cam_img
-        self.height, self.width, _ = cam_img.shape  # width,height of game
 
         self.edges: ndarray = None  # the image with edges detected
         self.lines: ndarray = None  # the list of lines detected in the form [[[x1,y1,x2,y2]],[[...]],...]
@@ -18,19 +21,29 @@ class GameContext:
         self.lines_conv: ndarray = None
         self.pixels_per_meter = 50  # conversion for pixels to real physics
         if use_pygame:
-            pywidth = pygame.display.get_surface().get_size()[0]
-            aspect = self.height / float(self.width)
-            pyheight = int(pywidth * aspect)  # size of pygame window
-            self.pysize = (pywidth, pyheight)
-            self.surface = pygame.display.set_mode(self.pysize)  # pygame surface
-            self.s = pywidth / self.width  # scaling factor between game and pygame
+            self.surface = pygame.display.get_surface()
+            self.pysize = self.surface.get_size()
+            self.sx = self.surface.get_width() / float(self.width)
+            self.sy = self.surface.get_height() / float(self.height)
 
-    # convert game vector coords to pygame coords
-    def cc(self, coord: Vector2) -> Tuple[int, int]:
-        return coord.x * self.s, coord.y * self.s
+    # convert game coords to pygame coords
+    def cc(self, coord: Coordinate) -> Tuple[int, int]:
+        if coord is Vector2:
+            return coord.x * self.sx, coord.y * self.sy
+        if coord is Tuple[float,float]:
+            return coord[0] * self.sx, coord[1] * self.sy
+        raise Exception('unsupported coordinate type')
 
-    def draw_circle(self, pos: Vector2, radius: int):
-        pass
+    # convert tuple rect to tuple rect
+    def cr(self, r: Tuple[float, float, float, float]) -> Tuple[float, float, float, float]:
+        x, y = self.sx, self.sy
+        return r[0] * x, r[1] * y, r[2] * x, r[3] * y
+
+    # draw pygame image to screen (image should be from py_img_)
+    def image_py(self, img: pygame.Surface, dest: Coordinate, flags=0, surface: pygame.Surface = None):
+        if surface is None:
+            surface = self.surface
+        surface.blit(img, self.cc(dest), special_flags=flags)
 
 
 # base class for games

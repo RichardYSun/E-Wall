@@ -1,7 +1,4 @@
 import cv2
-from numpy import ndarray
-import numpy as np
-import os
 
 from game.util import ParamWindow
 from game.util.areaselectwindow import AreaSelectWindow
@@ -31,17 +28,13 @@ class ImageIO:
             if ret is False:
                 raise Exception('could not read image')
         else:
-            img = np.copy(self.img_src)
+            img = self.img_src
 
-        sub = self.cam_window.get_sub_image(img)
+        downscale = ParamWindow.get_int('downscale', 100, 100)
+        w = int(downscale * img.shape[0] / 100)
+        h = int(downscale * img.shape[1] / 100)
 
-        game_w = ParamWindow.get_int('game map width', 1600, 500)
-        game_h = ParamWindow.get_int('game map height', 1900, 250)
-        sub = cv2.resize(sub, (game_w, game_h))
-
-        self.cam_window.show(img)
-
-        return sub
+        return cv2.resize(img, (w, h))
 
     def __del__(self):
         del self.cam_window
