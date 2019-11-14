@@ -15,15 +15,15 @@ from game.util import ParamWindow
 
 
 def test(G, cam='test2'):
+    pygame.init()
+    pygame.display.set_mode((600, 600))
+
     image_io = ImageIO(cam)
 
     map_detect = CVer()
     img = image_io.get_img()
     game = G(map_detect.do_cv(img))
     last_time = time.time()
-
-    pygame.init()
-    pygame.display.set_mode((100, 100))
 
     cnt = 0
     tt = 0

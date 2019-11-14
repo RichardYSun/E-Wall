@@ -9,6 +9,7 @@ from game.physics2.wallphysics import WallPhysics
 from game.test import test
 from game.util.vector2 import Vector2
 import game.keys as keys
+import pygame
 
 BALL_VEL = Vector2(200, 200)
 
@@ -42,6 +43,8 @@ class Pong(Game):
         self.score = (0, 0)
 
         self.start = 0
+
+        self.surface = pygame.display.get_surface()
 
     # this is called when there is a new frame available from camera
     def update_map(self, new_map: GameContext):
@@ -77,19 +80,29 @@ class Pong(Game):
                 self.start = 0
 
         # as a precaution, always draw stuff at the END of the update function
-        self.ball.draw_hitbox(self.map.game_img)
+        # self.ball.draw_hitbox(self.map.game_img)
+        self.surface.fill((255, 255, 255))
+
+        self.ball.draw_hitbox(self.surface)
 
         self.draw_score()
 
     def draw_score(self):
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        pos = (int(self.map.width * 0.45), self.map.height // 2)
-
+        # font = cv2.FONT_HERSHEY_SIMPLEX
+        # pos = (int(self.map.width * 0.45), self.map.height // 2)
         colour = (0, 255, 0)
-        font_scale = self.map.height // 250
-        thickness = 2
+        font = pygame.font.SysFont('arial', self.surface.get_width() // 10)
+        text = font.render('GeeksForGeeks', True, colour)
+        textRect = text.get_rect()
+        textRect.center = (int(self.surface.get_width() * 0.45), self.surface.get_height() // 2)
 
-        cv2.putText(self.map.game_img, str(self.score[0]) + " " + str(self.score[1]), pos, font, font_scale, colour,
-                    thickness, cv2.LINE_AA)
+        # font_scale = self.map.height // 250
+        # thickness = 2
+
+        # cv2.putText(self.map.game_img, str(self.score[0]) + " " + str(self.score[1]), pos, font, font_scale, colour,
+        #             thickness, cv2.LINE_AA)
+
+        self.surface.blit(text, textRect)
+
 
 test(Pong, None)
