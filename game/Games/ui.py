@@ -5,6 +5,7 @@ import numpy as np
 from cv2 import cv2, os
 
 from game.Games.pong import Pong
+from game.Games.pong import TankGame2
 from game.game import Game, GameContext
 
 import game.keys as keys
@@ -13,7 +14,7 @@ from game.test import test
 NUM_GAMES = 2
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-games: List[Game] = [Pong]
+games: List[Game] = [Pong, TankGame2]
 
 
 class ui(Game):

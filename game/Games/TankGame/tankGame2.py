@@ -57,6 +57,8 @@ class TankGame2(Game):
         self.down2 = False;
         self.right2 = False;
 
+        self.won = 0
+
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
 
@@ -65,6 +67,13 @@ class TankGame2(Game):
         self.std_physics.update_map(new_map)
 
     def update_game(self, keys_down, delta_t: int):
+        if self.won == 1:
+            #display
+            return
+        elif self.won == -1:
+            #display
+            return
+
         # make sure to call update for all physics the game is using
         self.pixel_physics.update(delta_t)
         self.wall_physics.update(delta_t)
@@ -98,10 +107,16 @@ class TankGame2(Game):
         for tank in self.players:
             for bullet in self.bullets:
                 if tank.hitBox.circle_collision(bullet.hitBox):
+                    if bullet.inside:
+                        continue
+
                     tank.alive = False
                     bullet.alive = False
                     self.remove(bullet)
                     #self.remove(tank)
+                else:
+                    if bullet.inside:
+                        bullet.inside = False
 
     def remove(self, obj: Bullet):
         self.std_physics.objects.remove(obj.hitBox)

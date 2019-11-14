@@ -9,6 +9,7 @@ class Bullet:
     alive = True
     hitBox: Circle
     timer = 200
+    inside = True
 
     def __init__(self, hitBox: Circle, speed, angle):
         self.hitBox = hitBox
