@@ -71,6 +71,7 @@ class TankGame2(Game):
         self.std_physics.update(delta_t)
 
         self.checkShot()
+        self.checkKeys()
 
         for tank in self.players:
             tank.hitBox.draw_hitbox(self.map.game_img)
@@ -107,20 +108,31 @@ class TankGame2(Game):
         self.pixel_physics.objects.remove(obj)
         self.wall_physics.objects.remove(obj)
 
-    def key_down(self, key_down: int):
-        if key_down == keys.RIGHT:
+    def checkKeys(self):
+        if self.right1:
             self.players[0].angle += self.players[0].turnSpeed
             self.players[0].rotateLeft()
-        if key_down == keys.LEFT:
+        if self.left1:
             self.players[0].angle -= self.players[0].turnSpeed
             self.players[0].rotateRight()
 
-        if key_down == keys.UP:
+        if self.up1:
             self.players[0].setSpeed(1)
-        elif key_down == keys.DOWN:
+        elif self.down1:
             self.players[0].setSpeed(-1)
         else:
             self.players[0].setSpeed(0)
+
+    def key_down(self, key_down: int):
+        if key_down == keys.RIGHT:
+            self.right1 = True
+        if key_down == keys.LEFT:
+            self.left1 = True
+
+        if key_down == keys.UP:
+            self.up1 = True
+        elif key_down == keys.DOWN:
+            self.down1 = True
 
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
         if key_down == keys.ENTER:
@@ -134,4 +146,14 @@ class TankGame2(Game):
 
                 self.bulletCooldowns[0] = 0
 
+    def key_up(self, key_up: int):
+        if key_up == keys.RIGHT:
+            self.right1 = False
+        if key_up == keys.LEFT:
+            self.left1 = False
+
+        if key_up == keys.UP:
+            self.up1 = False
+        elif key_up == keys.DOWN:
+            self.down1 = False
 test(TankGame2, None)
