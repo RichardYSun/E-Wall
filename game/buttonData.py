@@ -13,23 +13,42 @@ def send(button, state)->Button:
 arduino = serial.Serial('COM3', timeout = 1, baudrate= 9600)
 # Sift through data received from serial
 
-while True:
-    data = (arduino.readline())
+def button():
 
+    newData = (arduino.readline())
     try:
-        print(data.decode("utf-8"))
+        dataDecode = newData.decode("utf-8")
     except:
-        print(data + "Fail")
 
-    splitWork = True
+    splitWork = true;
     try:
-        split = data.split(",")
+        split = dataDecode.split(",")
     except:
-        splitWork = False
-    if splitWork:
+        splitWork = false;
+    if splitWork == true:
         button = int(split[0])
         state = int(split[1])
-        send(button, state)
+
+    return send(button, state)
+
+
+#while True:
+ #   data = (arduino.readline())
+
+  #  try:
+  #      print(data.decode("utf-8"))
+#    except:
+#        print(data + "Fail")
+
+#    splitWork = True
+#    try:
+#        split = data.split(",")
+ #   except:
+ #       splitWork = False
+ #   if splitWork:
+ #       button = int(split[0])
+ #       state = int(split[1])
+ #       send(button, state)
 
 
     #split = data.split(",")

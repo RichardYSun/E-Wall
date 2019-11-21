@@ -21,7 +21,7 @@ def test(G, cam='test2', use_pygame=True):
     cnt = 0
     tt = 0
 
-    keys_down = [False] * 5
+    keys_down = [False] * 10
 
     while True:
         ctx = image_io.get_img()

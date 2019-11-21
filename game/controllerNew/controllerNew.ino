@@ -60,7 +60,7 @@ void loop() {
   //checkState(stateY, buttonPinY);
   //checkState(stateA, buttonPinA);
   //checkState(stateB, buttonPinB);
-  checkState(stateUp, buttonPinUp);
+   checkState(stateUp, buttonPinUp);
   //checkState(stateDown, buttonPinDown);
   //checkState(stateLeft, buttonPinLeft);
   //checkState(stateRight, buttonPinRight);
