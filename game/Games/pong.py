@@ -8,6 +8,7 @@ from game.physics2.pixelphysics import PixelPhysics
 from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
 from game.test import test
+from game.util.moreimutils import conv_cv_to_py
 from game.util.vector2 import Vector2
 import game.keys as keys
 import pygame
@@ -69,12 +70,12 @@ class Pong(Game):
             xmn, xmx, ymn, ymx = self.ball.get_bounds()
             if xmn < 0:  # player 1 wins
                 self.ball.pos.x = self.map.width / 2  # reset ball to center
-                self.ball.vel = BALL_VEL  # reset ball velocity
+                self.ball.vel = BALL_VEL*self.map.downscale  # reset ball velocity
                 self.score = (self.score[0] + 1, self.score[1])  # increment score
                 self.start = 0
             if xmx > self.map.width:  # player 2 wins
                 self.ball.pos.x = self.map.width / 2  # reset ball to center
-                self.ball.vel = BALL_VEL  # reset ball velocity
+                self.ball.vel = BALL_VEL*self.map.downscale  # reset ball velocity
                 self.score = (self.score[0], self.score[1] + 1)  # increment score
                 self.start = 0
 
@@ -88,9 +89,7 @@ class Pong(Game):
         #
         # pygame.surfarray.blit_array(surface, self.map.edges)
         # pixels = pygame.surfarray.make_surface(numpy.resize(self.map.edges, surface.get_size()))
-        pixels = pygame.transform.flip(
-            pygame.transform.scale(pygame.surfarray.make_surface(numpy.rot90(self.map.edges)), surface.get_size()), 1,
-            0)
+        pixels = pygame.transform.scale(conv_cv_to_py(self.map.edges), surface.get_size())
         surface.blit(pixels, (0, 0))
 
         self.ball.draw(surface, self.map)

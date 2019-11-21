@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from numpy.core.multiarray import ndarray
 
 from game.game import GameContext
 from game.physics2.collisiontypes import COLLISION_STICK, COLLISION_SLIDE, COLLISION_BOUNCE
@@ -10,6 +11,9 @@ from game.util.vector2 import Vector2
 
 
 class PixelPhysics(Physics):
+    def __init__(self):
+        super().__init__()
+        self.mat: ndarray = None
 
     def apply_physics(self, obj: PhysicsObject, delta_t):
         if not isinstance(obj, PixelObject):
@@ -22,10 +26,14 @@ class PixelPhysics(Physics):
         off = 1e9
 
         edges = self.map.edges
-        mat = np.zeros(edges.shape, dtype=edges.dtype)
-        obj.draw_hitbox(mat)
-
         R = obj.collision_escape_radius
+        self.mat = np.zeros(edges.shape, dtype=edges.dtype)
+        if self.mat is None or self.mat.shape != edges.shape:
+            self.mat = np.zeros(edges.shape, dtype=edges.dtype)
+        else:
+            cv2.rectangle(self.mat, (ymn - R, xmn - R), (ymx + R + 1, xmx + R + 1), 0, cv2.FILLED)
+
+        obj.draw_hitbox(self.mat)
 
         for x in range(-R, R + 1):
             if xmx + x > edges.shape[1]:
@@ -34,7 +42,7 @@ class PixelPhysics(Physics):
                 if ymx + y > edges.shape[0]:
                     break
 
-                rect = cv2.bitwise_and(mat[ymn + y:ymx + y, xmn + x:xmx + x],
+                rect = cv2.bitwise_and(self.mat[ymn + y:ymx + y, xmn + x:xmx + x],
                                        edges[ymn + y:ymx + y, xmn + x:xmx + x])
 
                 cnt = cv2.countNonZero(rect)
