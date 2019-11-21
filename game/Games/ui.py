@@ -6,6 +6,7 @@ import pygame
 from cv2 import cv2, os
 
 # from game.Games.pong import Pong
+# from game.Games.TankGame.tankGame import TankGame
 from game.game import Game, GameContext
 
 import game.keys as keys
@@ -16,7 +17,7 @@ NUM_GAMES = 2
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-# games: List[Game] = [Pong]
+# games: List[Game] = [Pong,TankGame]
 
 
 class ui(Game):
@@ -29,8 +30,10 @@ class ui(Game):
         # self.arrow = cv2.imread(ROOT_DIR + '/../img/arrow.png')
         # self.arrow = cv2.resize(self.arrow, None, fx=0.25, fy=0.25)
         self.surface = pygame.display.get_surface()
-        self.background = moreimutils.get_py_img('selection.png', (self.surface.get_width(), self.surface.get_height()))
-        self.arrow = moreimutils.get_py_img('arrow.png', (self.surface.get_width() / 3, self.surface.get_height() / 3))
+        self.background = moreimutils.get_py_img('selection.png', None,
+                                                 self.surface.get_size())
+        self.arrow = moreimutils.get_py_img('arrow.png', None,
+                                            (self.surface.get_width() // 8, self.surface.get_height() // 8))
         self.start = 0
 
     def update_map(self, new_map: GameContext):
@@ -42,13 +45,16 @@ class ui(Game):
 
     def draw_ui(self):
         # background = np.copy(self.background)
+        self.background = pygame.transform.scale(self.background, self.surface.get_size())
+        self.arrow = pygame.transform.scale(self.arrow, (self.surface.get_width() // 8, self.surface.get_height() // 8))
 
-        pygame.blit(self.background, (0, 0))
+        self.surface.blit(self.background, (0, 0))
 
-        self.draw_arrow((180 + 100 * self.selection, 280))
+        self.draw_arrow((self.surface.get_width() // 4,
+                         self.surface.get_height() // 3 + self.surface.get_height() // 5 * self.selection))
 
         pygame.display.update()
-        #cv2.imshow('selection screen', background)
+        # cv2.imshow('selection screen', background)
 
     def start_game(self):
         cv2.destroyWindow('selection screen')
