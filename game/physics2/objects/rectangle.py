@@ -37,7 +37,7 @@ class Rectangle(PixelObject):
     # warning: does not work if you don't rotate about centre
     def circle_collision(self, other: Circle):
         dir = self.pos - other.pos
-        return self.inside(dir * (other.r // dir.mag()))
+        return self.inside(other.pos + dir * (other.r / dir.mag()))
 
     def inside(self, pt: Vector2):
         a = 0
