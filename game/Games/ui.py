@@ -42,19 +42,11 @@ class ui(Game):
         surface.blit(self.arrow, off)
 
     def draw_ui(self):
-        # background = np.copy(self.background)
-        surface = pygame.display.get_surface()
-        # self.background = pygame.transform.scale(self.background, surface.get_size())
-        # self.arrow = pygame.transform.scale(self.arrow, (surface.get_width() // 8, surface.get_height() // 8))
-        self.map.image_py(self.background, (0, 0), surface.get_size())
-
-        surface.blit(self.background, (0, 0))
-
-        # self.draw_arrow(surface, (surface.get_width() // 4,
-        #                           surface.get_height() // 3 + surface.get_height() // 5 * self.selection))
+        mp = self.map
+        self.map.image_py(self.background, (0, 0), mp.size)
+        self.map.image_py(self.arrow, (mp.width / 4, mp.height / 3 + mp.height / 5 * self.selection), mp.size / 8)
 
         pygame.display.update()
-        # cv2.imshow('selection screen', background)
 
     def start_game(self):
         cv2.destroyWindow('selection screen')

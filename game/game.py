@@ -22,6 +22,7 @@ class GameContext:
         self.lsd: Any = None  # the line segment detector
         self.lines_conv: ndarray = None
         self.pixels_per_meter = 200  # conversion for pixels to real physics
+        self.size=Vector2(self.width,self.height)
         if use_pygame:
             self.surface = pygame.display.get_surface()
             self.pysize = self.surface.get_size()
@@ -47,7 +48,7 @@ class GameContext:
                  surface: pygame.Surface = None):
         if surface is None:
             surface = self.surface
-        img = py_resize(img, self.cc(size))
+        img = py_resize(img,self.cc(size))
         surface.blit(img, self.cc(dest), special_flags=flags)
 
 

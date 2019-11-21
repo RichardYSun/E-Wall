@@ -13,7 +13,7 @@ py_img_cache: Dict[str, pygame.Surface] = {}
 cv_img_cache: Dict[Tuple[str, int], ndarray] = {}
 
 
-def py_resize(img: pygame.Surface, size: Tuple[int, int]):
+def py_resize(img: pygame.Surface, size: Tuple[int, int])-> pygame.Surface:
     return pygame.transform.scale(img, size)
 
 
