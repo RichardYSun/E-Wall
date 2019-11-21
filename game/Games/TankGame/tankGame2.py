@@ -67,11 +67,11 @@ class TankGame2(Game):
         self.std_physics.update_map(new_map)
 
     def update_game(self, keys_down, delta_t: int):
-        if self.won == 1:
-            #display
+        if not self.players[0].alive:
+            print("P2 Winner")
             return
-        elif self.won == -1:
-            #display
+        if not self.players[1].alive:
+            print("P1 Winner")
             return
 
         # make sure to call update for all physics the game is using
@@ -104,10 +104,11 @@ class TankGame2(Game):
             self.bulletCooldowns[i] += delta_t
 
     def checkShot(self):
-        for tank in self.players:
+        for index in range(len(self.players)):
             for bullet in self.bullets:
-                if tank.hitBox.circle_collision(bullet.hitBox):
-                    tank.alive = False
+                if self.players[index].hitBox.circle_collision(bullet.hitBox):
+                    self.players[index].alive = False
+
                     bullet.alive = False
                     self.remove(bullet)
                     #self.remove(tank)
