@@ -29,29 +29,29 @@ class ui(Game):
         # self.background = cv2.resize(self.background, None, fx=0.75, fy=0.75)
         # self.arrow = cv2.imread(ROOT_DIR + '/../img/arrow.png')
         # self.arrow = cv2.resize(self.arrow, None, fx=0.25, fy=0.25)
-        self.surface = pygame.display.get_surface()
-        self.background = moreimutils.get_py_img('selection.png', None,
-                                                 self.surface.get_size())
-        self.arrow = moreimutils.get_py_img('arrow.png', None,
-                                            (self.surface.get_width() // 8, self.surface.get_height() // 8))
+        surface = pygame.display.get_surface()
+        self.background = moreimutils.get_py_img('selection.png')
+        self.arrow = moreimutils.get_py_img('arrow.png')
         self.start = 0
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
 
-    def draw_arrow(self, off):
+    def draw_arrow(self, surface, off):
         # np.copyto(background[off[0]:self.arrow.shape[0] + off[0], off[1]:self.arrow.shape[1] + off[1]], self.arrow)
-        self.surface.blit(self.arrow, off)
+        surface.blit(self.arrow, off)
 
     def draw_ui(self):
         # background = np.copy(self.background)
-        self.background = pygame.transform.scale(self.background, self.surface.get_size())
-        self.arrow = pygame.transform.scale(self.arrow, (self.surface.get_width() // 8, self.surface.get_height() // 8))
+        surface = pygame.display.get_surface()
+        # self.background = pygame.transform.scale(self.background, surface.get_size())
+        # self.arrow = pygame.transform.scale(self.arrow, (surface.get_width() // 8, surface.get_height() // 8))
+        self.map.image_py(self.background, (0, 0), surface.get_size())
 
-        self.surface.blit(self.background, (0, 0))
+        surface.blit(self.background, (0, 0))
 
-        self.draw_arrow((self.surface.get_width() // 4,
-                         self.surface.get_height() // 3 + self.surface.get_height() // 5 * self.selection))
+        # self.draw_arrow(surface, (surface.get_width() // 4,
+        #                           surface.get_height() // 3 + surface.get_height() // 5 * self.selection))
 
         pygame.display.update()
         # cv2.imshow('selection screen', background)
