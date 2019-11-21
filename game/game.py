@@ -3,6 +3,7 @@ from typing import List, Any, Tuple, Union, Dict
 import pygame
 from numpy import ndarray
 
+from game.util.moreimutils import py_resize
 from game.util.vector2 import Vector2
 
 Coordinate = Union[Vector2, Tuple[float, float]]
@@ -14,7 +15,7 @@ class GameContext:
         self.height: int = cam_img.shape[0]  # height of game
         self.cam_img = cam_img
 
-        self.downscale=1 #downscale level
+        self.downscale = 1  # downscale level
         self.edges: ndarray = None  # the image with edges detected
         self.lines: ndarray = None  # the list of lines detected in the form [[[x1,y1,x2,y2]],[[...]],...]
         self.game_img: ndarray = None  # the output image to draw on
@@ -42,9 +43,11 @@ class GameContext:
         return a[0], a[1], b[0], b[1]
 
     # draw pygame image to screen (image should be from py_img_)
-    def image_py(self, img: pygame.Surface, dest: Coordinate, flags=0, surface: pygame.Surface = None):
+    def image_py(self, img: pygame.Surface, dest: Coordinate, size: Coordinate, flags=0,
+                 surface: pygame.Surface = None):
         if surface is None:
             surface = self.surface
+        img = py_resize(img, self.cc(size))
         surface.blit(img, self.cc(dest), special_flags=flags)
 
 

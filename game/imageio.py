@@ -21,11 +21,11 @@ class ImageIO:
             w = self.img_src.shape[1]
             h = self.img_src.shape[0]
         pygame.init()
-        pygame.display.set_mode((w, h),pygame.RESIZABLE)
+        pygame.display.set_mode((w, h), pygame.RESIZABLE)
 
         self.cam_window = AreaSelectWindow(w, h, 'camera window', (255, 0, 0))
 
-    def get_img(self)->GameContext:
+    def get_img(self) -> GameContext:
         if self.img_src is None:
             ret, img = self.cap.read()
             cv2.flip(img, 1, img)
@@ -38,8 +38,8 @@ class ImageIO:
         w = int(downscale * img.shape[0] / 100)
         h = int(downscale * img.shape[1] / 100)
 
-        ctx=GameContext(cv2.resize(img, (w, h)))
-        ctx.downscale=downscale/100.0
+        ctx = GameContext(cv2.resize(img, (w, h)))
+        ctx.downscale = downscale / 100.0
         return ctx
 
     def __del__(self):
