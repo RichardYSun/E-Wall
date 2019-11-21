@@ -69,9 +69,11 @@ class TankGame2(Game):
     def update_game(self, keys_down, delta_t: int):
         if not self.players[0].alive:
             print("P2 Winner")
+            self.stop_game()
             return
         if not self.players[1].alive:
             print("P1 Winner")
+            self.stop_game()
             return
 
         # make sure to call update for all physics the game is using
@@ -102,6 +104,13 @@ class TankGame2(Game):
 
         for i in range(len(self.bulletCooldowns)):
             self.bulletCooldowns[i] += delta_t
+
+    def stop_game(self):
+        for bullet in self.bullets:
+            bullet.vel = 0;
+
+        for tank in self.players:
+            tank.playerSpeed = 0;
 
     def checkShot(self):
         for index in range(len(self.players)):
