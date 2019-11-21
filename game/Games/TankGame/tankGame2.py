@@ -1,3 +1,5 @@
+import pygame
+
 from game import keys
 from game.Games.TankGame.bullet import Bullet
 from game.Games.TankGame.tank import Tank
@@ -9,6 +11,7 @@ from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
 from game.test import test
 from game.util.line import Line
+from game.util.moreimutils import conv_cv_to_py, get_py_img
 from game.util.vector2 import Vector2
 import math
 import cv2
@@ -57,6 +60,9 @@ class TankGame2(Game):
         self.down2 = False;
         self.right2 = False;
 
+        #ex
+        self.tankimg=get_py_img('tankgame/dskfj.png')
+
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
 
@@ -73,7 +79,13 @@ class TankGame2(Game):
         self.checkShot()
         self.checkKeys(delta_t)
 
+        pixels = pygame.transform.scale(conv_cv_to_py(self.map.edges), self.map.surface.get_size())
+        self.map.surface.blit(pixels, (0, 0))
+
         for tank in self.players:
+            ##ex
+            self.map.image_py(self.tankimg, tank.hitBox.pos,size)
+
             tank.hitBox.draw_hitbox(self.map.game_img)
             cv2.line(self.map.game_img, (int(tank.hitBox.pos.x), int(tank.hitBox.pos.y)), (int(tank.hitBox.pos.x + 12*math.cos(tank.angle)),
                         int(tank.hitBox.pos.y + 12*math.sin(tank.angle))), (69,42,210), 4)
@@ -94,6 +106,7 @@ class TankGame2(Game):
         for i in range(len(self.bulletCooldowns)):
             self.bulletCooldowns[i] += delta_t
 
+        pygame.display.update()
     def checkShot(self):
         for tank in self.players:
             for bullet in self.bullets:
