@@ -112,6 +112,16 @@ class TankGame2(Game):
         for tank in self.players:
             tank.playerSpeed = 0;
 
+    def reset_game(self):
+        self.players[0].alive = True
+        self.players[0].hitbox = self.spawn1
+        self.players[0].speed = 0;
+
+        self.players[1].alive = True
+        self.players[1].hitbox = self.spawn2
+        self.players[1].speed = 0;
+
+
     def checkShot(self):
         for index in range(len(self.players)):
             for bullet in self.bullets:
