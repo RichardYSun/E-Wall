@@ -1,4 +1,5 @@
 import cv2
+import numpy
 
 from game.game import Game, GameContext
 from game.physics2.collisiontypes import COLLISION_BOUNCE
@@ -7,8 +8,10 @@ from game.physics2.pixelphysics import PixelPhysics
 from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
 from game.test import test
+from game.util.moreimutils import conv_cv_to_py
 from game.util.vector2 import Vector2
 import game.keys as keys
+import pygame
 
 BALL_VEL = Vector2(200, 200)
 
@@ -43,6 +46,10 @@ class Pong(Game):
 
         self.start = 0
 
+        self.win = 0
+
+        self.winTime = 0
+
     # this is called when there is a new frame available from camera
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)  # make sure to call super
@@ -56,40 +63,99 @@ class Pong(Game):
         if key == keys.ENTER:
             self.start = 1
 
-    def update_game(self, keys, delta_t: int):
-        if self.start:
-            # make sure to call update for all physics the game is using
-            self.pixel_physics.update(delta_t)
-            self.wall_physics.update(delta_t)
-            self.std_physics.update(delta_t)
+    def update_game(self, keys, delta_t: float):
+        if self.win != 0:
+            self.winTime += delta_t
+            if self.winTime > 2:
+                self.score = (0, 0)
+                self.win = 0
+                return
 
-            # detect win conditions
-            xmn, xmx, ymn, ymx = self.ball.get_bounds()
-            if xmn < 0:  # player 1 wins
-                self.ball.pos.x = self.map.width / 2  # reset ball to center
-                self.ball.vel = BALL_VEL  # reset ball velocity
-                self.score = (self.score[0] + 1, self.score[1])  # increment score
-                self.start = 0
-            if xmx > self.map.width:  # player 2 wins
-                self.ball.pos.x = self.map.width / 2  # reset ball to center
-                self.ball.vel = BALL_VEL  # reset ball velocity
-                self.score = (self.score[0], self.score[1] + 1)  # increment score
-                self.start = 0
+            surface = self.map.surface
+            surface.fill((0, 0, 0))
 
-        # as a precaution, always draw stuff at the END of the update function
-        self.ball.draw_hitbox(self.map.game_img)
+            pixels = pygame.transform.scale(conv_cv_to_py(self.map.edges), surface.get_size())
+            surface.blit(pixels, (0, 0))
 
-        self.draw_score()
+            pos = [(surface.get_width() // 4, surface.get_height() // 2),
+                   (surface.get_width() * 3 // 4, surface.get_height() // 2)]
 
-    def draw_score(self):
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        pos = (int(self.map.width * 0.45), self.map.height // 2)
+            self.draw_win(surface, pos[self.win - 1])
+            self.draw_lose(surface, pos[2 - self.win])
 
+            self.ball.draw(surface, self.map)
+
+            self.draw_score(surface)
+
+            pygame.display.update()
+        else:
+            if self.start:
+                # make sure to call update for all physics the game is using
+                self.pixel_physics.update(delta_t)
+                self.wall_physics.update(delta_t)
+                self.std_physics.update(delta_t)
+
+                # detect win conditions
+                xmn, xmx, ymn, ymx = self.ball.get_bounds()
+                if xmn < 0:  # player 1 wins
+                    self.ball.pos.x = self.map.width / 2  # reset ball to center
+                    self.ball.pos.y = self.map.height / 2
+                    self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
+                    self.score = (self.score[0] + 1, self.score[1])  # increment score
+                    if self.score[0] == 7:
+                        self.win = 1
+                        self.winTime = 0
+                    self.start = 0
+                if xmx > self.map.width:  # player 2 wins
+                    self.ball.pos.x = self.map.width / 2  # reset ball to center
+                    self.ball.pos.y = self.map.height / 2
+                    self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
+                    self.score = (self.score[0], self.score[1] + 1)  # increment score
+                    if self.score[1] == 7:
+                        self.win = 2
+                        self.winTime = 0
+                    self.start = 0
+
+            # as a precaution, always draw stuff at the END of the update function
+            surface = self.map.surface
+
+            surface.fill((255, 255, 255))
+
+            pixels = pygame.transform.scale(conv_cv_to_py(self.map.edges), surface.get_size())
+            surface.blit(pixels, (0, 0))
+
+            self.ball.draw(surface, self.map)
+
+            self.draw_score(surface)
+
+            pygame.display.update()
+
+    def draw_score(self, surface):
         colour = (0, 255, 0)
-        font_scale = self.map.height // 250
-        thickness = 2
+        font = pygame.font.SysFont('arial', surface.get_width() // 6)
+        text = font.render(str(self.score[0]) + "           " + str(self.score[1]), True, colour)
+        textRect = text.get_rect()
+        textRect.center = (surface.get_width() // 2, surface.get_height() // 10)
 
-        cv2.putText(self.map.game_img, str(self.score[0]) + " " + str(self.score[1]), pos, font, font_scale, colour,
-                    thickness, cv2.LINE_AA)
+        surface.blit(text, textRect)
+
+    def draw_win(self, surface, pos):
+        colour = (0, 255, 0)
+        font = pygame.font.SysFont('arial', surface.get_width() // 8)
+        text = font.render('Winner', True, colour)
+        textRect = text.get_rect()
+        textRect.center = (surface.get_width() // 4, surface.get_height() // 2)
+
+        surface.blit(text, textRect)
+
+    def draw_lose(self, surface, pos):
+        colour = (0, 255, 0)
+        font = pygame.font.SysFont('arial', surface.get_width() // 8)
+        text = font.render('Loser', True, colour)
+        textRect = text.get_rect()
+        textRect.center = (surface.get_width() * 3 // 4, surface.get_height() // 2)
+
+        surface.blit(text, textRect)
+
 
 test(Pong, None)
