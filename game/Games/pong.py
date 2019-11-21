@@ -102,7 +102,7 @@ class Pong(Game):
                     self.ball.pos.y = self.map.height / 2
                     self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
                     self.score = (self.score[0] + 1, self.score[1])  # increment score
-                    if self.score[0] == 1:
+                    if self.score[0] == 7:
                         self.win = 1
                         self.winTime = 0
                     self.start = 0
@@ -111,7 +111,7 @@ class Pong(Game):
                     self.ball.pos.y = self.map.height / 2
                     self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
                     self.score = (self.score[0], self.score[1] + 1)  # increment score
-                    if self.score[1] == 1:
+                    if self.score[1] == 7:
                         self.win = 2
                         self.winTime = 0
                     self.start = 0
