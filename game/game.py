@@ -27,14 +27,10 @@ class GameContext:
 
     # convert game vector coords to pygame coords
     def cc(self, coord: Vector2) -> Tuple[int, int]:
-        return coord.x * self.s, coord.y * self.s
+        return int(coord.x * self.s), int(coord.y * self.s)
 
     def draw_circle(self, pos: Vector2, radius: int):
         pass
-
-    # convert game vector coords to pygame coordss
-    def cc(self, coord: Vector2) -> Tuple[int, int]:
-        return int(coord.x * self.sx()), int(coord.y * self.sy())
 
 # base class for games
 class Game:
