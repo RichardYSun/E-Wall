@@ -10,7 +10,6 @@ from game.keys import PY_MAPPING
 
 
 def test(G, cam='test2', use_pygame=True):
-
     image_io = ImageIO(cam)
 
     map_detect = CVer()
@@ -42,6 +41,8 @@ def test(G, cam='test2', use_pygame=True):
             cnt = 0
 
         for event in pygame.event.get():
+            if event.type == pygame.VIDEORESIZE:
+                pygame.display.set_mode(event.dict['size'], pygame.RESIZABLE)
             if event.type == pygame.KEYDOWN:
                 if event.key in PY_MAPPING:
                     game.key_down(PY_MAPPING[event.key])
