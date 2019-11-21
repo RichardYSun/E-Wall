@@ -53,11 +53,11 @@ class ui(Game):
         # test(games[self.selection], None)
 
     def key_down(self, key: int):
-        if key == keys.UP:
+        if key == keys.UP1:
             self.selection = (self.selection + 1) % NUM_GAMES
-        if key == keys.DOWN:
+        if key == keys.DOWN1:
             self.selection = (self.selection - 1) % NUM_GAMES
-        if key == keys.ENTER and not self.start:
+        if key == keys.FIRE1 and not self.start:
             self.start = 1
             self.start_game()
 

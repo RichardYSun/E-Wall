@@ -1,5 +1,3 @@
-import pygame
-
 from game import keys
 from game.Games.TankGame.bullet import Bullet
 from game.Games.TankGame.tank import Tank
@@ -11,13 +9,12 @@ from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
 from game.test import test
 from game.util.line import Line
-from game.util.moreimutils import conv_cv_to_py, get_py_img
 from game.util.vector2 import Vector2
 import math
 import cv2
 
 BulletSpeed = 100
-BulletCooldown = 30
+BulletCooldown = 1
 
 class TankGame2(Game):
 
@@ -60,8 +57,7 @@ class TankGame2(Game):
         self.down2 = False;
         self.right2 = False;
 
-        #ex
-        self.tankimg=get_py_img('tankgame/dskfj.png')
+        self.won = 0
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -71,6 +67,15 @@ class TankGame2(Game):
         self.std_physics.update_map(new_map)
 
     def update_game(self, keys_down, delta_t: int):
+        if not self.players[0].alive:
+            print("P2 Winner")
+            self.stop_game()
+            return
+        if not self.players[1].alive:
+            print("P1 Winner")
+            self.stop_game()
+            return
+
         # make sure to call update for all physics the game is using
         self.pixel_physics.update(delta_t)
         self.wall_physics.update(delta_t)
@@ -79,13 +84,7 @@ class TankGame2(Game):
         self.checkShot()
         self.checkKeys(delta_t)
 
-        pixels = pygame.transform.scale(conv_cv_to_py(self.map.edges), self.map.surface.get_size())
-        self.map.surface.blit(pixels, (0, 0))
-
         for tank in self.players:
-            ##ex
-            self.map.image_py(self.tankimg, tank.hitBox.pos,size)
-
             tank.hitBox.draw_hitbox(self.map.game_img)
             cv2.line(self.map.game_img, (int(tank.hitBox.pos.x), int(tank.hitBox.pos.y)), (int(tank.hitBox.pos.x + 12*math.cos(tank.angle)),
                         int(tank.hitBox.pos.y + 12*math.sin(tank.angle))), (69,42,210), 4)
@@ -101,25 +100,43 @@ class TankGame2(Game):
 
         for i in range(len(self.bullets), 0):
             if not self.bullets[i].alive:
-                self.remove(self.bullets[i].hitBox)
+                self.remove(self.bullets[i])
 
         for i in range(len(self.bulletCooldowns)):
             self.bulletCooldowns[i] += delta_t
 
-        pygame.display.update()
-    def checkShot(self):
+    def stop_game(self):
+        for bullet in self.bullets:
+            bullet.vel = 0;
+
         for tank in self.players:
+            tank.playerSpeed = 0;
+
+    def reset_game(self):
+        self.players[0].alive = True
+        self.players[0].hitbox = self.spawn1
+        self.players[0].speed = 0;
+
+        self.players[1].alive = True
+        self.players[1].hitbox = self.spawn2
+        self.players[1].speed = 0;
+
+
+    def checkShot(self):
+        for index in range(len(self.players)):
             for bullet in self.bullets:
-                if tank.hitBox.circle_collision(bullet.hitBox):
-                    tank.alive = False
+                if self.players[index].hitBox.circle_collision(bullet.hitBox):
+                    self.players[index].alive = False
+
                     bullet.alive = False
                     self.remove(bullet)
-                    self.remove(tank)
+                    #self.remove(tank)
 
-    def remove(self, obj):
-        self.std_physics.objects.remove(obj)
-        self.pixel_physics.objects.remove(obj)
-        self.wall_physics.objects.remove(obj)
+    def remove(self, obj: Bullet):
+        self.std_physics.objects.remove(obj.hitBox)
+        self.pixel_physics.objects.remove(obj.hitBox)
+        self.wall_physics.objects.remove(obj.hitBox)
+        self.bullets.remove(obj)
 
     def checkKeys(self, delta_t):
         if self.right1:
@@ -135,22 +152,47 @@ class TankGame2(Game):
             self.players[0].setSpeed(-1)
         else:
             self.players[0].setSpeed(0)
+        if self.right2:
+            self.players[1].angle += self.players[1].turnSpeed*delta_t
+            self.players[1].rotateLeft(delta_t)
+        if self.left2:
+            self.players[1].angle -= self.players[1].turnSpeed*delta_t
+            self.players[1].rotateRight(delta_t)
+
+        if self.up2:
+            self.players[1].setSpeed(1)
+        elif self.down2:
+            self.players[1].setSpeed(-1)
+        else:
+            self.players[1].setSpeed(0)
 
     def key_down(self, key_down: int):
-        if key_down == keys.RIGHT:
+        print(key_down)
+        if key_down == keys.RIGHT1:
             self.right1 = True
-        if key_down == keys.LEFT:
+        if key_down == keys.LEFT1:
             self.left1 = True
 
-        if key_down == keys.UP:
+        if key_down == keys.UP1:
             self.up1 = True
-        elif key_down == keys.DOWN:
+        elif key_down == keys.DOWN1:
             self.down1 = True
 
+        if key_down == keys.RIGHT2:
+            self.right2 = True
+        if key_down == keys.LEFT2:
+            self.left2 = True
+
+        if key_down == keys.UP2:
+            self.up2 = True
+        elif key_down == keys.DOWN2:
+            self.down2 = True
+
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
-        if key_down == keys.ENTER:
+        if key_down == keys.FIRE1:
            if self.bulletCooldowns[0] >= BulletCooldown:
-                bulletSpawn = Vector2(self.players[0].hitBox.pos.x, self.players[0].hitBox.pos.y)
+                bulletSpawn = Vector2(self.players[0].hitBox.pos.x + 20*math.cos(self.players[0].angle),
+                                      self.players[0].hitBox.pos.y + 20*math.sin(self.players[0].angle))
                 bullet = Bullet(Circle(bulletSpawn, 8), BulletSpeed, self.players[0].angle)
                 self.bullets.append(bullet)
                 self.std_physics.objects.append(bullet.hitBox)
@@ -159,14 +201,36 @@ class TankGame2(Game):
 
                 self.bulletCooldowns[0] = 0
 
+        if key_down == keys.FIRE2:
+            if self.bulletCooldowns[1] >= BulletCooldown:
+                bulletSpawn = Vector2(self.players[1].hitBox.pos.x + 20*math.cos(self.players[1].angle),
+                                      self.players[1].hitBox.pos.y + 20*math.sin(self.players[1].angle))
+                bullet = Bullet(Circle(bulletSpawn, 8), BulletSpeed, self.players[1].angle)
+                self.bullets.append(bullet)
+                self.std_physics.objects.append(bullet.hitBox)
+                self.pixel_physics.objects.append(bullet.hitBox)
+                self.wall_physics.objects.append(bullet.hitBox)
+
+                self.bulletCooldowns[1] = 0
+
     def key_up(self, key_up: int):
-        if key_up == keys.RIGHT:
+        if key_up == keys.RIGHT1:
             self.right1 = False
-        if key_up == keys.LEFT:
+        if key_up == keys.LEFT1:
             self.left1 = False
 
-        if key_up == keys.UP:
+        if key_up == keys.UP1:
             self.up1 = False
-        elif key_up == keys.DOWN:
+        elif key_up == keys.DOWN1:
             self.down1 = False
+
+        if key_up == keys.RIGHT2:
+            self.right2 = False
+        if key_up == keys.LEFT2:
+            self.left2 = False
+
+        if key_up == keys.UP2:
+            self.up2 = False
+        elif key_up == keys.DOWN2:
+            self.down2 = False
 test(TankGame2, None)
