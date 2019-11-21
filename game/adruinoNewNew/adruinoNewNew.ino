@@ -8,12 +8,20 @@ const int buttonPinUp = 2;
 const int buttonPinRight = 3;
 const int buttonPinDown = 4;
 const int buttonPinLeft = 5;
-const int buttonPinA = 6; // Bottom
-const int buttonPinB = 7; // Right
-const int buttonPinX = 8; // Left
-const int buttonPinY = 9; // Up
+const int buttonPinA = 6; // 
+const int buttonPinB = 7; // 
 
-int stateX = 0, stateY = 0, stateB = 0, stateA = 0, stateUp = 0, stateDown = 0, stateRight = 0, stateLeft = 0;
+const int buttonPinUp2 = 8;
+const int buttonPinRight2 = 9;
+const int buttonPinDown2 = 10;
+const int buttonPinLeft2 = 11;
+const int buttonPinA2 = 12; // 
+const int buttonPinB2 = 13; // 
+
+
+
+int stateB = 0, stateA = 0, stateUp = 0, stateDown = 0, stateRight = 0, stateLeft = 0;
+int stateB2 = 0, stateA2 = 0, stateUp2 = 0, stateDown2 = 0, stateRight2 = 0, stateLeft2 = 0;
 
 int time = 0;
 
@@ -40,9 +48,13 @@ void setup() {
   pinMode(buttonPinRight, INPUT);
   pinMode(buttonPinA, INPUT);
   pinMode(buttonPinB, INPUT);
-  pinMode(buttonPinX, INPUT);
-  pinMode(buttonPinY, INPUT);
 
+  pinMode(buttonPinUp2, INPUT);
+  pinMode(buttonPinDown2, INPUT);
+  pinMode(buttonPinLeft2, INPUT);
+  pinMode(buttonPinRight2, INPUT);
+  pinMode(buttonPinA2, INPUT);
+  pinMode(buttonPinB2, INPUT);
 }
 
 
@@ -56,8 +68,7 @@ void loop() {
 
 
   Serial.flush();
-  checkState(stateX, buttonPinX);
-  checkState(stateY, buttonPinY);
+
   checkState(stateA, buttonPinA);
   checkState(stateB, buttonPinB);
   checkState(stateUp, buttonPinUp);
@@ -65,4 +76,11 @@ void loop() {
   checkState(stateLeft, buttonPinLeft);
   checkState(stateRight, buttonPinRight);
 
+
+  checkState(stateA2, buttonPinA2);
+  checkState(stateB2, buttonPinB2);
+  checkState(stateUp2, buttonPinUp2);
+  checkState(stateDown2, buttonPinDown2);
+  checkState(stateLeft2, buttonPinLeft2);
+  checkState(stateRight2, buttonPinRight2);
 }
