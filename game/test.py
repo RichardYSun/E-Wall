@@ -10,14 +10,11 @@ from game.keys import PY_MAPPING
 
 
 def test(G, cam='test2', use_pygame=True):
-    pygame.init()
-    pygame.display.set_mode((800, 600))
 
     image_io = ImageIO(cam)
 
     map_detect = CVer()
-    img = image_io.get_img()
-    stupid = GameContext(img)
+    stupid = image_io.get_img()
     map_detect.do_cv(stupid)
     game = G(stupid)
     last_time = time.time()
@@ -28,9 +25,8 @@ def test(G, cam='test2', use_pygame=True):
     keys_down = [False] * 5
 
     while True:
-        img = image_io.get_img()
+        ctx = image_io.get_img()
 
-        ctx = GameContext(img)
         map_detect.do_cv(ctx)
 
         game.update_map(ctx)
