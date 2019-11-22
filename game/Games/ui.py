@@ -5,8 +5,8 @@ import numpy as np
 import pygame
 from cv2 import cv2, os
 
-# from game.Games.pong import Pong
-# from game.Games.TankGame.tankGame import TankGame
+from game.Games.pong import Pong
+from game.Games.TankGame.tankGame2 import TankGame2
 from game.game import Game, GameContext
 
 import game.keys as keys
@@ -17,7 +17,7 @@ NUM_GAMES = 2
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-# games: List[Game] = [Pong,TankGame]
+games: List[Game] = [Pong,TankGame2]
 
 
 class ui(Game):
@@ -50,7 +50,7 @@ class ui(Game):
 
     def start_game(self):
         cv2.destroyWindow('selection screen')
-        # test(games[self.selection], None)
+        test(games[self.selection], None)
 
     def key_down(self, key: int):
         if key == keys.UP1:
@@ -64,5 +64,5 @@ class ui(Game):
     def update_game(self, keys: List[bool], delta_t: int):
         self.draw_ui()
 
-
-test(ui)
+if __name__ == "__main__":
+    test(ui)

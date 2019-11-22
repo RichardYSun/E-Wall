@@ -7,9 +7,11 @@ from game.imageio import ImageIO
 from game.cv import CVer
 
 from game.keys import PY_MAPPING
+from game.util import ParamWindow
+from game.util.moreimutils import conv_cv_to_py
 
 
-def test(G, cam='test2', use_pygame=True):
+def test(G, cam='test2'):
     image_io = ImageIO(cam)
 
     map_detect = CVer()
@@ -28,6 +30,12 @@ def test(G, cam='test2', use_pygame=True):
 
         map_detect.do_cv(ctx)
 
+        show_edges=ParamWindow.get_int('show edges',1,1)
+        if show_edges:
+            pixels = pygame.transform.scale(conv_cv_to_py(ctx.edges), ctx.surface.get_size())
+            ctx.surface.blit(pixels, (0, 0))
+        else:
+            ctx.surface.fill((255,255,255))
         game.update_map(ctx)
 
         t = time.time()

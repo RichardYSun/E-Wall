@@ -24,7 +24,7 @@ class GameContext:
         self.pixels_per_meter = 200  # conversion for pixels to real physics
         self.size=Vector2(self.width,self.height)
         if use_pygame:
-            self.surface = pygame.display.get_surface()
+            self.surface:pygame.Surface = pygame.display.get_surface()
             self.pysize = self.surface.get_size()
             self.sx = self.surface.get_width() / float(self.width)
             self.sy = self.surface.get_height() / float(self.height)

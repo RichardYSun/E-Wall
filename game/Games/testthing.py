@@ -16,18 +16,18 @@ class c(PhysicsObject):
         self.facing = 'right'
         self.state = 'rest'
         self.states: Dict[str, pygame.Surface] = {
-            'rest': get_py_img('test2/ree0.bmp',0.5),
-            'walk1': get_py_img('test2/ree1.bmp',0.5),
-            'walk2': get_py_img('test2/ree0.bmp',0.5),
-            'walk3': get_py_img('test2/ree3.bmp',0.5),
-            'walk4': get_py_img('test2/ree0.bmp',0.5),
-            'jump_ready': get_py_img('test2/jump_ready.png',0.5),
-            'jump1': get_py_img('test2/jump1.png',0.5),
-            'jump2': get_py_img('test2/jump2.png',0.5),
-            'jump3': get_py_img('test2/jump3.png',0.5),
-            'jump4': get_py_img('test2/jump3.png',0.5),
-            'jump_land': get_py_img('test2/jump_land.png',0.5),
-            'jump_land2': get_py_img('test2/jump_ready.png',0.5),
+            'rest': get_py_img('test2/ree0.bmp'),
+            'walk1': get_py_img('test2/ree1.bmp'),
+            'walk2': get_py_img('test2/ree0.bmp'),
+            'walk3': get_py_img('test2/ree3.bmp'),
+            'walk4': get_py_img('test2/ree0.bmp'),
+            'jump_ready': get_py_img('test2/jump_ready.png'),
+            'jump1': get_py_img('test2/jump1.png'),
+            'jump2': get_py_img('test2/jump2.png'),
+            'jump3': get_py_img('test2/jump3.png'),
+            'jump4': get_py_img('test2/jump3.png'),
+            'jump_land': get_py_img('test2/jump_land.png'),
+            'jump_land2': get_py_img('test2/jump_ready.png'),
         }
 
         self.timer = 0
@@ -70,11 +70,11 @@ class c(PhysicsObject):
                         self.state = 'rest'
                 else:
                     moving = False
-                    if down[keys.RIGHT]:
+                    if down[keys.RIGHT1]:
                         self.facing = 'right'
                         self.vel.x = spd
                         moving = True
-                    if down[keys.LEFT]:
+                    if down[keys.LEFT1]:
                         self.facing = 'left'
                         self.vel.x = -spd
                         moving = True
@@ -102,7 +102,7 @@ class c(PhysicsObject):
                     else:
                         self.state = 'rest'
 
-                    if down[keys.UP]:
+                    if down[keys.UP1]:
                         self.state = 'jump_ready'
                         self.timer = 0
                 self.vel.x -=self.vel.x*friction*delta_t

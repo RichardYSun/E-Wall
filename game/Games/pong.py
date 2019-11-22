@@ -119,11 +119,6 @@ class Pong(Game):
             # as a precaution, always draw stuff at the END of the update function
             surface = self.map.surface
 
-            surface.fill((255, 255, 255))
-
-            pixels = pygame.transform.scale(conv_cv_to_py(self.map.edges), surface.get_size())
-            surface.blit(pixels, (0, 0))
-
             self.ball.draw(surface, self.map)
 
             self.draw_score(surface)
@@ -157,5 +152,5 @@ class Pong(Game):
 
         surface.blit(text, textRect)
 
-
-test(Pong, None)
+if __name__ == "__main__":
+    test(Pong, None)
