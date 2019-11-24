@@ -21,6 +21,7 @@ class ImageIO:
             w = self.img_src.shape[1]
             h = self.img_src.shape[0]
         pygame.init()
+        print('display size', w,h)
         pygame.display.set_mode((w, h), pygame.RESIZABLE)
 
         self.cam_window = AreaSelectWindow(w, h, 'camera window', (255, 0, 0))
@@ -35,8 +36,8 @@ class ImageIO:
             img = self.img_src
 
         downscale = ParamWindow.get_int('downscale', 100, 70)
-        w = int(downscale * img.shape[0] / 100)
-        h = int(downscale * img.shape[1] / 100)
+        h = int(downscale * img.shape[0] / 100)
+        w = int(downscale * img.shape[1] / 100)
 
         ctx = GameContext(cv2.resize(img, (w, h)))
         ctx.downscale = downscale / 100.0

@@ -4,17 +4,23 @@ from numpy import ndarray
 
 from game.util.vector2 import Vector2
 
+
 class PixelObject(PhysicsObject):
-    collision_escape_radius = 10
-    collision_type = COLLISION_NONE
 
     def __init__(self, pos):
         super().__init__(pos)
         self.collision_escape_vector: Vector2 = None
 
+        self.collision_escape_radius:int = 10
+        self.collision_type:int = COLLISION_NONE
+        self.is_rect:bool = False
+
     # should draw the hitbox of this image onto img
     # img is a uint8 array with the size of the game image
     def draw_hitbox(self, img: ndarray):
+        pass
+
+    def get_img(self)->ndarray:
         pass
 
     # should return the rectangular bounding box for this object

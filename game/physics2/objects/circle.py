@@ -1,6 +1,7 @@
 import cv2
 import pygame
 
+from game.game import GameContext
 from game.physics2.objects.physicsobject import PhysicsObject
 from numpy import ndarray
 
@@ -19,8 +20,8 @@ class Circle(PixelObject):
     def draw_hitbox(self, img: ndarray):
         cv2.circle(img, self.pos.as_int_tuple(), self.r, 255, cv2.FILLED)
 
-    def draw(self, surface, draw_map):
-        pygame.draw.circle(surface, self.colour, draw_map.cc(self.pos), self.r, 0)
+    def draw(self, surface, draw_map:GameContext):
+        pygame.draw.circle(surface, self.colour, draw_map.cc(self.pos), int(draw_map.sx*self.r), 0)
 
     def get_bounds(self):
         x, y = self.pos.as_int_tuple()

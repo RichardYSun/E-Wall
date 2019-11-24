@@ -10,7 +10,7 @@ from game.util import ParamWindow
 from game.img.images import conv_cv_to_py
 
 
-def test(G, cam='test2'):
+def test(G, cam='ree'):
     image_io = ImageIO(cam)
 
     map_detect = CVer()
