@@ -1,9 +1,9 @@
-from typing import List, Any, Tuple, Union, Dict
+from typing import List, Any, Tuple, Union
 
 import pygame
 from numpy import ndarray
 
-from game.util.moreimutils import py_resize
+from game.img.images import py_resize
 from game.util.vector2 import Vector2
 
 Coordinate = Union[Vector2, Tuple[float, float]]

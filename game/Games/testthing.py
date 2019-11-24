@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict
 
 import pygame
 
@@ -6,7 +6,7 @@ from game import keys
 from game.game import Game, GameContext
 from game.physics2.objects.physicsobject import PhysicsObject
 from game.test import test
-from game.util.moreimutils import get_py_img
+from game.img.images import load_py_img
 from game.util.vector2 import Vector2
 
 
@@ -16,18 +16,18 @@ class c(PhysicsObject):
         self.facing = 'right'
         self.state = 'rest'
         self.states: Dict[str, pygame.Surface] = {
-            'rest': get_py_img('test2/ree0.bmp'),
-            'walk1': get_py_img('test2/ree1.bmp'),
-            'walk2': get_py_img('test2/ree0.bmp'),
-            'walk3': get_py_img('test2/ree3.bmp'),
-            'walk4': get_py_img('test2/ree0.bmp'),
-            'jump_ready': get_py_img('test2/jump_ready.png'),
-            'jump1': get_py_img('test2/jump1.png'),
-            'jump2': get_py_img('test2/jump2.png'),
-            'jump3': get_py_img('test2/jump3.png'),
-            'jump4': get_py_img('test2/jump3.png'),
-            'jump_land': get_py_img('test2/jump_land.png'),
-            'jump_land2': get_py_img('test2/jump_ready.png'),
+            'rest': load_py_img('test2/ree0.bmp'),
+            'walk1': load_py_img('test2/ree1.bmp'),
+            'walk2': load_py_img('test2/ree0.bmp'),
+            'walk3': load_py_img('test2/ree3.bmp'),
+            'walk4': load_py_img('test2/ree0.bmp'),
+            'jump_ready': load_py_img('test2/jump_ready.png'),
+            'jump1': load_py_img('test2/jump1.png'),
+            'jump2': load_py_img('test2/jump2.png'),
+            'jump3': load_py_img('test2/jump3.png'),
+            'jump4': load_py_img('test2/jump3.png'),
+            'jump_land': load_py_img('test2/jump_land.png'),
+            'jump_land2': load_py_img('test2/jump_ready.png'),
         }
 
         self.timer = 0

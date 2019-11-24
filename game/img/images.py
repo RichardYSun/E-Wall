@@ -17,9 +17,9 @@ def py_resize(img: pygame.Surface, size: Tuple[int, int])-> pygame.Surface:
     return pygame.transform.scale(img, size)
 
 
-def get_py_img(file) -> pygame.Surface:
+def load_py_img(file) -> pygame.Surface:
     if file not in py_img_cache:
-        py_img_cache[file] = pygame.image.load(ROOT_DIR + '/../img/' + file)
+        py_img_cache[file] = pygame.image.load(ROOT_DIR + '/' + file)
         # if scale is not None:
         #     size = py_img_cache[key].get_size()
         #     size = (int(size[0] * scale), int(size[1] * scale))
@@ -33,7 +33,7 @@ def get_py_img(file) -> pygame.Surface:
 def imread(file, mode=cv2.IMREAD_COLOR) -> ndarray:
     key = (file, mode)
     if key not in py_img_cache:
-        cv_img_cache[key] = cv2.imread(ROOT_DIR + '/../img/' + file, mode)
+        cv_img_cache[key] = cv2.imread(ROOT_DIR + '/' + file, mode)
         # if size != 'none':
         #     size = map(int, size)
         #     cv_img_cache[key] = cv2.resize(cv_img_cache[key], size)

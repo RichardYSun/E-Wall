@@ -12,11 +12,9 @@ from game.physics2.pixelphysics import PixelPhysics
 from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
 from game.test import test
-from game.util.line import Line
-from game.util.moreimutils import conv_cv_to_py, get_py_img
+from game.img.images import load_py_img
 from game.util.vector2 import Vector2
 import math
-import cv2
 
 BulletSpeed = 100
 BulletSize = 8
@@ -69,9 +67,9 @@ class TankGame2(Game):
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
-        self.blueTankImg = self.map.conv_img(get_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize))
-        self.greenTankImg = self.map.conv_img(get_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize))
-        self.bulletImg = self.map.conv_img(get_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize))
+        self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize))
+        self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize))
+        self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize))
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)

@@ -2,13 +2,12 @@ import time
 
 import pygame as pygame
 
-from game.game import GameContext
 from game.imageio import ImageIO
 from game.cv import CVer
 
 from game.keys import PY_MAPPING
 from game.util import ParamWindow
-from game.util.moreimutils import conv_cv_to_py
+from game.img.images import conv_cv_to_py
 
 
 def test(G, cam='test2'):

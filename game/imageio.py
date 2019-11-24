@@ -4,7 +4,7 @@ import pygame
 from game.game import GameContext
 from game.util import ParamWindow
 from game.util.areaselectwindow import AreaSelectWindow
-from game.util.moreimutils import imread
+from game.img.images import imread
 
 
 class ImageIO:
