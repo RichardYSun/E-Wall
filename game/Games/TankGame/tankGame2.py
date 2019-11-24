@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import pygame
 
 from game import keys
@@ -60,10 +62,16 @@ class TankGame2(Game):
 
         # ex
         # self.tankimg = get_py_img('tankgame/dskfj.png')
+        self.blueTankImg: pygame.Surface = None
+        self.greenTankImg: pygame.Surface = None
+        self.bulletImg: pygame.Surface = None
 
-        self.blueTankImg = get_py_img('tankAssets/BlueTank.png')
-        self.greenTankImg = get_py_img('tankAssets/GreenTank.png')
-        self.bulletImg = get_py_img('tankAssets/Bullet.png')
+    # called upon window resize
+    def on_resize(self, size: Tuple[int, int]):
+        # resize tank images to correct size
+        self.blueTankImg = self.map.conv_img(get_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize))
+        self.greenTankImg = self.map.conv_img(get_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize))
+        self.bulletImg = self.map.conv_img(get_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize))
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -95,9 +103,9 @@ class TankGame2(Game):
             # ex
             #  self.map.image_py(self.tankimg, self.players[i].pos, size)
             if i == 0:
-                self.map.image_py(self.blueTankImg, self.players[i].hitBox.pos, Vector2(TankSize, TankSize))
+                self.map.image_py(self.blueTankImg, self.players[i].hitBox.pos)
             elif i == 1:
-                self.map.image_py(self.greenTankImg, self.players[i].hitBox.pos, Vector2(TankSize, TankSize))
+                self.map.image_py(self.greenTankImg, self.players[i].hitBox.pos)
 
             # self.players[i].hitBox.draw_hitbox(self.map.game_img)
             # cv2.line(self.map.game_img, (int(self.players[i].hitBox.pos.x), int(self.players[i].hitBox.pos.y)),
@@ -110,7 +118,7 @@ class TankGame2(Game):
             if bullet.timer < 0:
                 bullet.alive = False
                 continue
-            self.map.image_py(self.bulletImg, self.bullets[i].hitBox.pos, Vector2(BulletSize, BulletSize))
+            self.map.image_py(self.bulletImg, self.bullets[i].hitBox.pos)
             # bullet.hitBox.draw_hitbox(self.map.game_img)
 
         for i in range(len(self.bullets), 0):

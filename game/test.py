@@ -19,6 +19,7 @@ def test(G, cam='test2'):
     map_detect.do_cv(stupid)
     game = G(stupid)
     last_time = time.time()
+    game.on_resize(stupid.pysize)
 
     cnt = 0
     tt = 0
@@ -30,12 +31,12 @@ def test(G, cam='test2'):
 
         map_detect.do_cv(ctx)
 
-        show_edges=ParamWindow.get_int('show edges',1,1)
+        show_edges = ParamWindow.get_int('show edges', 1, 1)
         if show_edges:
             pixels = pygame.transform.scale(conv_cv_to_py(ctx.edges), ctx.surface.get_size())
             ctx.surface.blit(pixels, (0, 0))
         else:
-            ctx.surface.fill((255,255,255))
+            ctx.surface.fill((255, 255, 255))
         game.update_map(ctx)
 
         t = time.time()
@@ -51,6 +52,7 @@ def test(G, cam='test2'):
         for event in pygame.event.get():
             if event.type == pygame.VIDEORESIZE:
                 pygame.display.set_mode(event.dict['size'], pygame.RESIZABLE)
+                game.on_resize(event.dict['size'])
             if event.type == pygame.KEYDOWN:
                 if event.key in PY_MAPPING:
                     game.key_down(PY_MAPPING[event.key])

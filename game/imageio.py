@@ -34,7 +34,7 @@ class ImageIO:
         else:
             img = self.img_src
 
-        downscale = ParamWindow.get_int('downscale', 100, 100)
+        downscale = ParamWindow.get_int('downscale', 100, 70)
         w = int(downscale * img.shape[0] / 100)
         h = int(downscale * img.shape[1] / 100)
 

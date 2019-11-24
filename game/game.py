@@ -15,16 +15,16 @@ class GameContext:
         self.height: int = cam_img.shape[0]  # height of game
         self.cam_img = cam_img
 
-        self.downscale = 1  # downscale level
+        self.downscale = None  # downscale level
         self.edges: ndarray = None  # the image with edges detected
         self.lines: ndarray = None  # the list of lines detected in the form [[[x1,y1,x2,y2]],[[...]],...]
         self.game_img: ndarray = None  # the output image to draw on
         self.lsd: Any = None  # the line segment detector
         self.lines_conv: ndarray = None
         self.pixels_per_meter = 200  # conversion for pixels to real physics
-        self.size=Vector2(self.width,self.height)
+        self.size = Vector2(self.width, self.height)
         if use_pygame:
-            self.surface:pygame.Surface = pygame.display.get_surface()
+            self.surface: pygame.Surface = pygame.display.get_surface()
             self.pysize = self.surface.get_size()
             self.sx = self.surface.get_width() / float(self.width)
             self.sy = self.surface.get_height() / float(self.height)
@@ -43,19 +43,22 @@ class GameContext:
         b = self.cc(r[2:4])
         return a[0], a[1], b[0], b[1]
 
+    # convert pygame image to game size
+    def conv_img(self, img: pygame.Surface, size: Coordinate):
+        return py_resize(img, self.cc(size))
+
     # draw pygame image to screen (image should be from py_img_)
-    def image_py(self, img: pygame.Surface, dest: Coordinate, size: Coordinate, flags=0,
+    def image_py(self, img: pygame.Surface, dest: Coordinate, flags: int = 0,
                  surface: pygame.Surface = None):
         if surface is None:
             surface = self.surface
-        img = py_resize(img,self.cc(size))
         surface.blit(img, self.cc(dest), special_flags=flags)
 
 
 # base class for games
 class Game:
     def __init__(self, initial_map: GameContext):
-        self.map = initial_map
+        self.map: GameContext = initial_map
 
     # should be implemented by subclasses
     def update_game(self, keys_down: List[bool], delta_t: int):
@@ -67,6 +70,10 @@ class Game:
 
     # called when key comes back up
     def key_up(self, key: int):
+        pass
+
+    # called on window resize
+    def on_resize(self, size: Tuple[int, int]):
         pass
 
     # called when there is a new info from image processing

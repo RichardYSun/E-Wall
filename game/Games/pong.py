@@ -35,7 +35,7 @@ class Pong(Game):
         # 20 is the radius
         self.ball = Circle(Vector2(mp.width / 2, mp.height / 2), 20)
         self.ball.collision_type = COLLISION_BOUNCE  # this makes the ball bouncy
-        self.ball.vel = BALL_VEL  # make the ball begin moving
+        self.ball.vel = BALL_VEL*mp.downscale  # make the ball begin moving
 
         # we must add the ball to each physics module we want it to follow
         self.std_physics.objects.append(self.ball)  # we want the ball to move
@@ -60,10 +60,38 @@ class Pong(Game):
         self.std_physics.update_map(new_map)
 
     def key_down(self, key: int):
-        if key == keys.ENTER:
+        if key == keys.FIRE1:
             self.start = 1
 
+    def do_logic(self, delta_t:float):
+        # make sure to call update for all physics the game is using
+        self.pixel_physics.update(delta_t)
+        self.wall_physics.update(delta_t)
+        self.std_physics.update(delta_t)
+
+        # detect win conditions
+        xmn, xmx, ymn, ymx = self.ball.get_bounds()
+        if xmn < 0:  # player 1 wins
+            self.ball.pos.x = self.map.width / 2  # reset ball to center
+            self.ball.pos.y = self.map.height / 2
+            self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
+            self.score = (self.score[0] + 1, self.score[1])  # increment score
+            if self.score[0] == 7:
+                self.win = 1
+                self.winTime = 0
+            self.start = 0
+        if xmx > self.map.width:  # player 2 wins
+            self.ball.pos.x = self.map.width / 2  # reset ball to center
+            self.ball.pos.y = self.map.height / 2
+            self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
+            self.score = (self.score[0], self.score[1] + 1)  # increment score
+            if self.score[1] == 7:
+                self.win = 2
+                self.winTime = 0
+            self.start = 0
+
     def update_game(self, keys, delta_t: float):
+        surface = self.map.surface
         if self.win != 0:
             self.winTime += delta_t
             if self.winTime > 2:
@@ -71,59 +99,21 @@ class Pong(Game):
                 self.win = 0
                 return
 
-            surface = self.map.surface
-            surface.fill((0, 0, 0))
-
-            pixels = pygame.transform.scale(conv_cv_to_py(self.map.edges), surface.get_size())
-            surface.blit(pixels, (0, 0))
-
             pos = [(surface.get_width() // 4, surface.get_height() // 2),
                    (surface.get_width() * 3 // 4, surface.get_height() // 2)]
 
             self.draw_win(surface, pos[self.win - 1])
             self.draw_lose(surface, pos[2 - self.win])
-
             self.ball.draw(surface, self.map)
-
             self.draw_score(surface)
-
-            pygame.display.update()
         else:
             if self.start:
-                # make sure to call update for all physics the game is using
-                self.pixel_physics.update(delta_t)
-                self.wall_physics.update(delta_t)
-                self.std_physics.update(delta_t)
-
-                # detect win conditions
-                xmn, xmx, ymn, ymx = self.ball.get_bounds()
-                if xmn < 0:  # player 1 wins
-                    self.ball.pos.x = self.map.width / 2  # reset ball to center
-                    self.ball.pos.y = self.map.height / 2
-                    self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
-                    self.score = (self.score[0] + 1, self.score[1])  # increment score
-                    if self.score[0] == 7:
-                        self.win = 1
-                        self.winTime = 0
-                    self.start = 0
-                if xmx > self.map.width:  # player 2 wins
-                    self.ball.pos.x = self.map.width / 2  # reset ball to center
-                    self.ball.pos.y = self.map.height / 2
-                    self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
-                    self.score = (self.score[0], self.score[1] + 1)  # increment score
-                    if self.score[1] == 7:
-                        self.win = 2
-                        self.winTime = 0
-                    self.start = 0
-
-            # as a precaution, always draw stuff at the END of the update function
-            surface = self.map.surface
+                self.do_logic(delta_t)
 
             self.ball.draw(surface, self.map)
-
             self.draw_score(surface)
 
-            pygame.display.update()
+        pygame.display.update()
 
     def draw_score(self, surface):
         colour = (0, 255, 0)
