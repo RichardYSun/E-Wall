@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import cv2
 import numpy as np
 from numpy.core.multiarray import ndarray
@@ -8,6 +10,16 @@ from game.physics2.physics import Physics
 from game.physics2.objects.physicsobject import PhysicsObject
 from game.physics2.objects.pixelobject import PixelObject
 from game.util.vector2 import Vector2
+
+Rect = Tuple[int, int, int, int]
+
+
+def inter(a: Rect, b: Rect) -> Rect:
+    return max(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), min(a[3], b[3])
+
+
+def area(a: Rect) -> int:
+    return (a[1] - a[0]) * (a[3] - a[2])
 
 
 class PixelPhysics(Physics):
@@ -27,30 +39,44 @@ class PixelPhysics(Physics):
 
         edges = self.map.edges
         R = obj.collision_escape_radius
-        self.mat = np.zeros(edges.shape, dtype=edges.dtype)
-        if self.mat is None or self.mat.shape != edges.shape:
-            self.mat = np.zeros(edges.shape, dtype=edges.dtype)
-        else:
-            cv2.rectangle(self.mat, (ymn - R, xmn - R), (ymx + R + 1, xmx + R + 1), 0, cv2.FILLED)
 
-        obj.draw_hitbox(self.mat)
+        hitbox = None
+
+        if not obj.is_rect:
+            if obj.use_direct_img:
+                hitbox = obj.get_hitbox()
+                # print(obj.get_bounds())
+            else:
+                if self.mat is None or self.mat.shape != edges.shape:
+                    self.mat = np.zeros(edges.shape, dtype=edges.dtype)
+                else:
+                    cv2.rectangle(self.mat, (ymn - R, xmn - R), (ymx + R + 1, xmx + R + 1), 0, cv2.FILLED)
+                obj.draw_hitbox(self.mat)
+
+        screen_rect = (0, edges.shape[1], 0, edges.shape[0])
 
         for x in range(-R, R + 1):
-            if xmx + x > edges.shape[1]:
-                break
             for y in range(-R, R + 1):
-                if ymx + y > edges.shape[0]:
-                    break
+                test_rect = (xmn + x, xmx + x, ymn + y, ymx + y)
+                s = inter(test_rect, screen_rect)
+                if s[3] <= s[2] or s[1] <= s[0]:
+                    continue
+                # print(s)
+                img = edges[s[2]:s[3], s[0]:s[1]]
 
-                rect = cv2.bitwise_and(self.mat[ymn + y:ymx + y, xmn + x:xmx + x],
-                                       edges[ymn + y:ymx + y, xmn + x:xmx + x])
+                if not obj.is_rect:
+                    if obj.use_direct_img:
+                        a = hitbox[s[2] - ymn - y:s[3] - ymn - y, s[0] - xmn - x:s[1] - xmn - x]
+                        img = cv2.bitwise_and(a, img)
+                    else:
+                        img = cv2.bitwise_and(self.mat[s[2]:s[3], s[0]:s[1]], img)
 
-                cnt = cv2.countNonZero(rect)
+                cnt = cv2.countNonZero(img)
+
                 if cnt < mn or (cnt == mn and x * x + y * y < off):
                     off = x * x + y * y
                     mn = cnt
                     best = Vector2(x, y)
-
         obj.collision_escape_vector = best
 
         if best.sq_mag() == 0:

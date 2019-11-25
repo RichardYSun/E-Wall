@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import pygame
 
 from game import keys
@@ -66,16 +64,12 @@ class TankGame2(Game):
         self.greenTankImg: pygame.Surface = None
         self.bulletImg: pygame.Surface = None
 
-        self.winnerImg: pygame.Surface = None
-
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
         self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize))
         self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize))
         self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize))
-
-        self.winnerImg = self.map.conv_img((load_py_img('tankAssets/winner.png'), (TankSize + 10, TankSize + 10)));
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
