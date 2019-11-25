@@ -40,14 +40,18 @@ def test(G, cam='ree'):
                     game.key_up(PY_MAPPING[event.key])
                     keys_down[PY_MAPPING[event.key]] = False
 
-        state = button().state
-        buttonID = button().button
+        curKey = button()
+        buttonID = curKey.buttonID
+        state = curKey.state
 
-        if buttonID == 2:
-            if state == 1:
-                pygame.KEYDOWN
-            if state == 0:
-                pygame.KEYUP
+        for index in ARDUINO_MAPPING:
+            if index == buttonID:
+                if state == 1:
+                    game.key_down(ARDUINO_MAPPING[buttonID])
+                if state == 0:
+                    game.key_up(ARDUINO_MAPPING[buttonID])
+
+
 
         ctx = image_io.get_img()
 
