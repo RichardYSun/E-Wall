@@ -39,6 +39,16 @@ def test(G, cam='ree'):
                 if event.key in PY_MAPPING:
                     game.key_up(PY_MAPPING[event.key])
                     keys_down[PY_MAPPING[event.key]] = False
+
+        state = button().state
+        buttonID = button().button
+
+        if buttonID == 2:
+            if state == 1:
+                pygame.KEYDOWN
+            if state == 0:
+                pygame.KEYUP
+
         ctx = image_io.get_img()
 
         map_detect.do_cv(ctx)
