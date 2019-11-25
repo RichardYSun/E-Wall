@@ -57,6 +57,8 @@ class TankGame2(Game):
         self.down2 = False;
         self.right2 = False;
 
+        self.restartButton = False;
+
         self.won = 0
 
         # ex
@@ -85,12 +87,17 @@ class TankGame2(Game):
         self.std_physics.update_map(new_map)
 
     def update_game(self, keys_down, delta_t: int):
+        if self.restartButton:
+            self.__init__()
 
         if not self.players[0].alive:
             text = self.font.render('Player 2 Wins', True, self.textColor)
             text_rect = text.get_rect()
             text_rect.center = (self.map.surface.get_width() //2, self.map.surface.get_height() //4)
             self.map.surface.blit(text, text_rect)
+
+            #Put Winner Icon on top of P2
+            self.map.image_py(self.winnerImg, self.players[1].hitBox.pos);
             self.stop_game()
             pygame.display.update()
             return
@@ -99,6 +106,9 @@ class TankGame2(Game):
             text_rect = text.get_rect()
             text_rect.center = (self.map.surface.get_width() // 2, self.map.surface.get_height() // 4)
             self.map.surface.blit(text, text_rect)
+
+            #Put Winner Icon on top of P1
+            self.map.image_py(self.winnerImg, self.players[0].hitBox.pos);
             self.stop_game()
             pygame.display.update()
             return
@@ -178,11 +188,11 @@ class TankGame2(Game):
         if self.right1:
             self.players[0].angle += self.players[0].turnSpeed * delta_t
             # self.players[0].rotateLeft(delta_t)
-            pygame.transform.rotate(self.blueTankImg, self.players[0].turnSpeed * delta_t)
+            self.blueTankImg = pygame.transform.rotate(self.blueTankImg, self.players[0].turnSpeed * delta_t)
         if self.left1:
             self.players[0].angle -= self.players[0].turnSpeed * delta_t
             # self.players[0].rotateRight(delta_t)
-            pygame.transform.rotate(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
+            self.blueTankImg = pygame.transform.rotate(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
 
         if self.up1:
             self.players[0].setSpeed(1)
@@ -193,11 +203,11 @@ class TankGame2(Game):
         if self.right2:
             self.players[1].angle += self.players[1].turnSpeed * delta_t
             # self.players[1].rotateLeft(delta_t)
-            pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
+            self.greenTankImg = pygame.transform.rotate(self.greenTankImg, self.players[1].turnSpeed * delta_t)
         if self.left2:
             self.players[1].angle -= self.players[1].turnSpeed * delta_t
             # self.players[1].rotateRight(delta_t)
-            pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
+            self.greenTankImg = pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
         if self.up2:
             self.players[1].setSpeed(1)
         elif self.down2:
@@ -206,6 +216,9 @@ class TankGame2(Game):
             self.players[1].setSpeed(0)
 
     def key_down(self, key_down: int):
+        if key_down == keys.ACTIONB1:
+            self.restartButton = True
+
         if key_down == keys.RIGHT1:
             self.right1 = True
         if key_down == keys.LEFT1:
@@ -271,6 +284,9 @@ class TankGame2(Game):
             self.up2 = False
         elif key_up == keys.DOWN2:
             self.down2 = False
+
+        if key_up == keys.ACTIONB1 or key_up == keys.ACTIONB2:
+            self.restartButton = False
 
 
 if __name__ == "__main__":
