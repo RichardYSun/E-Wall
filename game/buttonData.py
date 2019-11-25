@@ -14,17 +14,14 @@ arduino = serial.Serial('COM3', timeout = 1, baudrate= 9600)
 # Sift through data received from serial
 
 def button():
-
     newData = (arduino.readline())
-    try:
-        dataDecode = newData.decode("utf-8")
-    except:
-
-    splitWork = true;
+    dataDecode = newData.decode("utf-8")
+    splitWork = true
     try:
         split = dataDecode.split(",")
     except:
-        splitWork = false;
+        splitWork = false
+
     if splitWork == true:
         button = int(split[0])
         state = int(split[1])

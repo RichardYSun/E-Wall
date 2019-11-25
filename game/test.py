@@ -39,6 +39,20 @@ def test(G, cam='ree'):
                 if event.key in PY_MAPPING:
                     game.key_up(PY_MAPPING[event.key])
                     keys_down[PY_MAPPING[event.key]] = False
+
+        curKey = button()
+        buttonID = curKey.buttonID
+        state = curKey.state
+
+        for index in ARDUINO_MAPPING:
+            if index == buttonID:
+                if state == 1:
+                    game.key_down(ARDUINO_MAPPING[buttonID])
+                if state == 0:
+                    game.key_up(ARDUINO_MAPPING[buttonID])
+
+
+
         ctx = image_io.get_img()
 
         map_detect.do_cv(ctx)

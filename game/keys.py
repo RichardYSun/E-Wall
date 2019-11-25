@@ -6,6 +6,7 @@ LEFT1 = 3
 RIGHT1 = 0
 FIRE1 = 4
 
+
 UP2 = 6
 DOWN2 = 7
 LEFT2 = 8
@@ -34,4 +35,21 @@ PY_MAPPING = {
     pygame.K_DOWN: DOWN2,
     pygame.K_RIGHT: RIGHT2,
     pygame.K_RETURN: FIRE2
+}
+
+ARDUINO_MAPPING = {
+    2: UP1,
+    3: RIGHT1,
+    4: DOWN1,
+    5: LEFT1,
+    6: ACTIONA1,
+    7: ACTIONB1,
+
+    8: UP2,
+    9: RIGHT2,
+    10: DOWN2,
+    11: LEFT2,
+    12: ACTIONA2,
+    13: ACTIONB2,
+
 }
