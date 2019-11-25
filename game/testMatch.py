@@ -1,56 +1,77 @@
+import time
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
-from game.img.images import imread
+from img.images import imread
 
 MATCH_CNT = 10
 
 
-def match(img: np.ndarray, fnd: np.ndarray):
-    sift = cv2.SIFT()
+def match(fnd: np.ndarray, img: np.ndarray):
+    orb = cv2.ORB_create()
 
-    kp1, des1 = sift.detectAndCompute(img, None)
-    kp2, des2 = sift.detectAndCompute(fnd, None)
+    kp1 = orb.detect(fnd, None)
+    kp1, des1 = orb.compute(fnd, kp1)
+    kp2 = orb.detect(img, None)
+    kp2, des2 = orb.compute(img, kp2)
 
-    index_params = dict(algorithm=0, trees=5)
-    search_params = dict(checks=50)
+    # plt.imshow(cv2.drawKeypoints(fnd, kp1, None, color=(255, 0, 0), flags=0))
+    # plt.show()
+    # return
 
-    matches = cv2.FlannBasedMatcher(index_params, search_params).knnMatch(des1, des2, k=2)
+    index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
+    search_params = dict(checks=100)
+
+    matches = cv2.FlannBasedMatcher(index_params, search_params).knnMatch(des1, des2, k=5)
 
     good = []
-    for m, n in matches:
-        if m.distance < 0.7 * n.distance:
-            good.append(m)
+    for k in matches:
+        if len(k) > 1 and k[0].distance < 0.7 * k[1].distance:
+            good.append(k[0])
 
-    if len(good) > MATCH_CNT:
-        src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
-        dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+    # draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
+    #                    singlePointColor=None,
+    #                    matchesMask=[1] * len(good),  # draw only inliers
+    #                    flags=2)
+    # img3 = cv2.drawMatches(fnd, kp1, img, kp2, good, None, **draw_params)
+    #
+    # plt.imshow(img3), plt.show()
+    # return
 
+    draw_mask = [0] * len(good)
+
+    while len(good) - sum(draw_mask) > MATCH_CNT:
+        print('loop')
+        src_pts = np.float32(
+            [kp1[m.queryIdx].pt for m in [good[i] for i in range(len(good)) if not draw_mask[i]]]).reshape(
+            -1, 1, 2)
+        dst_pts = np.float32(
+            [kp2[m.trainIdx].pt for m in [good[i] for i in range(len(good)) if not draw_mask[i]]]).reshape(
+            -1, 1, 2)
         M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
         matchesMask = mask.ravel().tolist()
 
-        h, w = fnd.shape
+        j = 0
+        for i in range(len(good)):
+            if not draw_mask[i]:
+                draw_mask[i] |= matchesMask[j]
+                j += 1
+
+        h, w, d = fnd.shape
         pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
         dst = cv2.perspectiveTransform(pts, M)
-
-        img2 = cv2.polylines(img, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
-
-    else:
-        print
-        "Not enough matches are found - %d/%d" % (len(good), MATCH_CNT)
-        matchesMask = None
+        img = cv2.polylines(img, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
 
     draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
                        singlePointColor=None,
-                       matchesMask=matchesMask,  # draw only inliers
+                       matchesMask=draw_mask,  # draw only inliers
                        flags=2)
 
     img3 = cv2.drawMatches(fnd, kp1, img, kp2, good, None, **draw_params)
-
     plt.imshow(img3, 'gray'), plt.show()
 
 
-img = imread('testmatch.png')
-fnd = imread('ree/jump1.png')
-match(img, fnd)
+img = imread('testMatch1.jpg')
+fnd = imread('test/image0.jpg')
+match(fnd, img)
