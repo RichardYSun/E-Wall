@@ -19,13 +19,13 @@ def button():
     try:
         dataDecode = newData.decode("utf-8")
     except:
+        splitWork = True;
 
-    splitWork = true;
     try:
         split = dataDecode.split(",")
     except:
-        splitWork = false;
-    if splitWork == true:
+        splitWork = False;
+    if splitWork == True:
         button = int(split[0])
         state = int(split[1])
 
