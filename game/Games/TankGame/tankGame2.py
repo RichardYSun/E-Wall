@@ -176,11 +176,11 @@ class TankGame2(Game):
         if self.right1:
             self.players[0].angle += self.players[0].turnSpeed * delta_t
             # self.players[0].rotateLeft(delta_t)
-            pygame.transform.rotate(self.blueTankImg, self.players[0].turnSpeed * delta_t)
+            self.blueTankImg = pygame.transform.rotate(self.blueTankImg, self.players[0].turnSpeed * delta_t)
         if self.left1:
             self.players[0].angle -= self.players[0].turnSpeed * delta_t
             # self.players[0].rotateRight(delta_t)
-            pygame.transform.rotate(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
+            self.blueTankImg = pygame.transform.rotate(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
 
         if self.up1:
             self.players[0].setSpeed(1)
@@ -191,11 +191,11 @@ class TankGame2(Game):
         if self.right2:
             self.players[1].angle += self.players[1].turnSpeed * delta_t
             # self.players[1].rotateLeft(delta_t)
-            pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
+            self.greenTankImg = pygame.transform.rotate(self.greenTankImg, self.players[1].turnSpeed * delta_t)
         if self.left2:
             self.players[1].angle -= self.players[1].turnSpeed * delta_t
             # self.players[1].rotateRight(delta_t)
-            pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
+            self.greenTankImg = pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
         if self.up2:
             self.players[1].setSpeed(1)
         elif self.down2:
