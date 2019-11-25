@@ -35,6 +35,13 @@ class TankGame2(Game):
         self.spawn1 = Vector2(mp.width / 4, mp.height / 2)
         self.spawn2 = Vector2(mp.width * 3 / 4, mp.height / 2)
 
+        self.initialize_objects()
+        self.initialize_buttons()
+
+        self.font : pygame.font.Font = None
+        self.textColor = (200,255,200)
+
+    def initialize_objects(self):
         self.players = [] * 2
         self.bullets = []
 
@@ -48,6 +55,14 @@ class TankGame2(Game):
 
         self.bulletCooldowns = [0, 0]
 
+        # ex
+        # self.tankimg = get_py_img('tankgame/dskfj.png')
+        self.blueTankImg: pygame.Surface = None
+        self.greenTankImg: pygame.Surface = None
+        self.bulletImg: pygame.Surface = None
+
+
+    def initialize_buttons(self):
         self.up1 = False;
         self.left1 = False;
         self.down1 = False;
@@ -61,14 +76,6 @@ class TankGame2(Game):
 
         self.won = 0
 
-        # ex
-        # self.tankimg = get_py_img('tankgame/dskfj.png')
-        self.blueTankImg: pygame.Surface = None
-        self.greenTankImg: pygame.Surface = None
-        self.bulletImg: pygame.Surface = None
-
-        self.font : pygame.font.Font = None
-        self.textColor = (200,255,200)
 
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
@@ -88,7 +95,8 @@ class TankGame2(Game):
 
     def update_game(self, keys_down, delta_t: int):
         if self.restartButton:
-            self.__init__()
+            self.initialize_objects()
+            self.initialize_buttons()
 
         if not self.players[0].alive:
             text = self.font.render('Player 2 Wins', True, self.textColor)
