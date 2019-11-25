@@ -6,6 +6,7 @@ LEFT1 = 3
 RIGHT1 = 0
 FIRE1 = 4
 
+
 UP2 = 6
 DOWN2 = 7
 LEFT2 = 8
