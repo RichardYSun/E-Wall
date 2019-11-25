@@ -64,12 +64,16 @@ class TankGame2(Game):
         self.greenTankImg: pygame.Surface = None
         self.bulletImg: pygame.Surface = None
 
+        self.winnerImg: pygame.Surface = None
+
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
         self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize))
         self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize))
         self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize))
+
+        self.winnerImg = self.map.conv_img((load_py_img('tankAssets/winner.png'), (TankSize + 10, TankSize + 10)));
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -82,10 +86,18 @@ class TankGame2(Game):
 
         if not self.players[0].alive:
             print("P2 Winner")
+
+            #Put Winner Icon on top of P2
+            self.map.image_py(self.winnerImg, self.players[1].hitBox.pos);
+
             self.stop_game()
             return
         if not self.players[1].alive:
             print("P1 Winner")
+
+            #Put Winner Icon on top of P1
+            self.map.image_py(self.winnerImg, self.players[0].hitBox.pos);
+
             self.stop_game()
             return
 
