@@ -112,8 +112,8 @@ class CVer:
         mp.lsd = self.lsd
 
         # removes noise
-        max_sz = ParamWindow.get_int('noise', 11, 3) | 1;
-        it = ParamWindow.get_int('it', 5, 1);
+        max_sz = ParamWindow.get_int('noise', 11, 3) | 1
+        it = ParamWindow.get_int('it', 5, 1)
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (max_sz, max_sz))
         mp.edges = cv2.morphologyEx(mp.edges, cv2.MORPH_OPEN, kernel, iterations=it)
 

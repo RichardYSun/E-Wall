@@ -62,7 +62,7 @@ void setup() {
 void loop() {
   // Sends the state to a function,  Makes it more readable
 
-  delay(1000);
+  delay(0);
   time += 1;
 
 

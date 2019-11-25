@@ -2,10 +2,11 @@ import time
 
 import pygame as pygame
 
+from game.buttonData import button
 from game.imageio import ImageIO
 from game.cv import CVer
 
-from game.keys import PY_MAPPING
+from game.keys import PY_MAPPING, ARDUINO_MAPPING
 from game.util import ParamWindow
 from game.img.images import conv_cv_to_py
 
@@ -39,6 +40,20 @@ def test(G, cam='ree'):
                 if event.key in PY_MAPPING:
                     game.key_up(PY_MAPPING[event.key])
                     keys_down[PY_MAPPING[event.key]] = False
+
+        curKey = button()
+        buttonID = curKey.buttonID
+        state = curKey.state
+
+        for index in ARDUINO_MAPPING:
+            if index == buttonID:
+                if state == 1:
+                    game.key_down(ARDUINO_MAPPING[buttonID])
+                if state == 0:
+                    game.key_up(ARDUINO_MAPPING[buttonID])
+
+
+
         ctx = image_io.get_img()
 
         map_detect.do_cv(ctx)

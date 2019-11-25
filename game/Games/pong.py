@@ -7,6 +7,7 @@ from game.physics2.objects.circle import Circle
 from game.physics2.pixelphysics import PixelPhysics
 from game.physics2.standardphysics import StandardPhysics
 from game.physics2.wallphysics import WallPhysics
+from game.sound.sounds import load_sound
 from game.test import test
 from game.util.vector2 import Vector2
 import game.keys as keys
@@ -56,6 +57,11 @@ class Pong(Game):
         self.win_img: pygame.Surface = None
         self.lose_img: pygame.Surface = None
 
+        # sounds
+        self.lose_sound = load_sound('lose.wav')
+        self.wall_sound = load_sound('wallhit.wav')
+        self.side_sound = load_sound('sidehit.wav')
+
     # this is called when there is a new frame available from camera
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)  # make sure to call super
@@ -71,6 +77,7 @@ class Pong(Game):
 
     def do_logic(self, delta_t: float):
         # make sure to call update for all physics the game is using
+        prev_vel = self.ball.vel
         self.pixel_physics.update(delta_t)
         self.wall_physics.update(delta_t)
         self.std_physics.update(delta_t)
@@ -78,6 +85,7 @@ class Pong(Game):
         # detect win conditions
         xmn, xmx, ymn, ymx = self.ball.get_bounds()
         if xmn < 0:  # player 1 wins
+            self.lose_sound.play()
             self.ball.pos.x = self.map.width / 2  # reset ball to center
             self.ball.pos.y = self.map.height / 2
             self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
@@ -86,7 +94,9 @@ class Pong(Game):
                 self.win = 1
                 self.winTime = 0
             self.start = 0
-        if xmx > self.map.width:  # player 2 wins
+
+        elif xmx > self.map.width:  # player 2 wins
+            self.lose_sound.play()
             self.ball.pos.x = self.map.width / 2  # reset ball to center
             self.ball.pos.y = self.map.height / 2
             self.ball.vel = BALL_VEL * self.map.downscale  # reset ball velocity
@@ -95,6 +105,12 @@ class Pong(Game):
                 self.win = 2
                 self.winTime = 0
             self.start = 0
+        else:
+            n_vel = self.ball.vel
+            if prev_vel.x != n_vel.x:
+                self.side_sound.play()
+            elif prev_vel.y != n_vel.y:
+                self.wall_sound.play()
 
     def update_game(self, keys, delta_t: float):
         surface = self.map.surface

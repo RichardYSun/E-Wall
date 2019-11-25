@@ -43,17 +43,17 @@ class Stuart(PixelObject):
         super().__init__(pos)
         self.facing = 'right'
         self.state: str = 'rest'
-        self.game_size = (100, 150)
+        self.game_size = (230, 300)
 
-        def A(nm: str):
-            return AnimationState(nm, self.game_size)
+        def A(nm: str, off:Tuple[int,int]=(0,0)):
+            return AnimationState(nm, self.game_size, Vector2(off[0],off[1]))
 
         self.states: Dict[str, AnimationState] = {
-            'rest': A('ree/rest.png'),
-            'walk1': A('ree/walk2.png'),
-            'walk2': A('ree/rest.png'),
-            'walk3': A('ree/walk1.png'),
-            'walk4': A('ree/rest.png'),
+            'rest': A('ree/walk_0.png',),
+            'walk1': A('ree/walk_1.png',),
+            'walk2': A('ree/walk_2.png',),
+            'walk3': A('ree/walk_3.png',),
+            'walk4': A('ree/walk_0.png',),
             'jump_ready': A('ree/jump_ready.png'),
             'jump1': A('ree/jump1.png'),
             'jump2': A('ree/jump2.png'),
@@ -79,10 +79,14 @@ class Stuart(PixelObject):
         self.mp = new_map
 
     def set_state(self, state: str):
+        kstate = self.states[self.state]
+        self.pos -= kstate.offset
+
         self.state = state
-        state = self.states[self.state]
-        self.pos += state.offset
-        if state.timer is not None:
+
+        kstate = self.states[self.state]
+        self.pos += kstate.offset
+        if kstate.timer is not None:
             self.timer = 0
 
     # TODO actually use this
@@ -197,12 +201,12 @@ class Ree(Game):
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
         self.p.update_map(new_map)
-        self.w.update_map(new_map)
+        # self.w.update_map(new_map)
         self.r.update_map(new_map)
 
     def update_game(self, keys_down: List[bool], delta_t: int):
         self.p.update(delta_t)
-        self.w.update(delta_t)
+        # self.w.update(delta_t)
         self.r.update(delta_t, keys_down)
 
         s = self.map.surface
@@ -210,4 +214,4 @@ class Ree(Game):
         pygame.display.flip()
 
 
-test(Ree, None)
+test(Ree,'kust')

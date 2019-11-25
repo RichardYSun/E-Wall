@@ -5,6 +5,7 @@ import pygame
 from game import keys
 from game.Games.TankGame.bullet import Bullet
 from game.Games.TankGame.tank import Tank
+from game.font.fonts import load_font
 from game.game import Game, GameContext
 from game.physics2.objects.circle import Circle
 from game.physics2.objects.rectangle import Rectangle
@@ -56,6 +57,8 @@ class TankGame2(Game):
         self.down2 = False;
         self.right2 = False;
 
+        self.restartButton = False;
+
         self.won = 0
 
         # ex
@@ -64,12 +67,17 @@ class TankGame2(Game):
         self.greenTankImg: pygame.Surface = None
         self.bulletImg: pygame.Surface = None
 
+        self.font : pygame.font.Font = None
+        self.textColor = (200,255,200)
+
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
         self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize))
         self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize))
         self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize))
+        w,h = size
+        self.font = load_font('bit9x9.ttf', h // 8)
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -79,14 +87,30 @@ class TankGame2(Game):
         self.std_physics.update_map(new_map)
 
     def update_game(self, keys_down, delta_t: int):
+        if self.restartButton:
+            self.__init__()
 
         if not self.players[0].alive:
-            print("P2 Winner")
+            text = self.font.render('Player 2 Wins', True, self.textColor)
+            text_rect = text.get_rect()
+            text_rect.center = (self.map.surface.get_width() //2, self.map.surface.get_height() //4)
+            self.map.surface.blit(text, text_rect)
+
+            #Put Winner Icon on top of P2
+            self.map.image_py(self.winnerImg, self.players[1].hitBox.pos);
             self.stop_game()
+            pygame.display.update()
             return
         if not self.players[1].alive:
-            print("P1 Winner")
+            text = self.font.render('Player 1 Wins', True, self.textColor)
+            text_rect = text.get_rect()
+            text_rect.center = (self.map.surface.get_width() // 2, self.map.surface.get_height() // 4)
+            self.map.surface.blit(text, text_rect)
+
+            #Put Winner Icon on top of P1
+            self.map.image_py(self.winnerImg, self.players[0].hitBox.pos);
             self.stop_game()
+            pygame.display.update()
             return
 
         # make sure to call update for all physics the game is using
@@ -116,7 +140,7 @@ class TankGame2(Game):
             if bullet.timer < 0:
                 bullet.alive = False
                 continue
-            self.map.image_py(self.bulletImg, self.bullets[i].hitBox.pos)
+            self.map.image_py(self.bulletImg, bullet.hitBox.pos)
             # bullet.hitBox.draw_hitbox(self.map.game_img)
 
         for i in range(len(self.bullets), 0):
@@ -164,11 +188,11 @@ class TankGame2(Game):
         if self.right1:
             self.players[0].angle += self.players[0].turnSpeed * delta_t
             # self.players[0].rotateLeft(delta_t)
-            pygame.transform.rotate(self.blueTankImg, self.players[0].turnSpeed * delta_t)
+            self.blueTankImg = pygame.transform.rotate(self.blueTankImg, self.players[0].turnSpeed * delta_t)
         if self.left1:
             self.players[0].angle -= self.players[0].turnSpeed * delta_t
             # self.players[0].rotateRight(delta_t)
-            pygame.transform.rotate(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
+            self.blueTankImg = pygame.transform.rotate(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
 
         if self.up1:
             self.players[0].setSpeed(1)
@@ -179,11 +203,11 @@ class TankGame2(Game):
         if self.right2:
             self.players[1].angle += self.players[1].turnSpeed * delta_t
             # self.players[1].rotateLeft(delta_t)
-            pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
+            self.greenTankImg = pygame.transform.rotate(self.greenTankImg, self.players[1].turnSpeed * delta_t)
         if self.left2:
             self.players[1].angle -= self.players[1].turnSpeed * delta_t
             # self.players[1].rotateRight(delta_t)
-            pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
+            self.greenTankImg = pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
         if self.up2:
             self.players[1].setSpeed(1)
         elif self.down2:
@@ -192,6 +216,9 @@ class TankGame2(Game):
             self.players[1].setSpeed(0)
 
     def key_down(self, key_down: int):
+        if key_down == keys.ACTIONB1:
+            self.restartButton = True
+
         if key_down == keys.RIGHT1:
             self.right1 = True
         if key_down == keys.LEFT1:
@@ -213,7 +240,7 @@ class TankGame2(Game):
             self.down2 = True
 
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
-        if key_down == keys.FIRE1:
+        if key_down == keys.ACTIONA1:
             if self.bulletCooldowns[0] >= BulletCooldown:
                 bulletSpawn = Vector2(self.players[0].hitBox.pos.x + 20 * math.cos(self.players[0].angle),
                                       self.players[0].hitBox.pos.y + 20 * math.sin(self.players[0].angle))
@@ -225,7 +252,7 @@ class TankGame2(Game):
 
                 self.bulletCooldowns[0] = 0
 
-        if key_down == keys.FIRE2:
+        if key_down == keys.ACTIONA2:
             if self.bulletCooldowns[1] >= BulletCooldown:
                 bulletSpawn = Vector2(self.players[1].hitBox.pos.x + 20 * math.cos(self.players[1].angle),
                                       self.players[1].hitBox.pos.y + 20 * math.sin(self.players[1].angle))
@@ -257,6 +284,9 @@ class TankGame2(Game):
             self.up2 = False
         elif key_up == keys.DOWN2:
             self.down2 = False
+
+        if key_up == keys.ACTIONB1 or key_up == keys.ACTIONB2:
+            self.restartButton = False
 
 
 if __name__ == "__main__":

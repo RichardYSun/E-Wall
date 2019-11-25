@@ -8,6 +8,10 @@ class PhysicsObject:
     def __init__(self, pos: Vector2):
         self.pos = pos
         self.vel = Vector2(0, 0)
+        self.touching_top: bool = None
+        self.touching_bottom: bool = None
+        self.touching_left: bool = None
+        self.touching_right: bool = None
 
     # called upon unsolvable physics situation
     def kill(self):
