@@ -5,6 +5,7 @@ import pygame
 from game import keys
 from game.Games.TankGame.bullet import Bullet
 from game.Games.TankGame.tank import Tank
+from game.font.fonts import load_font
 from game.game import Game, GameContext
 from game.physics2.objects.circle import Circle
 from game.physics2.objects.rectangle import Rectangle
@@ -64,12 +65,17 @@ class TankGame2(Game):
         self.greenTankImg: pygame.Surface = None
         self.bulletImg: pygame.Surface = None
 
+        self.font : pygame.font.Font = None
+        self.textColor = (200,255,200)
+
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
         self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize))
         self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize))
         self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize))
+        w,h = size
+        self.font = load_font('bit9x9.ttf', h // 8)
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -81,12 +87,20 @@ class TankGame2(Game):
     def update_game(self, keys_down, delta_t: int):
 
         if not self.players[0].alive:
-            print("P2 Winner")
+            text = self.font.render('Player 2 Wins', True, self.textColor)
+            text_rect = text.get_rect()
+            text_rect.center = (self.map.surface.get_width() //2, self.map.surface.get_height() //4)
+            self.map.surface.blit(text, text_rect)
             self.stop_game()
+            pygame.display.update()
             return
         if not self.players[1].alive:
-            print("P1 Winner")
+            text = self.font.render('Player 1 Wins', True, self.textColor)
+            text_rect = text.get_rect()
+            text_rect.center = (self.map.surface.get_width() // 2, self.map.surface.get_height() // 4)
+            self.map.surface.blit(text, text_rect)
             self.stop_game()
+            pygame.display.update()
             return
 
         # make sure to call update for all physics the game is using
@@ -116,7 +130,7 @@ class TankGame2(Game):
             if bullet.timer < 0:
                 bullet.alive = False
                 continue
-            self.map.image_py(self.bulletImg, self.bullets[i].hitBox.pos)
+            self.map.image_py(self.bulletImg, bullet.hitBox.pos)
             # bullet.hitBox.draw_hitbox(self.map.game_img)
 
         for i in range(len(self.bullets), 0):
