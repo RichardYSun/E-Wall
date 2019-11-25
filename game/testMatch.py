@@ -9,14 +9,15 @@ MATCH_CNT = 10
 
 
 def match(fnd: np.ndarray, img: np.ndarray):
-    orb = cv2.ORB_create()
+    orb = cv2.ORB_create(nfeatures=2000)
 
     kp1 = orb.detect(fnd, None)
     kp1, des1 = orb.compute(fnd, kp1)
     kp2 = orb.detect(img, None)
     kp2, des2 = orb.compute(img, kp2)
 
-    # plt.imshow(cv2.drawKeypoints(fnd, kp1, None, color=(255, 0, 0), flags=0))
+    # plt.imshow(cv2.drawKeypoints(img, kp2, None, color=(255, 0, 0), flags=0))
+    # # plt.imshow(cv2.drawKeypoints(fnd, kp1, None, color=(255, 0, 0), flags=0))
     # plt.show()
     # return
 
@@ -72,6 +73,6 @@ def match(fnd: np.ndarray, img: np.ndarray):
     plt.imshow(img3, 'gray'), plt.show()
 
 
-img = imread('testMatch1.jpg')
-fnd = imread('test/image0.jpg')
+img = imread('test/smallguy.jpg')
+fnd = imread('test/guy.jpg')
 match(fnd, img)
