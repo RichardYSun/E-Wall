@@ -2,10 +2,11 @@ import time
 
 import pygame as pygame
 
+from game.buttonData import button
 from game.imageio import ImageIO
 from game.cv import CVer
 
-from game.keys import PY_MAPPING
+from game.keys import PY_MAPPING, ARDUINO_MAPPING
 from game.util import ParamWindow
 from game.img.images import conv_cv_to_py
 

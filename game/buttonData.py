@@ -1,7 +1,7 @@
 import serial
 
 class Button:
-    def _init_(self, buttonID, state):
+    def __init__(self, buttonID, state):
         self.buttonID = buttonID
         self.state = state
 
@@ -16,13 +16,16 @@ arduino = serial.Serial('COM3', timeout = 1, baudrate= 9600)
 def button():
     newData = (arduino.readline())
     dataDecode = newData.decode("utf-8")
-    splitWork = true
+    splitWork = True
+    button = None
+    state = None
+    split = None
     try:
         split = dataDecode.split(",")
     except:
-        splitWork = false
+        splitWork = False
 
-    if splitWork == true:
+    if splitWork == True:
         button = int(split[0])
         state = int(split[1])
 

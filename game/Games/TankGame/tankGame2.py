@@ -240,7 +240,7 @@ class TankGame2(Game):
             self.down2 = True
 
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
-        if key_down == keys.FIRE1:
+        if key_down == keys.ACTIONA1:
             if self.bulletCooldowns[0] >= BulletCooldown:
                 bulletSpawn = Vector2(self.players[0].hitBox.pos.x + 20 * math.cos(self.players[0].angle),
                                       self.players[0].hitBox.pos.y + 20 * math.sin(self.players[0].angle))
@@ -252,7 +252,7 @@ class TankGame2(Game):
 
                 self.bulletCooldowns[0] = 0
 
-        if key_down == keys.FIRE2:
+        if key_down == keys.ACTIONA2:
             if self.bulletCooldowns[1] >= BulletCooldown:
                 bulletSpawn = Vector2(self.players[1].hitBox.pos.x + 20 * math.cos(self.players[1].angle),
                                       self.players[1].hitBox.pos.y + 20 * math.sin(self.players[1].angle))
