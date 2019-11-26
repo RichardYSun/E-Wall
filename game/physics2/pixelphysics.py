@@ -85,7 +85,9 @@ class PixelPhysics(Physics):
         if obj.collision_type == COLLISION_BOUNCE:
             obj.translate(best)
             vel = obj.vel
-            obj.vel = vel - best.proj(vel) * 2.0
+            mag = vel.mag()
+            vel = vel - best.proj(vel) * 2.0
+            obj.vel = vel * mag / vel.mag()
         elif obj.collision_type == COLLISION_SLIDE:
             obj.translate(best)
             obj.vel = best.perp_vector().proj(obj.vel)

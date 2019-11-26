@@ -1,5 +1,6 @@
 from typing import List, Any, Tuple, Union
 
+import cv2
 import pygame
 from numpy import ndarray
 
@@ -11,11 +12,15 @@ Coordinate = Union[Vector2, Tuple[float, float]]
 
 class GameContext:
     def __init__(self, cam_img: ndarray, use_pygame=True):
+        self.downscale = 0.7  # downscale level
+        self.original_img = cam_img
+
+        h, w = cam_img.shape[0:2]
+        cam_img = cv2.resize(cam_img, (int(w * self.downscale), int(h * self.downscale)))
+        self.cam_img = cam_img
         self.width: int = cam_img.shape[1]  # width of game
         self.height: int = cam_img.shape[0]  # height of game
-        self.cam_img = cam_img
 
-        self.downscale = None  # downscale level
         self.edges: ndarray = None  # the image with edges detected
         self.lines: ndarray = None  # the list of lines detected in the form [[[x1,y1,x2,y2]],[[...]],...]
         self.game_img: ndarray = None  # the output image to draw on

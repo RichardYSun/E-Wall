@@ -35,12 +35,7 @@ class ImageIO:
         else:
             img = self.img_src
 
-        downscale = ParamWindow.get_int('downscale', 100, 70)
-        h = int(downscale * img.shape[0] / 100)
-        w = int(downscale * img.shape[1] / 100)
-
-        ctx = GameContext(cv2.resize(img, (w, h)))
-        ctx.downscale = downscale / 100.0
+        ctx = GameContext(img)
         return ctx
 
     def __del__(self):
