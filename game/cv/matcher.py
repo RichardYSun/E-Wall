@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 from game.img.images import imread
+from game.util import ParamWindow
 
 
 class Matcher:
@@ -18,6 +19,8 @@ class Matcher:
 
     def update_img(self, img):
         self.camera_img = img
+        kp2 = self.orb.detect(img, None)
+        self.kp2, self.des2 = self.orb.compute(img, kp2)
 
     # takes in an image and returns all instances of the image in the camera image
     def match_obj(self, fnd: np.ndarray):
@@ -30,8 +33,7 @@ class Matcher:
             kp1, des1 = self.orb.compute(fnd, kp1)
             self.objs[id(fnd)] = (kp1, des1)
 
-        kp2 = self.orb.detect(img, None)
-        kp2, des2 = self.orb.compute(img, kp2)
+        kp2, des2 = self.kp2, self.des2
 
         # plt.imshow(cv2.drawKeypoints(img, kp2, None, color=(255, 0, 0), flags=0))
         # # plt.imshow(cv2.drawKeypoints(fnd, kp1, None, color=(255, 0, 0), flags=0))
@@ -57,6 +59,7 @@ class Matcher:
         # plt.imshow(img3), plt.show()
         # return
 
+        # remove for final thing
         draw_mask = [0] * len(good)
 
         matches = []
@@ -72,6 +75,7 @@ class Matcher:
             M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
             matchesMask = mask.ravel().tolist()
 
+            # remove for final thing
             j = 0
             for i in range(len(good)):
                 if not draw_mask[i]:
@@ -83,18 +87,17 @@ class Matcher:
             dst = cv2.perspectiveTransform(pts, M)
             img = cv2.polylines(img, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
 
-            matches.append([np.int32(dst)])
+            matches.append([np.int32(M)])
 
-        draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
-                           singlePointColor=None,
-                           matchesMask=draw_mask,  # draw only inliers
-                           flags=2)
-
-        img3 = cv2.drawMatches(fnd, kp1, img, kp2, good, None, **draw_params)
-        plt.imshow(img3, 'gray'), plt.show()
+        # draw_params = dict(matchColor=(0, 255, 0),
+        #                    singlePointColor=None,
+        #                    matchesMask=draw_mask,
+        #                    flags=2)
+        #
+        # img3 = cv2.drawMatches(fnd, kp1, img, kp2, good, None, **draw_params)
+        # plt.imshow(img3, 'gray'), plt.show()
 
         return matches
-
 
 matcher = Matcher()
 matcher.update_img(imread('test/smallguy.jpg'))
