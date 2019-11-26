@@ -47,15 +47,16 @@ def test(G, cam='ree'):
 
         # process arduino events
         cur_key = button()
-        button_id = cur_key.buttonID
-        state = cur_key.state
+        if cur_key is not None:
+            button_id = cur_key.buttonID
+            state = cur_key.state
 
-        for index in ARDUINO_MAPPING:
-            if index == button_id:
-                if state == 1:
-                    game.key_down(ARDUINO_MAPPING[button_id])
-                if state == 0:
-                    game.key_up(ARDUINO_MAPPING[button_id])
+            for index in ARDUINO_MAPPING:
+                if index == button_id:
+                    if state == 1:
+                        game.key_down(ARDUINO_MAPPING[button_id])
+                    if state == 0:
+                        game.key_up(ARDUINO_MAPPING[button_id])
 
         # get new webcam image
         ctx = image_io.get_img()

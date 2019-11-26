@@ -58,9 +58,9 @@ class Pong(Game):
         self.lose_img: pygame.Surface = None
 
         # sounds
-        self.lose_sound = load_sound('lose.wav')
-        self.wall_sound = load_sound('wallhit.wav')
-        self.side_sound = load_sound('sidehit.wav')
+        self.lose_sound = load_sound('pong/lose.wav')
+        self.wall_sound = load_sound('pong/wallhit.wav')
+        self.side_sound = load_sound('pong/sidehit.wav')
 
     # this is called when there is a new frame available from camera
     def update_map(self, new_map: GameContext):

@@ -21,7 +21,7 @@ class ImageIO:
             w = self.img_src.shape[1]
             h = self.img_src.shape[0]
         pygame.init()
-        print('display size', w,h)
+        print('display size', w, h)
         pygame.display.set_mode((w, h), pygame.RESIZABLE)
 
         self.cam_window = AreaSelectWindow(w, h, 'camera window', (255, 0, 0))
@@ -29,11 +29,17 @@ class ImageIO:
     def get_img(self) -> GameContext:
         if self.img_src is None:
             ret, img = self.cap.read()
-            cv2.flip(img, 1, img)
             if ret is False:
                 raise Exception('could not read image')
+
+            flip = ParamWindow.get_int('flip image', 1, 1)
+            if flip:
+                cv2.flip(img, 1, img)
         else:
             img = self.img_src
+
+        self.cam_window.show(img)
+        img = self.cam_window.get_sub_image(img)
 
         ctx = GameContext(img)
         return ctx
