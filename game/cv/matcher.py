@@ -87,13 +87,13 @@ class Matcher:
 
             matches.append(match)
 
-        # draw_params = dict(matchColor=(0, 255, 0),
-        #                    singlePointColor=None,
-        #                    matchesMask=found,
-        #                    flags=2)
-        #
-        # img3 = cv2.drawMatches(fnd, kp1, img, kp2, good, None, **draw_params)
-        # plt.imshow(img3, 'gray'), plt.show()
+        draw_params = dict(matchColor=(0, 255, 0),
+                           singlePointColor=None,
+                           matchesMask=found,
+                           flags=2)
+
+        img3 = cv2.drawMatches(fnd, kp1, img, kp2, good, None, **draw_params)
+        plt.imshow(img3, 'gray'), plt.show()
 
         return matches
 
