@@ -72,22 +72,22 @@ class Matcher:
             dst_pts = np.float32(
                 [kp2[m.trainIdx].pt for m in [good[i] for i in range(len(good)) if not draw_mask[i]]]).reshape(
                 -1, 1, 2)
-            M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
-            matchesMask = mask.ravel().tolist()
+            match, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+            matches_mask = mask.ravel().tolist()
 
             # remove for final thing
             j = 0
             for i in range(len(good)):
                 if not draw_mask[i]:
-                    draw_mask[i] |= matchesMask[j]
+                    draw_mask[i] |= matches_mask[j]
                     j += 1
 
-            h, w, d = fnd.shape
-            pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
-            dst = cv2.perspectiveTransform(pts, M)
-            img = cv2.polylines(img, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
+            # h, w, d = fnd.shape
+            # pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
+            # dst = cv2.perspectiveTransform(pts, match)
+            #mg = cv2.polylines(img, [np.int32(match)], True, 255, 3, cv2.LINE_AA)
 
-            matches.append([np.int32(M)])
+            matches.append([np.int32(match)])
 
         # draw_params = dict(matchColor=(0, 255, 0),
         #                    singlePointColor=None,
@@ -99,6 +99,7 @@ class Matcher:
 
         return matches
 
-matcher = Matcher()
-matcher.update_img(imread('test/smallguy.jpg'))
-matcher.match_obj(imread('test/guy.jpg'))
+
+# matcher = Matcher()
+# matcher.update_img(imread('test/smallguy.jpg'))
+# matcher.match_obj(imread('test/guy.jpg'))
