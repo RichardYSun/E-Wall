@@ -23,13 +23,13 @@ thres = 1
 thres_gaussian = 2
 
 
-class CVer:
+class EdgeDetector:
 
     def __init__(self):
         self.prev = None
         self.lsd = cv2.ximgproc.createFastLineDetector()
 
-    def do_cv(self, mp: GameContext):
+    def detect_edges(self, mp: GameContext):
         frame = mp.cam_img
         algorithm = ParamWindow.get_int('algorithm', 2, 2)
 
