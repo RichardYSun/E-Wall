@@ -63,7 +63,7 @@ class Matcher:
 
         matches = []
 
-        while len(good) - sum(found) > self.MATCH_CNT:
+        if len(good) - sum(found) > self.MATCH_CNT:
             print(len(good) - sum(found))
             src_pts = np.float32(
                 [kp1[m.queryIdx].pt for m in [good[i] for i in range(len(good)) if not found[i]]]).reshape(
