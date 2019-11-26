@@ -35,6 +35,27 @@ class TankGame2(Game):
         self.spawn1 = Vector2(mp.width / 4, mp.height / 2)
         self.spawn2 = Vector2(mp.width * 3 / 4, mp.height / 2)
 
+        self.blueTankImg: pygame.Surface = None
+        self.greenTankImg: pygame.Surface = None
+        self.bulletImg: pygame.Surface = None
+        self.winnerImg: pygame.Surface = None
+
+        self.up1 = False;
+        self.left1 = False;
+        self.down1 = False;
+        self.right1 = False;
+        self.up2 = False;
+        self.left2 = False;
+        self.down2 = False;
+        self.right2 = False;
+
+        self.restartButton = False;
+
+        self.won = 0
+
+        self.players = []*2
+        self.bullets = []
+
         self.initialize_objects()
         self.initialize_buttons()
 
@@ -55,13 +76,6 @@ class TankGame2(Game):
 
         self.bulletCooldowns = [0, 0]
 
-        # ex
-        # self.tankimg = get_py_img('tankgame/dskfj.png')
-        self.blueTankImg: pygame.Surface = None
-        self.greenTankImg: pygame.Surface = None
-        self.bulletImg: pygame.Surface = None
-
-
     def initialize_buttons(self):
         self.up1 = False;
         self.left1 = False;
@@ -76,13 +90,13 @@ class TankGame2(Game):
 
         self.won = 0
 
-
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
         self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize))
         self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize))
         self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize))
+        self.winnerImg = self.map.conv_img(load_py_img('tankAssets/winner.png'), (BulletSize, BulletSize))
         w,h = size
         self.font = load_font('bit9x9.ttf', h // 8)
 
@@ -193,15 +207,24 @@ class TankGame2(Game):
         self.bullets.remove(obj)
 
     def checkKeys(self, delta_t):
+        if self.restartButton:
+            self.initialize_buttons()
+            self.initialize_objects()
+
         if self.right1:
             self.players[0].angle += self.players[0].turnSpeed * delta_t
             # self.players[0].rotateLeft(delta_t)
 
-            self.oldSurf = self.blueTankImg.hitbox
+#           oldSurf = pygame.Surface((self.blueTankImg.hitbox.l*math.sqrt(2), self.blueTankImg.hitbox.h*math.sqrt(2)))
+
+            #Rotates image
+            oldSurf = self.players[0].hitBox
 
             self.blueTankImg = pygame.transform.rotate(self.blueTankImg, self.players[0].turnSpeed * delta_t)
 
-            self.blueTankImg.hitbox.centre = self.oldSurf.centre
+            self.blueTankImg.get_rect().center = oldSurf.pos.x + oldSurf.l / 2, oldSurf.pos.x + oldSurf.h / 2
+            #Rotates hitbox
+            self.players[0].rotateRight(delta_t)
         if self.left1:
             self.players[0].angle -= self.players[0].turnSpeed * delta_t
             # self.players[0].rotateRight(delta_t)
@@ -229,7 +252,7 @@ class TankGame2(Game):
             self.players[1].setSpeed(0)
 
     def key_down(self, key_down: int):
-        if key_down == keys.ACTIONB1:
+        if key_down == keys.ACTIONB1 or key_down == keys.ACTIONB2:
             self.restartButton = True
 
         if key_down == keys.RIGHT1:

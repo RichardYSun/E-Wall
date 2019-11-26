@@ -12,6 +12,8 @@ class AreaSelectWindow:
         self.l = 0
         self.r = w
         self.b = h
+        self.w = w
+        self.h = h
 
         self.name = name
         self.color = color
@@ -37,13 +39,13 @@ class AreaSelectWindow:
             self.sel = [False] * 4
 
         if self.sel[0]:
-            self.l = min(x, self.r)
+            self.l = max(0, min(x, self.r-10))
         if self.sel[1]:
-            self.r = max(x, self.l)
+            self.r = min(self.w, max(x, self.l+10))
         if self.sel[2]:
-            self.t = min(y, self.b)
+            self.t = max(0, min(y, self.b-10))
         if self.sel[3]:
-            self.b = max(y, self.t)
+            self.b = min(self.h, max(y, self.t+10))
 
     def get_sub_image(self, img):
         return img[self.t:self.b, self.l:self.r]

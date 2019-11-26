@@ -13,7 +13,7 @@ Coordinate = Union[Vector2, Tuple[float, float]]
 class GameContext:
     def __init__(self, cam_img: ndarray, use_pygame=True):
         self.downscale = 0.7  # downscale level
-        self.original_img = cam_img
+        self.original_img:ndarray = cam_img
 
         h, w = cam_img.shape[0:2]
         cam_img = cv2.resize(cam_img, (int(w * self.downscale), int(h * self.downscale)))
@@ -38,7 +38,7 @@ class GameContext:
     def cc(self, coord: Coordinate) -> Tuple[int, int]:
         if isinstance(coord, Vector2):
             return int(coord.x * self.sx), int(coord.y * self.sy)
-        if isinstance(coord, Tuple):
+        if isinstance(coord, Tuple) or isinstance(coord, ndarray):
             return int(coord[0] * self.sx), int(coord[1] * self.sy)
         raise Exception('unsupported coordinate type')
 

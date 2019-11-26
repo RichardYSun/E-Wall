@@ -12,6 +12,7 @@ from game.img.images import conv_cv_to_py
 
 
 def test(G, cam='ree'):
+    pygame.init()
     image_io = ImageIO(cam)
     edge_detector = EdgeDetector()
 

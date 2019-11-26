@@ -62,4 +62,4 @@ class ui(Game):
 
 
 if __name__ == "__main__":
-    test(ui, 'kust')
+    test(ui, None)
