@@ -9,7 +9,7 @@ MATCH_CNT = 10
 
 
 def match(fnd: np.ndarray, img: np.ndarray):
-    orb = cv2.ORB_create(nfeatures=2000)
+    orb = cv2.ORB_create(nfeatures=500)
 
     kp1 = orb.detect(fnd, None)
     kp1, des1 = orb.compute(fnd, kp1)

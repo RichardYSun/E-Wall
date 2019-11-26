@@ -43,17 +43,17 @@ class Stuart(PixelObject):
         super().__init__(pos)
         self.facing = 'right'
         self.state: str = 'rest'
-        self.game_size = (230, 300)
+        self.game_size = (115, 150)
 
         def A(nm: str, off:Tuple[int,int]=(0,0)):
             return AnimationState(nm, self.game_size, Vector2(off[0],off[1]))
 
         self.states: Dict[str, AnimationState] = {
-            'rest': A('ree/walk_0.png',),
-            'walk1': A('ree/walk_1.png',),
-            'walk2': A('ree/walk_2.png',),
-            'walk3': A('ree/walk_3.png',),
-            'walk4': A('ree/walk_0.png',),
+            'rest': A('ree/walk1.png',),
+            'walk1': A('ree/walk2.png',),
+            'walk2': A('ree/walk3.png',),
+            'walk3': A('ree/walk4.png',),
+            'walk4': A('ree/walk1.png',),
             'jump_ready': A('ree/jump_ready.png'),
             'jump1': A('ree/jump1.png'),
             'jump2': A('ree/jump2.png'),
