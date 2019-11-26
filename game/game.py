@@ -38,7 +38,7 @@ class GameContext:
     def cc(self, coord: Coordinate) -> Tuple[int, int]:
         if isinstance(coord, Vector2):
             return int(coord.x * self.sx), int(coord.y * self.sy)
-        if isinstance(coord, Tuple):
+        if isinstance(coord, Tuple) or isinstance(coord, ndarray):
             return int(coord[0] * self.sx), int(coord[1] * self.sy)
         raise Exception('unsupported coordinate type')
 

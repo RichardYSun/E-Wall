@@ -20,7 +20,7 @@ class ImageIO:
             w = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             h = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         else:
-            self.img_src = imread('test/' + img_name + '.bmp')
+            self.img_src = imread('test/' + img_name )
             w = self.img_src.shape[1]
             h = self.img_src.shape[0]
 

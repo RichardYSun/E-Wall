@@ -12,6 +12,7 @@ from game.physics2.objects.physicsobject import PhysicsObject
 from game.physics2.pixelphysics import PixelPhysics
 from game.test import test
 from game.util.vector2 import Vector2
+import numpy as np
 
 
 class Enemy(PhysicsObject):
@@ -30,10 +31,11 @@ class Ree(Game):
         self.matcher = Matcher()
         # self.w.objects.append(self.r)
         self.frame = 0
-        self.e= imread('ree/enemies/squaredude.jpg')
-        h,w=self.e.shape
-        self.r=[[0,0],[w,0],[w,h],[0,h]]
-        self.M=None
+        self.e = imread('ree/enemies/dude2.jpg')
+        h, w, d = self.e.shape
+        self.r = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
+
+        self.M = None
 
     def on_resize(self, size: Tuple[int, int]):
         self.player.on_resize(size)
@@ -44,24 +46,34 @@ class Ree(Game):
         # self.w.update_map(new_map)
         self.player.update_map(new_map)
         self.frame += 1
-        if self.frame == 5:
+        if self.frame == 1:
             self.frame = 0
-            self.matcher.update_img(new_map.cam_img)
-            self.M = self.matcher.match_obj(self.e)
+            self.matcher.update_img(new_map.original_img)
+            k = self.matcher.match_obj(self.e)
+            if len(k) > 0:
+                self.M = k[0]
+            else:
+                self.M = None
 
     def update_game(self, keys_down: List[bool], delta_t: int):
         self.pixel_physics.update(delta_t)
         # self.w.update(delta_t)
-        self.player.update(delta_t, keys_down)
+        # self.player.update(delta_t, keys_down)
 
         s = self.map.surface
-        self.player.draw()
+        # self.player.draw()
 
         if self.M is not None:
-            nr=cv2.perspectiveTransform()
+            nr = cv2.perspectiveTransform(self.r, self.M)
+            r = []
+            print('ye')
+            for a in nr:
+                x, y = a[0][0], a[0][1]
+                r.append(self.map.cc((x * self.map.downscale, y * self.map.downscale)))
+            pygame.draw.polygon(self.map.surface, (255, 0, 0), r, 2)
 
         pygame.display.flip()
 
 
 if __name__ == "__main__":
-    test(Ree, None)
+    test(Ree, None)#'../ree/enemies/squaredude.jpg')
