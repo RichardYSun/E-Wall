@@ -27,7 +27,7 @@ class Matcher:
         img = self.camera_img
 
         if id(fnd) in self.objs:
-            kp1, des1 = self.objs[fnd]
+            kp1, des1 = self.objs[id(fnd)]
         else:
             kp1 = self.orb.detect(fnd, None)
             kp1, des1 = self.orb.compute(fnd, kp1)
