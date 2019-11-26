@@ -10,30 +10,31 @@ from game.physics2.objects.pixelobject import PixelObject
 from game.util.vector2 import Vector2
 
 
-class Stuart(PixelObject):
+class Player(PixelObject):
 
     def __init__(self, pos: Vector2, mp: GameContext):
         super().__init__(pos)
         self.facing = 'right'
         self.state: str = 'rest'
         self.game_size = (115, 150)
+        self.health: float = 100
 
-        def A(nm: str, off: Tuple[int, int] = (0, 0)):
-            return AnimationState(nm, self.game_size, Vector2(off[0], off[1]))
+        def A(nm: int, off: Tuple[int, int] = (0, 0)):
+            return AnimationState('ree/player/sprite_' + str(nm) + '.png', self.game_size, Vector2(off[0], off[1]))
 
         self.states: Dict[str, AnimationState] = {
-            'rest': A('ree/sprite_0.png', ),
-            'walk1': A('ree/sprite_1.png', ),
-            'walk2': A('ree/sprite_2.png', ),
-            'walk3': A('ree/sprite_3.png', ),
-            'walk4': A('ree/sprite_0.png', ),
-            'jump_ready': A('ree/sprite_4.png'),
-            'jump1': A('ree/sprite_5.png'),
-            'jump2': A('ree/sprite_6.png'),
-            'jump3': A('ree/sprite_7.png'),
-            'jump4': A('ree/sprite_7.png'),
-            'jump_land': A('ree/sprite_8.png'),
-            'jump_land2': A('ree/sprite_4.png'),
+            'rest': A(0),
+            'walk1': A(1),
+            'walk2': A(2),
+            'walk3': A(3),
+            'walk4': A(0),
+            'jump_ready': A(4),
+            'jump1': A(5),
+            'jump2': A(6),
+            'jump3': A(7),
+            'jump4': A(7),
+            'jump_land': A(8),
+            'jump_land2': A(4),
         }
 
         self.timer = 0
