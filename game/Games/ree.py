@@ -45,22 +45,22 @@ class Stuart(PixelObject):
         self.state: str = 'rest'
         self.game_size = (115, 150)
 
-        def A(nm: str, off:Tuple[int,int]=(0,0)):
-            return AnimationState(nm, self.game_size, Vector2(off[0],off[1]))
+        def A(nm: str, off: Tuple[int, int] = (0, 0)):
+            return AnimationState(nm, self.game_size, Vector2(off[0], off[1]))
 
         self.states: Dict[str, AnimationState] = {
-            'rest': A('ree/walk1.png',),
-            'walk1': A('ree/walk2.png',),
-            'walk2': A('ree/walk3.png',),
-            'walk3': A('ree/walk4.png',),
-            'walk4': A('ree/walk1.png',),
-            'jump_ready': A('ree/jump_ready.png'),
-            'jump1': A('ree/jump1.png'),
-            'jump2': A('ree/jump2.png'),
-            'jump3': A('ree/jump3.png'),
-            'jump4': A('ree/jump3.png'),
-            'jump_land': A('ree/jump_land.png'),
-            'jump_land2': A('ree/jump_ready.png'),
+            'rest': A('ree/sprite_0.png', ),
+            'walk1': A('ree/sprite_1.png', ),
+            'walk2': A('ree/sprite_2.png', ),
+            'walk3': A('ree/sprite_3.png', ),
+            'walk4': A('ree/sprite_0.png', ),
+            'jump_ready': A('ree/sprite_4.png'),
+            'jump1': A('ree/sprite_5.png'),
+            'jump2': A('ree/sprite_6.png'),
+            'jump3': A('ree/sprite_7.png'),
+            'jump4': A('ree/sprite_7.png'),
+            'jump_land': A('ree/sprite_8.png'),
+            'jump_land2': A('ree/sprite_4.png'),
         }
 
         self.timer = 0
@@ -99,16 +99,14 @@ class Stuart(PixelObject):
             self.timer = 0
             self.set_state(state.next_state)
 
-    def update(self, delta_t: float, down: List[bool]):
+    def update_input(self, delta_t: float, down: List[bool]):
         w, h = self.game_size
-        self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
-        self.pos += self.vel * delta_t
         self.grounded_timer -= delta_t
         # self.jmp_timer -= delta_t
-        if self.collision_escape_vector.y < 0:
+        if self.touching_bottom or self.collision_escape_vector.y < 0:
             self.grounded_timer = 0.1
         grounded = self.grounded_timer >= 0
-        spd = w
+        spd = w * 1.5
         jmp = -h * 3
         friction = 10
         if grounded:
@@ -175,6 +173,11 @@ class Stuart(PixelObject):
                 self.set_state('jump4')
         self.timer += delta_t
 
+    def update(self, delta_t: float, down: List[bool]):
+        self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
+        self.pos += self.vel * delta_t
+        self.update_input(delta_t, down)
+
     def draw(self):
         img = self.states[self.state].py_img
         if self.facing == 'left':
@@ -191,9 +194,9 @@ class Ree(Game):
         super().__init__(mp)  # make sure to call superclass initializer
         self.r = Stuart(Vector2(0, 0), mp)
         self.p = PixelPhysics()
-        self.w = WallPhysics()
+        # self.w = WallPhysics()
         self.p.objects.append(self.r)
-        self.w.objects.append(self.r)
+        # self.w.objects.append(self.r)
 
     def on_resize(self, size: Tuple[int, int]):
         self.r.on_resize(size)
@@ -214,4 +217,4 @@ class Ree(Game):
         pygame.display.flip()
 
 
-test(Ree,'kust')
+test(Ree, None)
