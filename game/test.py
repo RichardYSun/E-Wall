@@ -4,7 +4,7 @@ import pygame as pygame
 
 from game.buttonData import button
 from game.imageio import ImageIO
-from game.cv import CVer
+from game.cv.edgedetector import EdgeDetector
 
 from game.keys import PY_MAPPING, ARDUINO_MAPPING
 from game.util import ParamWindow
@@ -12,21 +12,26 @@ from game.img.images import conv_cv_to_py
 
 
 def test(G, cam='ree'):
+    pygame.init()
     image_io = ImageIO(cam)
+    edge_detector = EdgeDetector()
 
-    map_detect = CVer()
-    stupid = image_io.get_img()
-    map_detect.do_cv(stupid)
-    game = G(stupid)
-    last_time = time.time()
-    game.on_resize(stupid.pysize)
+    # get initial frame
+    first_frame = image_io.get_img()
+    edge_detector.detect_edges(first_frame)
 
-    cnt = 0
-    tt = 0
+    # initialize game
+    game = G(first_frame)
+    game.on_resize(first_frame.pysize)
+
+    frame_count = 0
+    total_time = 0
 
     keys_down = [False] * 10
 
+    last_time = time.time()
     while True:
+        # process pygame events
         new_sz = None
         for event in pygame.event.get():
             if event.type == pygame.VIDEORESIZE:
@@ -41,23 +46,26 @@ def test(G, cam='ree'):
                     game.key_up(PY_MAPPING[event.key])
                     keys_down[PY_MAPPING[event.key]] = False
 
-        curKey = button()
-        buttonID = curKey.buttonID
-        state = curKey.state
+        # process arduino events
+        cur_key = button()
+        if cur_key is not None:
+            button_id = cur_key.buttonID
+            state = cur_key.state
 
-        for index in ARDUINO_MAPPING:
-            if index == buttonID:
-                if state == 1:
-                    game.key_down(ARDUINO_MAPPING[buttonID])
-                if state == 0:
-                    game.key_up(ARDUINO_MAPPING[buttonID])
+            for index in ARDUINO_MAPPING:
+                if index == button_id:
+                    if state == 1:
+                        game.key_down(ARDUINO_MAPPING[button_id])
+                    if state == 0:
+                        game.key_up(ARDUINO_MAPPING[button_id])
 
-
-
+        # get new webcam image
         ctx = image_io.get_img()
 
-        map_detect.do_cv(ctx)
+        # image processing
+        edge_detector.detect_edges(ctx)
 
+        # debug
         show_edges = ParamWindow.get_int('show edges', 1, 1)
         if show_edges:
             pixels = pygame.transform.scale(conv_cv_to_py(ctx.edges), ctx.surface.get_size())
@@ -65,20 +73,24 @@ def test(G, cam='ree'):
         else:
             ctx.surface.fill((255, 255, 255))
 
+        # give game new edges
         game.update_map(ctx)
 
+        # tell game if window has resized
         if new_sz is not None:
             game.on_resize(new_sz)
 
+        # update game
+        cur_time = time.time()
+        game.update_game(keys_down, min(cur_time - last_time, 0.1))
+        total_time += cur_time - last_time
 
-        t = time.time()
-        game.update_game(keys_down, min(t - last_time,0.1))
-        tt += t - last_time
-        last_time = t
-        cnt += 1
-        if tt > 1:
-            print(cnt)
-            tt = 0
-            cnt = 0
+        # print fps
+        last_time = cur_time
+        frame_count += 1
+        if total_time > 1:
+            print(frame_count)
+            total_time = 0
+            frame_count = 0
 
     del image_io

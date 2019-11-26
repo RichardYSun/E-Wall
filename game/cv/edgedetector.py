@@ -23,13 +23,13 @@ thres = 1
 thres_gaussian = 2
 
 
-class CVer:
+class EdgeDetector:
 
     def __init__(self):
         self.prev = None
         self.lsd = cv2.ximgproc.createFastLineDetector()
 
-    def do_cv(self, mp: GameContext):
+    def detect_edges(self, mp: GameContext):
         frame = mp.cam_img
         algorithm = ParamWindow.get_int('algorithm', 2, 2)
 
@@ -113,25 +113,7 @@ class CVer:
 
         # removes noise
         max_sz = ParamWindow.get_int('noise', 11, 3) | 1
-        it = ParamWindow.get_int('it', 5, 1)
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (max_sz, max_sz))
-        mp.edges = cv2.morphologyEx(mp.edges, cv2.MORPH_OPEN, kernel, iterations=it)
-
-    # stupid optical flow stuff thats too slow
-
-    # frame=cv2.resize(frame,(int(frame.shape[1]/1), int(frame.shape[0]/1)))
-    # frame, g, r = cv2.split(frame)
-
-    # get optical flow
-    # kst=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    # kst=kst.astype(np.uint8)
-    # if self.prev is None:
-    #     self.prev=kst
-    # flow=cv2.calcOpticalFlowFarneback(self.prev,kst,None,pyr_scale=0.5,
-    #                                   levels=1, winsize=5,iterations=1,
-    #                                   poly_n=5,poly_sigma=1.1,flags=0)
-    # mag = cv2.magnitude(flow[..., 0], flow[..., 1])
-    # _,mag=cv2.threshold(mag,5,255,cv2.THRESH_BINARY)
-
-    # cv2.imshow('movement', mag)
-    # self.prev=kst
+        it = ParamWindow.get_int('it', 5, 0)
+        if it>0:
+            kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (max_sz, max_sz))
+            mp.edges = cv2.morphologyEx(mp.edges, cv2.MORPH_OPEN, kernel, iterations=it)

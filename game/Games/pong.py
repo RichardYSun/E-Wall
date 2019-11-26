@@ -58,9 +58,9 @@ class Pong(Game):
         self.lose_img: pygame.Surface = None
 
         # sounds
-        self.lose_sound = load_sound('lose.wav')
-        self.wall_sound = load_sound('wallhit.wav')
-        self.side_sound = load_sound('sidehit.wav')
+        self.lose_sound = load_sound('pong/lose.wav')
+        self.wall_sound = load_sound('pong/wallhit.wav')
+        self.side_sound = load_sound('pong/sidehit.wav')
 
     # this is called when there is a new frame available from camera
     def update_map(self, new_map: GameContext):
@@ -72,7 +72,7 @@ class Pong(Game):
         self.std_physics.update_map(new_map)
 
     def key_down(self, key: int):
-        if key == keys.FIRE1:
+        if key == keys.ACTIONA1:
             self.start = 1
 
     def do_logic(self, delta_t: float):
@@ -107,10 +107,12 @@ class Pong(Game):
             self.start = 0
         else:
             n_vel = self.ball.vel
-            if prev_vel.x != n_vel.x:
-                self.side_sound.play()
-            elif prev_vel.y != n_vel.y:
-                self.wall_sound.play()
+            dv = prev_vel - n_vel
+            if dv.x != 0 or dv.y != 0:
+                if abs(dv.x) > abs(dv.y):
+                    self.side_sound.play()
+                else:
+                    self.wall_sound.play()
 
     def update_game(self, keys, delta_t: float):
         surface = self.map.surface

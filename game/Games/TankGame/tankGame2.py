@@ -215,11 +215,17 @@ class TankGame2(Game):
             self.players[0].angle += self.players[0].turnSpeed * delta_t
             # self.players[0].rotateLeft(delta_t)
 
-            self.oldSurf = self.blueTankImg.hitbox
+#           oldSurf = pygame.Surface((self.blueTankImg.hitbox.l*math.sqrt(2), self.blueTankImg.hitbox.h*math.sqrt(2)))
+
+            #Rotates image
+            oldSurf = self.blueTankImg.hitbox
 
             self.blueTankImg = pygame.transform.rotate(self.blueTankImg, self.players[0].turnSpeed * delta_t)
 
-            self.blueTankImg.hitbox.centre = self.oldSurf.centre
+            self.blueTankImg.hitbox.centre = oldSurf.hitbox.pos.x + oldSurf.hitbox.l / 2, oldSurf.hitbox.pos.x + oldSurf.hitbox.h / 2
+
+            #Rotates hitbox
+            self.blueTankImg.rotateRight(delta_t)
         if self.left1:
             self.players[0].angle -= self.players[0].turnSpeed * delta_t
             # self.players[0].rotateRight(delta_t)

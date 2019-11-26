@@ -1,66 +1,40 @@
-from typing import List, Dict, Tuple
+from typing import Tuple, Dict, List
 
 import pygame
-from numpy.core.multiarray import ndarray
 
 from game import keys
-from game.game import Game, GameContext
-from game.physics2.collisiontypes import COLLISION_SLIDE, COLLISION_STICK
+from game.Games.Ree.animationstate import AnimationState
+from game.game import GameContext
+from game.physics2.collisiontypes import COLLISION_SLIDE
 from game.physics2.objects.pixelobject import PixelObject
-from game.physics2.pixelphysics import PixelPhysics
-from game.physics2.wallphysics import WallPhysics
-from game.test import test
-from game.img.images import load_py_img, imread
 from game.util.vector2 import Vector2
 
-import cv2
 
-
-class AnimationState:
-    def __init__(self, img: str, game_size: Tuple[float, float], offset: Vector2 = Vector2(0, 0),
-                 timer: float = None,
-                 next_state: str = None):
-        self.o_py_img: pygame.Surface = load_py_img(img).convert_alpha()
-
-        self.cv_img: ndarray = cv2.extractChannel(imread(img, cv2.IMREAD_UNCHANGED), 3)
-        self.py_img: pygame.Surface = None
-
-        self.next_state: str = next_state
-        self.timer: float = timer
-        self.offset: Vector2 = offset
-        if game_size is None:
-            game_size = self.o_py_img.get_size()
-        self.game_size: Vector2 = game_size
-        self.cv_img = cv2.resize(self.cv_img, game_size)
-
-    def load(self, mp: GameContext):
-        self.py_img = mp.conv_img(self.o_py_img, self.game_size)
-
-
-class Stuart(PixelObject):
+class Player(PixelObject):
 
     def __init__(self, pos: Vector2, mp: GameContext):
         super().__init__(pos)
         self.facing = 'right'
         self.state: str = 'rest'
-        self.game_size = (230, 300)
+        self.game_size = (115, 150)
+        self.health: float = 100
 
-        def A(nm: str, off:Tuple[int,int]=(0,0)):
-            return AnimationState(nm, self.game_size, Vector2(off[0],off[1]))
+        def A(nm: int, off: Tuple[int, int] = (0, 0)):
+            return AnimationState('ree/player/sprite_' + str(nm) + '.png', self.game_size, Vector2(off[0], off[1]))
 
         self.states: Dict[str, AnimationState] = {
-            'rest': A('ree/walk_0.png',),
-            'walk1': A('ree/walk_1.png',),
-            'walk2': A('ree/walk_2.png',),
-            'walk3': A('ree/walk_3.png',),
-            'walk4': A('ree/walk_0.png',),
-            'jump_ready': A('ree/jump_ready.png'),
-            'jump1': A('ree/jump1.png'),
-            'jump2': A('ree/jump2.png'),
-            'jump3': A('ree/jump3.png'),
-            'jump4': A('ree/jump3.png'),
-            'jump_land': A('ree/jump_land.png'),
-            'jump_land2': A('ree/jump_ready.png'),
+            'rest': A(0),
+            'walk1': A(1),
+            'walk2': A(2),
+            'walk3': A(3),
+            'walk4': A(0),
+            'jump_ready': A(4),
+            'jump1': A(5),
+            'jump2': A(6),
+            'jump3': A(7),
+            'jump4': A(7),
+            'jump_land': A(8),
+            'jump_land2': A(4),
         }
 
         self.timer = 0
@@ -99,16 +73,14 @@ class Stuart(PixelObject):
             self.timer = 0
             self.set_state(state.next_state)
 
-    def update(self, delta_t: float, down: List[bool]):
+    def update_input(self, delta_t: float, down: List[bool]):
         w, h = self.game_size
-        self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
-        self.pos += self.vel * delta_t
         self.grounded_timer -= delta_t
         # self.jmp_timer -= delta_t
-        if self.collision_escape_vector.y < 0:
+        if self.touching_bottom or self.collision_escape_vector.y < 0:
             self.grounded_timer = 0.1
         grounded = self.grounded_timer >= 0
-        spd = w
+        spd = w * 1.5
         jmp = -h * 3
         friction = 10
         if grounded:
@@ -175,6 +147,11 @@ class Stuart(PixelObject):
                 self.set_state('jump4')
         self.timer += delta_t
 
+    def update(self, delta_t: float, down: List[bool]):
+        self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
+        self.pos += self.vel * delta_t
+        self.update_input(delta_t, down)
+
     def draw(self):
         img = self.states[self.state].py_img
         if self.facing == 'left':
@@ -183,35 +160,3 @@ class Stuart(PixelObject):
 
     def get_hitbox(self):
         return self.states[self.state].cv_img
-
-
-class Ree(Game):
-
-    def __init__(self, mp: GameContext):
-        super().__init__(mp)  # make sure to call superclass initializer
-        self.r = Stuart(Vector2(0, 0), mp)
-        self.p = PixelPhysics()
-        self.w = WallPhysics()
-        self.p.objects.append(self.r)
-        self.w.objects.append(self.r)
-
-    def on_resize(self, size: Tuple[int, int]):
-        self.r.on_resize(size)
-
-    def update_map(self, new_map: GameContext):
-        super().update_map(new_map)
-        self.p.update_map(new_map)
-        # self.w.update_map(new_map)
-        self.r.update_map(new_map)
-
-    def update_game(self, keys_down: List[bool], delta_t: int):
-        self.p.update(delta_t)
-        # self.w.update(delta_t)
-        self.r.update(delta_t, keys_down)
-
-        s = self.map.surface
-        self.r.draw()
-        pygame.display.flip()
-
-
-test(Ree,'kust')
