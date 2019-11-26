@@ -3,6 +3,7 @@ from typing import List, Tuple
 import pygame
 from cv2 import os
 
+from game.Games.Ree.ree import Ree
 from game.Games.pong import Pong
 from game.Games.TankGame.tankGame2 import TankGame2
 from game.game import Game, GameContext
@@ -11,10 +12,10 @@ import game.keys as keys
 from game.test import test
 from game.img import images
 
-NUM_GAMES = 2
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-games: List[Game] = [Pong, TankGame2]
+games: List[Game] = [Pong, TankGame2, Ree]
+NUM_GAMES = len(games)
 
 
 class ui(Game):
@@ -52,7 +53,7 @@ class ui(Game):
             self.selection = (self.selection + 1) % NUM_GAMES
         if key == keys.DOWN1:
             self.selection = (self.selection - 1) % NUM_GAMES
-        if key == keys.FIRE1 and not self.start:
+        if key == keys.ACTIONA1 and not self.start:
             self.start = 1
             self.start_game()
 
@@ -61,4 +62,4 @@ class ui(Game):
 
 
 if __name__ == "__main__":
-    test(ui)
+    test(ui, 'kust')

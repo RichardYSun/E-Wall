@@ -1,40 +1,13 @@
-from typing import List, Dict, Tuple
+from typing import Tuple, Dict, List
 
 import pygame
-from numpy.core.multiarray import ndarray
 
 from game import keys
-from game.game import Game, GameContext
-from game.physics2.collisiontypes import COLLISION_SLIDE, COLLISION_STICK
+from game.Games.Ree.animationstate import AnimationState
+from game.game import GameContext
+from game.physics2.collisiontypes import COLLISION_SLIDE
 from game.physics2.objects.pixelobject import PixelObject
-from game.physics2.pixelphysics import PixelPhysics
-from game.physics2.wallphysics import WallPhysics
-from game.test import test
-from game.img.images import load_py_img, imread
 from game.util.vector2 import Vector2
-
-import cv2
-
-
-class AnimationState:
-    def __init__(self, img: str, game_size: Tuple[float, float], offset: Vector2 = Vector2(0, 0),
-                 timer: float = None,
-                 next_state: str = None):
-        self.o_py_img: pygame.Surface = load_py_img(img).convert_alpha()
-
-        self.cv_img: ndarray = cv2.extractChannel(imread(img, cv2.IMREAD_UNCHANGED), 3)
-        self.py_img: pygame.Surface = None
-
-        self.next_state: str = next_state
-        self.timer: float = timer
-        self.offset: Vector2 = offset
-        if game_size is None:
-            game_size = self.o_py_img.get_size()
-        self.game_size: Vector2 = game_size
-        self.cv_img = cv2.resize(self.cv_img, game_size)
-
-    def load(self, mp: GameContext):
-        self.py_img = mp.conv_img(self.o_py_img, self.game_size)
 
 
 class Stuart(PixelObject):
@@ -186,35 +159,3 @@ class Stuart(PixelObject):
 
     def get_hitbox(self):
         return self.states[self.state].cv_img
-
-
-class Ree(Game):
-
-    def __init__(self, mp: GameContext):
-        super().__init__(mp)  # make sure to call superclass initializer
-        self.r = Stuart(Vector2(0, 0), mp)
-        self.p = PixelPhysics()
-        # self.w = WallPhysics()
-        self.p.objects.append(self.r)
-        # self.w.objects.append(self.r)
-
-    def on_resize(self, size: Tuple[int, int]):
-        self.r.on_resize(size)
-
-    def update_map(self, new_map: GameContext):
-        super().update_map(new_map)
-        self.p.update_map(new_map)
-        # self.w.update_map(new_map)
-        self.r.update_map(new_map)
-
-    def update_game(self, keys_down: List[bool], delta_t: int):
-        self.p.update(delta_t)
-        # self.w.update(delta_t)
-        self.r.update(delta_t, keys_down)
-
-        s = self.map.surface
-        self.r.draw()
-        pygame.display.flip()
-
-
-test(Ree, None)
