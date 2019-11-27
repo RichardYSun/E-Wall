@@ -10,7 +10,7 @@ class Matcher:
     MATCH_CNT = 20
 
     def __init__(self):
-        self.orb = cv2.ORB_create(nfeatures=self.MATCH_CNT * 50)
+        self.orb = cv2.ORB_create(nfeatures=self.MATCH_CNT * 1000)
 
         # Source images that have already had their keypoints calculated
         self.objs = {}
@@ -59,6 +59,9 @@ class Matcher:
         for k in matches:
             if len(k) > 1 and k[0].distance < 0.7 * k[1].distance:
                 good.append(k[0])
+
+        # good = [i[0] for i in matches if len(i) > 1]
+        print(len(good))
 
         if show_debug:
             draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
