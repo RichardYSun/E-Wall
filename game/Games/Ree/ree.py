@@ -31,14 +31,12 @@ class Ree(Game):
         self.matcher = Matcher()
         # self.w.objects.append(self.r)
         self.frame = 0
-        self.e = imread('test/BOXSD.jpg', )
+        self.e = imread('test/BOX.jpg')
 
-        # cv2.GaussianBlur(self.e, (3, 3), 0, dst=self.e)
-        # self.e=cv2.cvtColor(self.e, cv2.COLOR_BGR2HSV)
-        h, w= self.e.shape[0:2]
-        self.r = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
+        self.matcher.add_obj(self.e, self.appear, self.appear)
 
-        self.M = None
+    def appear(self, m, r):
+        pygame.draw.polygon(self.map.surface, (255, 0, 0), r, 2)
 
     def on_resize(self, size: Tuple[int, int]):
         self.player.on_resize(size)
@@ -53,12 +51,7 @@ class Ree(Game):
             self.frame = 0
             # g=cv2.cvtColor(new_map.original_img,cv2.COLOR_BGR2GRAY)
             # cv2.GaussianBlur(new_map.original_img, (3, 3), 0, dst=new_map.original_img)
-            self.matcher.update_img(new_map.original_img)
-            k = self.matcher.match_obj(self.e)
-            if len(k) > 0:
-                self.M = k[0]
-            else:
-                self.M = None
+            self.matcher.update_map(new_map)
 
     def update_game(self, keys_down: List[bool], delta_t: int):
         self.pixel_physics.update(delta_t)
@@ -68,18 +61,9 @@ class Ree(Game):
         s = self.map.surface
         # self.player.draw()
 
-        if self.M is not None:
-            nr = cv2.perspectiveTransform(self.r, self.M)
-            r = []
-            print('ye')
-            for a in nr:
-                x, y = a[0][0], a[0][1]
-                r.append(self.map.cc((x * self.map.downscale, y * self.map.downscale)))
-            pygame.draw.polygon(self.map.surface, (255, 0, 0), r, 2)
-
         pygame.display.flip()
 
 
 if __name__ == "__main__":
-    test(Ree, None)#'../ree/enemies/squaredude.jpg')
-    #test(Ree,'smalldude3.jpg')
+    test(Ree, None)  # '../ree/enemies/squaredude.jpg')
+    # test(Ree,'smalldude3.jpg')

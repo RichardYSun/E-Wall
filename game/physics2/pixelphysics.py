@@ -22,6 +22,43 @@ def area(a: Rect) -> int:
     return (a[1] - a[0]) * (a[3] - a[2])
 
 
+def check_collision(a: PixelObject, b: PixelObject) -> int:
+    b_bounds = b.get_bounds()
+    a_bounds = a.get_bounds()
+    s = inter(a_bounds, b_bounds)
+
+    if empty(s):
+        return 0
+
+    # if both rect, just use area
+    if a.is_rect and b.is_rect:
+        return area(s)
+
+    if b.is_rect:  # swap so a is rect only
+        a, b = b, a
+
+    # one is image
+    xmn, xmx, ymn, ymx = b_bounds
+    b_hit = b.get_hitbox()
+    b_sub = b_hit[s[2] - ymn:s[3] - ymn, s[0] - xmn:s[1] - xmn]
+    if a.is_rect:  # select b rect from a rect
+        if b.use_direct_img:
+            return cv2.countNonZero(b_sub)
+        raise Exception('unsupported hitbox type: use_direct_img=false')
+
+    # both images, binary and
+    if a.use_direct_img:
+        xmn, xmx, ymn, ymx = a_bounds
+        a_sub = b_hit[s[2] - ymn:s[3] - ymn, s[0] - xmn:s[1] - xmn]
+        return cv2.countNonZero(cv2.bitwise_and(a_sub, b_sub))
+
+    raise Exception('unsupported hitbox type: use_direct_img=false')
+
+
+def empty(s: Rect) -> bool:
+    return s[3] <= s[2] or s[1] <= s[0]
+
+
 class PixelPhysics(Physics):
     def __init__(self):
         super().__init__()
@@ -59,7 +96,7 @@ class PixelPhysics(Physics):
             for y in range(-R, R + 1):
                 test_rect = (xmn + x, xmx + x, ymn + y, ymx + y)
                 s = inter(test_rect, screen_rect)
-                if s[3] <= s[2] or s[1] <= s[0]:
+                if empty(s):
                     continue
                 # print(s)
                 img = edges[s[2]:s[3], s[0]:s[1]]
