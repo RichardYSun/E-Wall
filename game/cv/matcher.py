@@ -7,7 +7,7 @@ from game.util import ParamWindow
 
 
 class Matcher:
-    MATCH_CNT = 10
+    MATCH_CNT = 20
 
     def __init__(self):
         self.orb = cv2.ORB_create(nfeatures=self.MATCH_CNT * 50)
@@ -44,10 +44,11 @@ class Matcher:
         # bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
         # matches = bf.match(des1, des2)
         # matches = sorted(matches, key=lambda x: x.distance)
-
+        #
+        # good = matches
 
         index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
-        search_params = dict(checks=200)
+        search_params = dict(checks=500)
 
         try:
             matches = cv2.FlannBasedMatcher(index_params, search_params).knnMatch(des1, des2, k=2)
@@ -69,7 +70,7 @@ class Matcher:
 
         ret = []
 
-        if len(matches) > self.MATCH_CNT:
+        if len(good) > self.MATCH_CNT:
             src_pts = np.float32(
                 [kp1[m.queryIdx].pt for m in good]).reshape(
                 -1, 1, 2)
@@ -83,14 +84,14 @@ class Matcher:
             #     [kp2[m.trainIdx].pt for m in good]).reshape(
             #     -1, 1, 2)
 
-            match, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
-            matches_mask = mask.ravel().tolist()
+            # match, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+            # matches_mask = mask.ravel().tolist()
             # j = 0
             # for i in range(len(good)):
             #     if not found[i]:
             #         found[i] |= matches_mask[j]
             #         j += 1
-
+            match = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)[0]
             ret.append(match)
 
         return ret
