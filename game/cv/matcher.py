@@ -7,10 +7,10 @@ from game.util import ParamWindow
 
 
 class Matcher:
-    MATCH_CNT = 10
+    MATCH_CNT = 20
 
     def __init__(self):
-        self.orb = cv2.ORB_create(nfeatures=Matcher.MATCH_CNT*50)
+        self.orb = cv2.ORB_create(nfeatures=self.MATCH_CNT * 1000)
 
         # Source images that have already had their keypoints calculated
         self.objs = {}
@@ -19,7 +19,8 @@ class Matcher:
 
     def update_img(self, img):
         self.camera_img = img
-        self.kp2,self.des2 = self.orb.detectAndCompute(img, None)
+        kp2 = self.orb.detect(img, None)
+        self.kp2, self.des2 = self.orb.compute(img, kp2)
 
     # takes in an image and returns all instances of the image in the camera image
     def match_obj(self, fnd: np.ndarray):
@@ -30,7 +31,8 @@ class Matcher:
         if id(fnd) in self.objs:
             kp1, des1 = self.objs[id(fnd)]
         else:
-            kp1,des1 = self.orb.detectAndCompute(fnd, None)
+            kp1 = self.orb.detect(fnd, None)
+            kp1, des1 = self.orb.compute(fnd, kp1)
             self.objs[id(fnd)] = (kp1, des1)
 
         kp2, des2 = self.kp2, self.des2
@@ -46,18 +48,20 @@ class Matcher:
         # good = matches
 
         index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
-        search_params = dict(checks=100)
+        search_params = dict(checks=500)
 
         try:
             matches = cv2.FlannBasedMatcher(index_params, search_params).knnMatch(des1, des2, k=2)
         except:
             return []
 
-        kkk=ParamWindow.get_int('match distance', 100,80)/100.0
         good = []
         for k in matches:
-            if len(k) > 1 and k[0].distance < kkk* k[1].distance:
+            if len(k) > 1 and k[0].distance < 0.7 * k[1].distance:
                 good.append(k[0])
+
+        # good = [i[0] for i in matches if len(i) > 1]
+        print(len(good))
 
         if show_debug:
             draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
@@ -69,7 +73,7 @@ class Matcher:
 
         ret = []
 
-        if len(good) > 5:
+        if len(good) > self.MATCH_CNT:
             src_pts = np.float32(
                 [kp1[m.queryIdx].pt for m in good]).reshape(
                 -1, 1, 2)
