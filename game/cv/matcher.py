@@ -11,7 +11,7 @@ class Matcher:
 
     def __init__(self):
         self.orb = cv2.ORB_create(nfeatures=self.MATCH_CNT * 50)
-        self.bf=cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+        self.bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
 
         # Source images that have already had their keypoints calculated
         self.objs = {}
@@ -26,7 +26,7 @@ class Matcher:
     def match_obj(self, fnd: np.ndarray):
         img = self.camera_img
 
-        show_debug=ParamWindow.get_int('debug matcher', 1,1)
+        show_debug = ParamWindow.get_int('debug matcher', 1, 1)
 
         if id(fnd) in self.objs:
             kp1, des1 = self.objs[id(fnd)]
@@ -47,10 +47,9 @@ class Matcher:
         index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
         search_params = dict(checks=100)
 
-        matches = self.bf.match(des1,des2)
+        matches = self.bf.match(des1, des2)
 
-        good=matches[:30]
-
+        good = matches[:30]
 
         if show_debug:
             draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
@@ -58,11 +57,11 @@ class Matcher:
                                matchesMask=[1] * len(good),  # draw only inliers
                                flags=2)
             img3 = cv2.drawMatches(fnd, kp1, img, kp2, good, None, **draw_params)
-            cv2.imshow('matches',img3)
+            cv2.imshow('matches', img3)
         # plt.imshow(img3), plt.show()
         # return
 
-        if len(good)<10:
+        if len(good) < 10:
             return []
         src_pts = np.float32(
             [kp1[m.queryIdx].pt for m in good]).reshape(
@@ -81,8 +80,6 @@ class Matcher:
         #
         # img3 = cv2.drawMatches(fnd, kp1, img, kp2, good, None, **draw_params)
         # plt.imshow(img3, 'gray'), plt.show()
-
-
 
 # matcher = Matcher()
 # matcher.update_img(imread('test/smallguy.jpg'))

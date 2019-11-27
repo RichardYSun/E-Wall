@@ -45,6 +45,7 @@ class ImageIO:
             img = self.img_src.copy()
 
         self.cam_window.show(img)
+
         img = self.cam_window.get_sub_image(img)
 
         ctx = GameContext(img)
