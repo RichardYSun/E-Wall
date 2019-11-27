@@ -31,7 +31,7 @@ class Ree(Game):
         self.matcher = Matcher()
         # self.w.objects.append(self.r)
         self.frame = 0
-        self.e = imread('ree/enemies/dude2.jpg')
+        self.e = imread('test/book.jpg')
         h, w, d = self.e.shape
         self.r = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
 
@@ -77,3 +77,4 @@ class Ree(Game):
 
 if __name__ == "__main__":
     test(Ree, None)#'../ree/enemies/squaredude.jpg')
+    #test(Ree,'smalldude3.jpg')
