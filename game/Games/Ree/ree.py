@@ -31,7 +31,7 @@ class Ree(Game):
         self.matcher = Matcher()
         # self.w.objects.append(self.r)
         self.frame = 0
-        self.e = imread('test/BOX.jpg', )
+        self.e = imread('test/BOXSD.jpg', )
 
         # cv2.GaussianBlur(self.e, (3, 3), 0, dst=self.e)
         # self.e=cv2.cvtColor(self.e, cv2.COLOR_BGR2HSV)
