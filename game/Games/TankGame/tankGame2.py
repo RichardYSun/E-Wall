@@ -23,6 +23,15 @@ TankSize = 20
 BulletCooldown = 1
 
 
+def rotateImg(img, angle):
+    rect = img.get_rect()
+    retImg = pygame.transform.rotate(img, angle)
+    retRect = rect.copy()
+    retRect.center = retImg.get_rect().center
+    retImg = retImg.subsurface(retRect).copy()
+    return retImg
+
+
 class TankGame2(Game):
 
     def __init__(self, mp: GameContext):
@@ -93,10 +102,10 @@ class TankGame2(Game):
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
-        self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize))
-        self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize))
-        self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize))
-        self.winnerImg = self.map.conv_img(load_py_img('tankAssets/winner.png'), (BulletSize, BulletSize))
+        self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize)).convert_alpha()
+        self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize)).convert_alpha()
+        self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize)).convert_alpha()
+        self.winnerImg = self.map.conv_img(load_py_img('tankAssets/winner.png'), (70, 70)).convert_alpha()
         w,h = size
         self.font = load_font('bit9x9.ttf', h // 8)
 
@@ -228,8 +237,8 @@ class TankGame2(Game):
         if self.left1:
             self.players[0].angle -= self.players[0].turnSpeed * delta_t
             # self.players[0].rotateRight(delta_t)
-            self.blueTankImg = pygame.transform.rotate(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
-
+            # self.blueTankImg = pygame.transform.rotate(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
+            self.blueTankImg = rotateImg(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
         if self.up1:
             self.players[0].setSpeed(1)
         elif self.down1:
