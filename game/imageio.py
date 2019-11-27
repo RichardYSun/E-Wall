@@ -38,7 +38,7 @@ class ImageIO:
             if ret is False:
                 raise Exception('could not read image')
 
-            flip = ParamWindow.get_int('flip image', 1, 1)
+            flip = ParamWindow.get_int('flip image', 1, 0)
             if flip:
                 cv2.flip(img, 1, img)
         else:

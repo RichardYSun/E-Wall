@@ -31,8 +31,11 @@ class Ree(Game):
         self.matcher = Matcher()
         # self.w.objects.append(self.r)
         self.frame = 0
-        self.e = imread('ree/enemies/dude2.jpg')
-        h, w, d = self.e.shape
+        self.e = imread('test/dudefar.jpg', )
+
+        # cv2.GaussianBlur(self.e, (3, 3), 0, dst=self.e)
+        # self.e=cv2.cvtColor(self.e, cv2.COLOR_BGR2HSV)
+        h, w= self.e.shape[0:2]
         self.r = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
 
         self.M = None
@@ -48,6 +51,8 @@ class Ree(Game):
         self.frame += 1
         if self.frame == 1:
             self.frame = 0
+            # g=cv2.cvtColor(new_map.original_img,cv2.COLOR_BGR2GRAY)
+            # cv2.GaussianBlur(new_map.original_img, (3, 3), 0, dst=new_map.original_img)
             self.matcher.update_img(new_map.original_img)
             k = self.matcher.match_obj(self.e)
             if len(k) > 0:
@@ -77,3 +82,4 @@ class Ree(Game):
 
 if __name__ == "__main__":
     test(Ree, None)#'../ree/enemies/squaredude.jpg')
+    #test(Ree,'smalldude3.jpg')

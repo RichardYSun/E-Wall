@@ -91,7 +91,7 @@ class EdgeDetector:
             res = cv2.Canny(frame, canny_lower, canny_higher)
 
         # detect lines
-        do_lsd = ParamWindow.get_int('do lsd', 1, 0)
+        do_lsd = 0#ParamWindow.get_int('do lsd', 1, 0)
         if do_lsd == 1:
             lines = self.lsd.detect(res)
             if lines is not None:
