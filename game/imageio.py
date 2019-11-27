@@ -15,10 +15,10 @@ class ImageIO:
         if img_name is None:
             self.img_src = None
             if ImageIO.cap is None:
-                ImageIO.cap = cv2.VideoCapture(ParamWindow.get_int('camera number', 5, 0))
+                ImageIO.cap = cv2.VideoCapture(ParamWindow.get_int('camera number', 5, 0),cv2.CAP_DSHOW)
             self.cap=ImageIO.cap
-            # self.cap.set(3, 1280)
-            # self.cap.set(4, 720)
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
             w = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             h = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         else:
