@@ -27,7 +27,7 @@ class Flag(PixelObject):
         pygame.draw.rect(surface, (255, 0, 0), self.game.map.crr(self.hitbox), 10)
 
     def update_hitbox(self, m, new_hitbox: List[Tuple[int, int]]):
-        x, y, w, h = cv2.boundingRect(np.int32[new_hitbox])
+        x, y, w, h = cv2.boundingRect(np.int32(new_hitbox))
         self.pos = Vector2(x + w / 2, y + h / 2)
         self.hitbox = (x, x + w, y, y + h)
         self.p_transform = m

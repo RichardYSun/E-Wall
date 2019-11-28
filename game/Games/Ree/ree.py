@@ -49,10 +49,12 @@ class Ree(Game):
         kek = []
 
         def on_appear(transform: ndarray, rect: List[Tuple[float, float]]):
+            print('appear')
             kek.append(E(transform, rect, self))
             self.templates.append(kek[0])
 
         def on_move(transform: ndarray, rect: List[Tuple[float, float]]):
+            print('move')
             ree = kek[0]
             ree.update_hitbox(transform, rect)
 
