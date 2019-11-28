@@ -25,6 +25,8 @@ except serial.SerialException:
 def button():
     if not controller_connected:
         return None
+    if not arduino.inWaiting():
+        return None
     newData = (arduino.readline())
     dataDecode = newData.decode("utf-8")
     if(dataDecode == ''):
