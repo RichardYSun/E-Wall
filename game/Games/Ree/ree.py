@@ -36,7 +36,7 @@ class Ree(Game):
 
         self.matcher = Matcher()
         self.matcher.add_obj(imread('ree/enemies/dude.jpg'), self.on_enemy_appear, self.on_enemy_move)
-        self.matcher.add_obj(imread('test/BoxSD.jpg'), self.on_flag_appear, self.on_flag_move)
+        # self.matcher.add_obj(imread('test/BoxSD.jpg'), self.on_flag_appear, self.on_flag_move)
 
         self.enemy = None
 
@@ -68,7 +68,7 @@ class Ree(Game):
         self.wall_physics.update_map(new_map)
         self.player.update_map(new_map)
         self.frame += 1
-        if self.frame == 24:
+        if self.frame == 1:
             self.frame = 0
             self.matcher.update_map(new_map)
 

@@ -1,5 +1,6 @@
 import time
 
+import cv2
 import pygame as pygame
 
 from game.buttonData import button
@@ -22,6 +23,8 @@ def derp(image_io, edge_detector, game, g_lock: threading.Lock):
         edge_detector.detect_edges(ctx)
         # give game new edges
         game.update_map(ctx)
+
+        cv2.waitKey(1)
 
 
 def test(G, cam='ree'):
