@@ -25,11 +25,11 @@ BulletCooldown = 1
 
 
 def rotateImg(img, angle):
-    orig_rect = img.get_rect()
+    # orig_rect = img.get_rect()
     rot_image = pygame.transform.rotate(img, angle)
-    rot_rect = orig_rect.copy()
-    rot_rect.center = rot_image.get_rect().center
-    rot_image = rot_image.subsurface(rot_rect).copy()
+    # rot_rect = orig_rect.copy()
+    # rot_rect.center = rot_image.get_rect().center
+    # rot_image = rot_image.subsurface(rot_rect).copy()
     return rot_image
 
 class TankGame2(Game):
@@ -168,11 +168,14 @@ class TankGame2(Game):
             # ex
             #  self.map.image_py(self.tankimg, self.players[i].pos, size)
             if i == 0:
-                self.map.image_py(rotateImg(self.blueTankImg , -math.degrees(self.players[i].angle) % 360),
-                                  (self.players[0].hitBox.pos.x - TankSize, self.players[0].hitBox.pos.y - TankSize))
+                rot_image = pygame.transform.rotate(self.blueTankImg,  -math.degrees(self.players[i].angle) % 360)
+                rect=rot_image.get_rect()
+                rect.center=self.map.cc(self.players[i].hitBox.pos)
+                self.map.surface.blit(rot_image, rect)
             elif i == 1:
-                self.map.image_py(rotateImg(self.greenTankImg , -math.degrees(self.players[i].angle) % 360),
-                                  (self.players[1].hitBox.pos.x - TankSize, self.players[1].hitBox.pos.y - TankSize))
+                rot_image = pygame.transform.rotate(self.greenTankImg, -math.degrees(self.players[i].angle) % 360)
+                rect = rot_image.get_rect()
+                rect.center = self.map.cc(self.players[i].hitBox.pos)
 
             # self.players[i].hitBox.draw_hitbox(self.map.game_img)
             # cv2.line(self.map.game_img, (int(self.players[i].hitBox.pos.x), int(self.players[i].hitBox.pos.y)),

@@ -11,10 +11,10 @@ from game.util.vector2 import Vector2
 
 class GeneralEnemy(Living):
     def __init__(self, m, hitbox: List[Tuple[float, float]], game,
-                 shoot_pts: List[Tuple[float,float]], health: float,
+                 shoot_pts: List[Tuple[float, float]], health: float,
                  bul_img: str = '1.png',
-                 damage_sound: str = 'ree/damaged.wav',shoot_sound:str='ree/pew.wav',
-                 cooldown=1.0,):
+                 damage_sound: str = 'ree/damaged.wav', shoot_sound: str = 'ree/pew.wav',
+                 cooldown=1.0, ):
         x, y, w, h = cv2.boundingRect(np.int32(hitbox), )
         super().__init__(health, Vector2(x + w / 2, y + h / 2))
 
@@ -23,9 +23,9 @@ class GeneralEnemy(Living):
         self.game = game
         self.p_transform = m
 
-        self.s=10
-        s=self.s
-        self.hitbox: Tuple[float, float, float, float] = (x-s, x+s + w, y-s, y+s + h)
+        self.s = 10
+        s = self.s
+        self.hitbox: Tuple[float, float, float, float] = (x - s, x + s + w, y - s, y + s + h)
 
         self.o_pts = shoot_pts
         self.shoot_pts = self.cvt_pts(self.o_pts)
@@ -56,7 +56,7 @@ class GeneralEnemy(Living):
                 player_pos = self.game.player.pos
                 self.shoot_sound.play()
                 for pt in self.shoot_pts:
-                    pos = Vector2(pt[0][0], pt[0][1])*self.game.map.downscale
+                    pos = Vector2(pt[0][0], pt[0][1]) * self.game.map.downscale
                     dire = player_pos - pos
                     self.game.add_bullet(self.bul_img, pos,
                                          dire.unit() * self.game.map.pixels_per_meter,
@@ -67,8 +67,8 @@ class GeneralEnemy(Living):
         self.shoot_pts = self.cvt_pts(self.o_pts)
         x, y, w, h = cv2.boundingRect(np.int32(new_hitbox))
         self.pos = Vector2(x + w / 2, y + h / 2)
-        s=self.s
-        self.hitbox = (x-s, x+s + w, y-s, y+s + h)
+        s = self.s
+        self.hitbox = (x - s, x + s + w, y - s, y + s + h)
         self.p_transform = m
 
     def get_bounds(self) -> Tuple[float, float, float, float]:
