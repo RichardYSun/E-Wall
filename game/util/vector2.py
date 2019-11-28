@@ -34,6 +34,9 @@ class Vector2:
     def cross(self, other):
         return abs(self.x * other.y - self.y * other.x)
 
+    def angle(self, other):
+        return math.acos(self.dot(other) / self.mag() / other.mag())
+
     def as_tuple(self):
         return self.x, self.y
 
