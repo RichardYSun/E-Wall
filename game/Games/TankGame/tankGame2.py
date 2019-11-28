@@ -15,6 +15,7 @@ from game.physics2.wallphysics import WallPhysics
 from game.test import test
 from game.img.images import load_py_img
 from game.util.vector2 import Vector2
+from game.sound.sounds import load_sound
 import math
 
 BulletSpeed = 100
@@ -58,6 +59,7 @@ class TankGame2(Game):
         self.right2 = False;
 
         self.restartButton = False;
+        self.endGameSoundPlayed = False
 
         self.won = 0
 
@@ -67,15 +69,19 @@ class TankGame2(Game):
         self.initialize_objects()
         self.initialize_buttons()
 
+        self.shootSound = load_sound('tankAssets/fire.wav')
+        self.endGameSound = load_sound('tankAssets/round_end.wav')
+
         self.font : pygame.font.Font = None
         self.textColor = (200,255,200)
+        self.update_map(mp)
 
     def initialize_objects(self):
         self.players = [] * 2
         self.bullets = []
 
-        self.players.append(Tank(Rectangle(self.spawn1, TankSize, TankSize)))
-        self.players.append(Tank(Rectangle(self.spawn2, TankSize, TankSize)))
+        self.players.append(Tank(Rectangle(self.spawn1, TankSize*2, TankSize*2)))
+        self.players.append(Tank(Rectangle(self.spawn2, TankSize*2, TankSize*2)))
 
         for tank in self.players:
             self.std_physics.objects.append(tank.hitBox)
@@ -155,9 +161,9 @@ class TankGame2(Game):
             # ex
             #  self.map.image_py(self.tankimg, self.players[i].pos, size)
             if i == 0:
-                self.map.image_py(rotateImg(self.blueTankImg , -math.degrees(self.players[i].angle) % 360), self.players[i].hitBox.pos)
+                self.map.image_py(rotateImg(self.blueTankImg , -math.degrees(self.players[i].angle) % 360), self.players[0].hitBox.pos)
             elif i == 1:
-                self.map.image_py(rotateImg(self.greenTankImg , -math.degrees(self.players[i].angle) % 360), self.players[i].hitBox.pos)
+                self.map.image_py(rotateImg(self.greenTankImg , -math.degrees(self.players[i].angle) % 360), self.players[1].hitBox.pos)
 
             # self.players[i].hitBox.draw_hitbox(self.map.game_img)
             # cv2.line(self.map.game_img, (int(self.players[i].hitBox.pos.x), int(self.players[i].hitBox.pos.y)),
@@ -188,6 +194,10 @@ class TankGame2(Game):
 
         for tank in self.players:
             tank.playerSpeed = 0;
+
+        if not self.endGameSoundPlayed:
+            self.endGameSound.play()
+            self.endGameSoundPlayed = True
 
     def reset_game(self):
         self.players[0].alive = True
@@ -268,8 +278,8 @@ class TankGame2(Game):
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
         if key_down == keys.ACTIONA1:
             if self.bulletCooldowns[0] >= BulletCooldown:
-                bulletSpawn = Vector2(self.players[0].hitBox.pos.x + 20 * math.cos(self.players[0].angle),
-                                      self.players[0].hitBox.pos.y + 20 * math.sin(self.players[0].angle))
+                bulletSpawn = Vector2(self.players[0].hitBox.pos.x + 40 * math.cos(self.players[0].angle),
+                                      self.players[0].hitBox.pos.y + 40 * math.sin(self.players[0].angle))
                 bullet = Bullet(Circle(bulletSpawn, BulletSize), BulletSpeed, self.players[0].angle)
                 self.bullets.append(bullet)
                 self.std_physics.objects.append(bullet.hitBox)
@@ -277,11 +287,12 @@ class TankGame2(Game):
                 self.wall_physics.objects.append(bullet.hitBox)
 
                 self.bulletCooldowns[0] = 0
+                self.shootSound.play()
 
         if key_down == keys.ACTIONA2:
             if self.bulletCooldowns[1] >= BulletCooldown:
-                bulletSpawn = Vector2(self.players[1].hitBox.pos.x + 20 * math.cos(self.players[1].angle),
-                                      self.players[1].hitBox.pos.y + 20 * math.sin(self.players[1].angle))
+                bulletSpawn = Vector2(self.players[1].hitBox.pos.x + 40 * math.cos(self.players[1].angle),
+                                      self.players[1].hitBox.pos.y + 40 * math.sin(self.players[1].angle))
                 bullet = Bullet(Circle(bulletSpawn, BulletSize), BulletSpeed, self.players[1].angle)
                 self.bullets.append(bullet)
                 self.std_physics.objects.append(bullet.hitBox)
@@ -289,6 +300,8 @@ class TankGame2(Game):
                 self.wall_physics.objects.append(bullet.hitBox)
 
                 self.bulletCooldowns[1] = 0
+
+                self.shootSound.play()
 
     def key_up(self, key_up: int):
         if key_up == keys.RIGHT1:
