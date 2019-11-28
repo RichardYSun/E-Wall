@@ -81,7 +81,7 @@ def test(G, cam='ree'):
         ctx: GameContext = game.map
         # g_lock.acquire()
         if show_edges:
-            pixels = pygame.transform.scale(conv_cv_to_py(ctx.cam_img), ctx.surface.get_size())
+            pixels = pygame.transform.scale(conv_cv_to_py(ctx.edges), ctx.surface.get_size())
             ctx.surface.blit(pixels, (0, 0))
         else:
             ctx.surface.fill((255, 255, 255))

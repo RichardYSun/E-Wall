@@ -26,7 +26,6 @@ class Ree(Game):
 
         self.pixel_physics = PixelPhysics()
         self.wall_physics = WallPhysics()
-        self.wall_physics.top = False
         self.matcher = Matcher()
         self.frame = 0
 
@@ -76,10 +75,12 @@ class Ree(Game):
     def add_bullet(self, img: str, pos: Vector2, vel: Vector2, damage: float, src, size=None):
         b = Bullet(self.map, pos, img, damage, vel, src, size)
         self.pixel_physics.objects.append(b)
+        self.wall_physics.objects.append(b)
         self.bullets.append(b)
 
     def remove_bullet(self, b: Bullet):
         self.pixel_physics.objects.remove(b)
+        self.wall_physics.objects.remove(b)
         self.bullets.remove(b)
 
     def update_bullets(self, delta_t: float):
@@ -102,7 +103,7 @@ class Ree(Game):
             # if bullet is not already dead and collided with wall, remove it
             if not flag:
                 if bul.death_flag:
-                    del self.bullets[j]
+                    self.remove_bullet(bul)
 
     def update_game(self, keys_down: List[bool], delta_t: float):
         if self.won:
@@ -139,5 +140,5 @@ class Ree(Game):
 
 
 if __name__ == "__main__":
-    test(Ree, None)  # '../ree/enemies/squaredude.jpg')
+    test(Ree, None)# '../ree/enemies/squaredude.jpg')
     # test(Ree,'smalldude3.jpg')
