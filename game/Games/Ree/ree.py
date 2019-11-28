@@ -39,21 +39,24 @@ class Ree(Game):
         self.add_template('ree/enemies/dude.jpg', Enemy)
         self.add_template('ree/flag.jpg', Flag)
 
-        self.templates=[]
+        self.templates = []
 
         self.won = 0
         self.win_img = None
         self.update_map(mp)
 
-    def add_template(self, img:str, E):
-        kek=[]
+    def add_template(self, img: str, E):
+        kek = []
+
         def on_appear(transform: ndarray, rect: List[Tuple[float, float]]):
-            kek.append(E(transform,rect,self))
+            kek.append(E(transform, rect, self))
             self.templates.append(kek[0])
+
         def on_move(transform: ndarray, rect: List[Tuple[float, float]]):
-            ree=kek[0]
+            ree = kek[0]
             ree.update_hitbox(transform, rect)
-        self.matcher.add_obj(imread(img),on_appear, on_move)
+
+        self.matcher.add_obj(imread(img), on_appear, on_move)
 
     def on_resize(self, size: Tuple[int, int]):
         super().on_resize(size)

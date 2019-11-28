@@ -1,3 +1,4 @@
+import os
 import time
 
 import cv2
@@ -15,16 +16,20 @@ from game.img.images import conv_cv_to_py
 import threading
 
 def derp(image_io, edge_detector, game, g_lock: threading.Lock):
-    while True:
-        # get new webcam image
-        ctx = image_io.get_img()
+    try:
+        while True:
+            # get new webcam image
+            ctx = image_io.get_img()
 
-        # image processing
-        edge_detector.detect_edges(ctx)
-        # give game new edges
-        game.update_map(ctx)
+            # image processing
+            edge_detector.detect_edges(ctx)
+            # give game new edges
+            game.update_map(ctx)
 
-        cv2.waitKey(1)
+            cv2.waitKey(1)
+    except Exception as e:
+        print(e)
+        os._exit(-1)
 
 
 def test(G, cam='ree'):
