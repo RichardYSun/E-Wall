@@ -7,6 +7,7 @@ from numpy.core.multiarray import ndarray
 from game.game import GameContext
 from game.img.images import imread, load_py_img
 from game.physics2.objects.pixelobject import PixelObject
+from game.physics2.pixelphysics import check_pixel_collision
 from game.util.vector2 import Vector2
 import imutils
 
@@ -21,12 +22,13 @@ class Bullet(PixelObject):
                  src,
                  size=None
                  ):
+        pos = Vector2(pos.x, pos.y)
         super().__init__(pos)
         self.use_direct_img = True
         self.vel = vel
         self.damage = damage
         self.death_flag = False
-        self.src=src
+        self.src = src
 
         cv_img = imread('ree/bullet/' + img, cv2.IMREAD_UNCHANGED)
         if size is None:
@@ -39,7 +41,8 @@ class Bullet(PixelObject):
         self.cv_img = imutils.rotate_bound(cv_img, ang)
         # ignore resizing of window cause ppl won't notice anyways
         p = mp.conv_img(load_py_img('ree/bullet/' + img).convert_alpha(), size)
-        self.py_img = pygame.transform.rotate(p, ang*360*2/math.pi)
+        self.py_img = pygame.transform.rotate(p, ang * 180 / math.pi + 90)
+        self.just_spawned = 0.5
 
     def get_hitbox(self):
         return self.cv_img
@@ -52,7 +55,10 @@ class Bullet(PixelObject):
         if self.touching_wall:
             self.death_flag = True
 
-        if self.collision_escape_vector is not None:
+        if check_pixel_collision(self, self.src) == 0:
+            self.just_spawned -= delta_t
+
+        if self.just_spawned <= 0 and self.collision_escape_vector is not None:
             if self.collision_escape_vector.sq_mag() > 0:
                 self.death_flag = True
 

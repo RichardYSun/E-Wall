@@ -18,8 +18,8 @@ class WallPhysics(Physics):
     def apply_physics(self, obj: PhysicsObject, delta_t):
         if isinstance(obj, PixelObject):
             xmn, xmx, ymn, ymx = obj.get_bounds()
-            obj.touching_top = self.top and ymn < 0
 
+            obj.touching_top = self.top and ymn < 0
             if obj.touching_top:
                 obj.touching_wall=True
                 obj.translate(Vector2(0, -ymn + 1))
@@ -35,8 +35,8 @@ class WallPhysics(Physics):
                     obj.vel.y *= -1
                 else:
                     obj.vel.y = 0
-            obj.touching_bottom = self.left and xmn < 0
-            if obj.touching_bottom:
+            obj.touching_left = self.left and xmn < 0
+            if obj.touching_left:
                 obj.touching_wall=True
                 obj.translate(Vector2(-xmn + 1, 0))
                 if obj.collision_type == COLLISION_BOUNCE:

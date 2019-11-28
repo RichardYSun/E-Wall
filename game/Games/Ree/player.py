@@ -20,7 +20,6 @@ class Player(Living):
         self.game_size = (115, 150)
         self.gm = gm
 
-
         def A(nm: int):
             return AnimationState(img='ree/player/sprite_' + str(nm) + '.png',
                                   game_size=None,
@@ -92,7 +91,7 @@ class Player(Living):
             if self.state == 'jump_ready':
                 if self.timer > 0.05:
                     self.vel.y = jmp
-                    self.pos.y -= 10
+                    self.pos.y -= 20
                     # self.jmp_timer = 0.1
                     self.set_state('jump1')
             else:
@@ -102,7 +101,7 @@ class Player(Living):
                 elif self.state == 'jump_land':
                     if self.timer > 0.2:
                         self.timer = 0
-                        self.pos.y-=10
+                        self.pos.y -= 10
                         self.set_state('jump_land2')
                 elif self.state == 'jump_land2':
                     if self.timer > 0.1:
@@ -160,7 +159,7 @@ class Player(Living):
         if self.shoot_timer <= 0 and down[keys.ACTIONA1]:
             self.shoot_timer = 0.5
             if self.facing == 'left':
-                self.gm.add_bullet('1.png', self.pos + Vector2(0, 10), bullet_vel * -1, bullet_dmg,self)
+                self.gm.add_bullet('1.png', self.pos + Vector2(0, 10), bullet_vel * -1, bullet_dmg, self)
             else:
                 self.gm.add_bullet('1.png', self.pos + Vector2(0, 10), bullet_vel, bullet_dmg, self)
 
@@ -168,7 +167,7 @@ class Player(Living):
         self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
         self.pos += self.vel * delta_t
         self.update_movement(delta_t, down)
-        self.update_gun(down,delta_t)
+        self.update_gun(down, delta_t)
 
     def draw(self):
         img = self.states[self.state].py_img

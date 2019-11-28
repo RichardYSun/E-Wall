@@ -35,7 +35,7 @@ class Ree(Game):
         self.wall_physics.objects.append(self.player)
 
         self.matcher = Matcher()
-        self.matcher.add_obj(imread('test/book_low_res.jpg'), self.on_enemy_appear, self.on_enemy_move)
+        self.matcher.add_obj(imread('ree/enemies/dude.jpg'), self.on_enemy_appear, self.on_enemy_move)
         self.matcher.add_obj(imread('test/BoxSD.jpg'), self.on_flag_appear, self.on_flag_move)
 
         self.enemy = None
