@@ -39,7 +39,7 @@ class Bullet(PixelObject):
         self.cv_img = imutils.rotate_bound(cv_img, ang)
         # ignore resizing of window cause ppl won't notice anyways
         p = mp.conv_img(load_py_img('ree/bullet/' + img).convert_alpha(), size)
-        self.py_img = pygame.transform.rotate(p, ang)
+        self.py_img = pygame.transform.rotate(p, ang*360*2/math.pi)
 
     def get_hitbox(self):
         return self.cv_img
