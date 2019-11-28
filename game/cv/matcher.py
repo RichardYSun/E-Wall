@@ -1,3 +1,4 @@
+import math
 import time
 from typing import Callable, Any, List, Tuple
 
@@ -6,6 +7,7 @@ import cv2
 
 from game.game import GameContext
 from game.util import ParamWindow
+from game.util.vector2 import Vector2
 
 PosUpdate = Callable[[np.ndarray, List[Tuple[float, float]]], None]
 
@@ -26,7 +28,7 @@ class Matcher:
     MATCH_CNT = 10
 
     def __init__(self):
-        self.orb: cv2.ORB = cv2.ORB_create(nfeatures=self.MATCH_CNT * 5000)
+        self.orb: cv2.ORB = cv2.ORB_create(nfeatures=self.MATCH_CNT * 100)
 
         # Source images that have already had their keypoints calculated
         self.objects: List[MatchObj] = []
@@ -62,10 +64,28 @@ class Matcher:
                     x, y = a[0][0], a[0][1]
                     r.append((x * mp.downscale, y * mp.downscale))
 
-                if obj.appeared:
-                    obj.on_move(M, r)
-                else:
-                    obj.on_appear(M, r)
+                assert len(r) == 4
+
+                is_rect = 1
+
+                sides = []
+                for i in range(4):
+                    sides.append(Vector2(r[(i + 1) % 4][0] - r[i][0], r[(i + 1) % 4][1] - r[i][1]))
+                    if sides[i].sq_mag() < 1e-6:
+                        is_rect = 0
+
+                if abs(math.log(sides[0].mag() / sides[2].mag())) > math.log(1.3) or abs(
+                        math.log(sides[1].mag() / sides[3].mag())) > math.log(1.3):
+                    is_rect = 0
+
+                if sides[0].angle(sides[2]) < 2.8 or sides[1].angle(sides[3]) < 2.8:
+                    is_rect = 0
+
+                if is_rect:
+                    if obj.appeared:
+                        obj.on_move(M, r)
+                    else:
+                        obj.on_appear(M, r)
 
     # takes in an image and returns all instances of the image in the camera image
     def match_obj(self, obj: MatchObj):

@@ -31,11 +31,13 @@ class Ree(Game):
         self.matcher = Matcher()
         # self.w.objects.append(self.r)
         self.frame = 0
-        self.e = imread('test/BOX.jpg')
+        self.e = imread('test/book_low_res.jpg')
 
         self.matcher.add_obj(self.e, self.appear, self.appear)
 
     def appear(self, m, r):
+        for i in range(4):
+            r[i] = self.map.cc(r[i])
         pygame.draw.polygon(self.map.surface, (255, 0, 0), r, 2)
 
     def on_resize(self, size: Tuple[int, int]):
