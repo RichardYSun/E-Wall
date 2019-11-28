@@ -56,7 +56,7 @@ class Bullet(PixelObject):
             self.death_flag = True
 
         if check_pixel_collision(self, self.src) == 0:
-            self.just_spawned -= delta_t
+            self.just_spawned = 0
 
         if self.just_spawned <= 0 and self.collision_escape_vector is not None:
             if self.collision_escape_vector.sq_mag() > 0:
@@ -64,12 +64,13 @@ class Bullet(PixelObject):
 
 
 class Living(PixelObject):
-    def __init__(self, health: float, pos):
+    def __init__(self, max_health: float, pos):
         super().__init__(pos)
-        self.health = health
+        self.health = max_health
+        self.max_health = max_health
 
     def damage(self, damage: float):
-        self.health -= damage
+        self.health = max(-1,self.health-damage)
 
     def die(self):
         pass

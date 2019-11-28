@@ -170,11 +170,21 @@ class Player(Living):
         self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
         self.pos += self.vel * delta_t
 
+    def draw_healthbar(self):
+        bnds = self.get_bounds()
+        ctr_x = (bnds[0] + bnds[1]) / 2
+        bar_len, bar_w = 70, 6
+        rect = self.mp.cr((ctr_x - bar_len / 2, bnds[2] - 6 - bar_w, bar_len, bar_w))
+        rect2 = self.mp.cr((ctr_x - bar_len / 2, bnds[2] - 6 - bar_w, bar_len* self.health/self.max_health, bar_w ))
+        pygame.draw.rect(self.mp.surface, (255, 0, 0), rect)
+        pygame.draw.rect(self.mp.surface, (0, 255, 0), rect2)
+
     def draw(self):
         img = self.states[self.state].py_img
         if self.facing == 'left':
             img = pygame.transform.flip(img, True, False)
         self.mp.image_py(img, self.pos)
+        self.draw_healthbar()
 
     def get_hitbox(self):
         return self.states[self.state].cv_img

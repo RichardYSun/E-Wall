@@ -36,7 +36,7 @@ class Flag(PixelObject):
         rect = [max(r1[0], r2[0]), min(r1[1], r2[1]), max(r1[2], r2[2]), min(r1[3], r2[3])]
         return rect[0] <= rect[1] and rect[2] <= rect[3]
 
-    def update(self):
+    def update(self, delta_t:float):
         if check_pixel_collision(self, self.game.player) > 0:
             print('win')
             self.game.win()

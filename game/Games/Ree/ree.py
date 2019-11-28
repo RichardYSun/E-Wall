@@ -35,28 +35,25 @@ class Ree(Game):
         self.wall_physics.objects.append(self.player)
 
         self.matcher = Matcher()
-        self.matcher.add_obj(imread('ree/enemies/dude.jpg'), self.on_enemy_appear, self.on_enemy_move)
-        self.matcher.add_obj(imread('test/BoxSD.jpg'), self.on_flag_appear, self.on_flag_move)
 
-        self.enemy = None
+        self.add_template('ree/enemies/dude.jpg', Enemy)
+        self.add_template('ree/flag.jpg', Flag)
 
-        self.flag = None
+        self.templates=[]
 
         self.won = 0
         self.win_img = None
         self.update_map(mp)
 
-    def on_enemy_appear(self, transform: ndarray, rect: List[Tuple[float, float]]):
-        self.enemy = Enemy(transform, rect, self)
-
-    def on_enemy_move(self, transform: ndarray, rect: List[Tuple[float, float]]):
-        self.enemy.update_hitbox(transform, rect)
-
-    def on_flag_appear(self, transform: ndarray, rect: List[Tuple[float, float]]):
-        self.flag = Flag(transform, rect, self)
-
-    def on_flag_move(self, transform: ndarray, rect: List[Tuple[float, float]]):
-        self.flag.update_hitbox(transform, rect)
+    def add_template(self, img:str, E):
+        kek=[]
+        def on_appear(transform: ndarray, rect: List[Tuple[float, float]]):
+            kek.append(E(transform,rect,self))
+            self.templates.append(kek[0])
+        def on_move(transform: ndarray, rect: List[Tuple[float, float]]):
+            ree=kek[0]
+            ree.update_hitbox(transform, rect)
+        self.matcher.add_obj(imread(img),on_appear, on_move)
 
     def on_resize(self, size: Tuple[int, int]):
         super().on_resize(size)
@@ -91,11 +88,11 @@ class Ree(Game):
 
             for i in range(len(self.living) - 1, -1, -1):
                 obj = self.living[i]
-                if bul.src is not obj and check_pixel_collision(obj, bul) > 0:
+                col = check_pixel_collision(obj, bul)
+                if bul.src is not obj and col > 0:
                     obj.damage(bul.damage)
                     if obj.health <= 0:
                         obj.die()
-                        del self.living[i]
                     self.remove_bullet(bul)
                     flag = True
                     break
@@ -122,13 +119,9 @@ class Ree(Game):
             for b in self.bullets:
                 b.draw(self.map)
 
-            if self.enemy is not None:
-                self.enemy.update(delta_t)
-                self.enemy.draw()
-
-            if self.flag is not None:
-                self.flag.update()
-                self.flag.draw()
+            for k in self.templates:
+                k.update(delta_t)
+                k.draw()
 
             pygame.display.flip()
 
@@ -140,5 +133,5 @@ class Ree(Game):
 
 
 if __name__ == "__main__":
-    test(Ree, None)# '../ree/enemies/squaredude.jpg')
+    test(Ree, None)  # '../ree/enemies/squaredude.jpg')
     # test(Ree,'smalldude3.jpg')
