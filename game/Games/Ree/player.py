@@ -164,10 +164,11 @@ class Player(Living):
                 self.gm.add_bullet('1.png', self.pos + Vector2(0, 10), bullet_vel, bullet_dmg, self)
 
     def update(self, delta_t: float, down: List[bool]):
-        self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
-        self.pos += self.vel * delta_t
         self.update_movement(delta_t, down)
         self.update_gun(down, delta_t)
+
+        self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
+        self.pos += self.vel * delta_t
 
     def draw(self):
         img = self.states[self.state].py_img

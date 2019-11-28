@@ -10,6 +10,17 @@ from game.keys import PY_MAPPING, ARDUINO_MAPPING
 from game.util import ParamWindow
 from game.img.images import conv_cv_to_py
 
+import threading
+
+def derp(image_io,edge_detector,game):
+    while True:
+        # get new webcam image
+        ctx = image_io.get_img()
+
+        # image processing
+        edge_detector.detect_edges(ctx)
+        # give game new edges
+        game.update_map(ctx)
 
 def test(G, cam='ree'):
     pygame.init()
@@ -28,6 +39,9 @@ def test(G, cam='ree'):
     total_time = 0
 
     keys_down = [False] * 10
+
+    x=threading.Thread(target=derp,args=(image_io, edge_detector,game))
+    x.start()
 
     last_time = time.time()
     while True:
@@ -59,22 +73,14 @@ def test(G, cam='ree'):
                     if state == 0:
                         game.key_up(ARDUINO_MAPPING[button_id])
 
-        # get new webcam image
-        ctx = image_io.get_img()
-
-        # image processing
-        edge_detector.detect_edges(ctx)
-
         # debug
         show_edges = ParamWindow.get_int('show edges', 1, 1)
+        ctx=game.map
         if show_edges:
             pixels = pygame.transform.scale(conv_cv_to_py(ctx.edges), ctx.surface.get_size())
             ctx.surface.blit(pixels, (0, 0))
         else:
             ctx.surface.fill((255, 255, 255))
-
-        # give game new edges
-        game.update_map(ctx)
 
         # tell game if window has resized
         if new_sz is not None:

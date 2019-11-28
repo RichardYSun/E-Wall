@@ -26,6 +26,7 @@ class Ree(Game):
 
         self.pixel_physics = PixelPhysics()
         self.wall_physics = WallPhysics()
+        self.wall_physics.top = False
         self.matcher = Matcher()
         self.frame = 0
 
