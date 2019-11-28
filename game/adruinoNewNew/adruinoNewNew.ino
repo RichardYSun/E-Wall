@@ -18,10 +18,11 @@ const int buttonPinLeft2 = 11;
 const int buttonPinA2 = 12; // 
 const int buttonPinB2 = 13; // 
 
-
-
 int stateB = 0, stateA = 0, stateUp = 0, stateDown = 0, stateRight = 0, stateLeft = 0;
 int stateB2 = 0, stateA2 = 0, stateUp2 = 0, stateDown2 = 0, stateRight2 = 0, stateLeft2 = 0;
+
+int lastStateB = 0, lastStateA = 0, lastStateUp = 0, lastStateDown = 0, lastStateRight = 0, lastStateLeft = 0;
+int lastStateB2 = 0, lastStateA2 = 0, lastStateUp2 = 0, lastStateDown2 = 0, lastStateRight2 = 0, lastStateLeft2 = 0;
 
 int time = 0;
 
@@ -29,15 +30,25 @@ void action(int buttonPin, int onOff) {
   Serial.println(String(buttonPin) + "," + String(onOff));
   Serial.flush();
 }
-void checkState(int state, int buttonPin) {
+int checkState(int state, int buttonPin, int lastState) {
   state = digitalRead(buttonPin);
 
-  if (state == HIGH) {
-    action(buttonPin, 1);
+  if(lastState!=state){
+    if (state == HIGH) {
+      action(buttonPin, 1);
+    }
+    else{
+      action(buttonPin, 0);
+    }
+    delay(50);
   }
-  else{
-    action(buttonPin, 0);
-  }
+  return state;
+
+  
+
+  
+
+
 }
 void setup() {
   // Setting everything as input.
@@ -69,18 +80,18 @@ void loop() {
 
   Serial.flush();
 
-  checkState(stateA, buttonPinA);
-  checkState(stateB, buttonPinB);
-  checkState(stateUp, buttonPinUp);
-  checkState(stateDown, buttonPinDown);
-  checkState(stateLeft, buttonPinLeft);
-  checkState(stateRight, buttonPinRight);
+  lastStateA = checkState(stateA, buttonPinA, lastStateA);
+  lastStateB = checkState(stateB, buttonPinB, lastStateB);
+  lastStateUp = checkState(stateUp, buttonPinUp, lastStateUp);
+  lastStateDown = checkState(stateDown, buttonPinDown, lastStateDown);
+  lastStateLeft = checkState(stateLeft, buttonPinLeft, lastStateLeft);
+  lastStateRight = checkState(stateRight, buttonPinRight, lastStateRight);
 
 
-  checkState(stateA2, buttonPinA2);
-  checkState(stateB2, buttonPinB2);
-  checkState(stateUp2, buttonPinUp2);
-  checkState(stateDown2, buttonPinDown2);
-  checkState(stateLeft2, buttonPinLeft2);
-  checkState(stateRight2, buttonPinRight2);
+  lastStateA2 = checkState(stateA2, buttonPinA2, lastStateA2);
+  lastStateB2 = checkState(stateB2, buttonPinB2, lastStateB2);
+  lastStateUp2 = checkState(stateUp2, buttonPinUp2, lastStateUp2);
+  lastStateDown2 = checkState(stateDown2, buttonPinDown2, lastStateDown2);
+  lastStateLeft2 = checkState(stateLeft2, buttonPinLeft2, lastStateLeft2);
+  lastStateRight2 = checkState(stateRight2, buttonPinRight2, lastStateRight2);
 }
