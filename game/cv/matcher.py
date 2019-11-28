@@ -62,7 +62,7 @@ class Matcher:
                 r = []
                 for a in nr:
                     x, y = a[0][0], a[0][1]
-                    r.append((x * mp.downscale, y * mp.downscale))
+                    r.append(Vector2(x * mp.downscale, y * mp.downscale))
 
                 assert len(r) == 4
 
@@ -70,7 +70,7 @@ class Matcher:
 
                 sides = []
                 for i in range(4):
-                    sides.append(Vector2(r[(i + 1) % 4][0] - r[i][0], r[(i + 1) % 4][1] - r[i][1]))
+                    sides.append(Vector2(r[(i + 1) % 4].x - r[i].x, r[(i + 1) % 4].y - r[i].y))
                     if sides[i].sq_mag() < 1e-6:
                         is_rect = 0
 
