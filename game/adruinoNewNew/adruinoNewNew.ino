@@ -32,6 +32,7 @@ void action(int buttonPin, int onOff) {
 }
 int checkState(int state, int buttonPin, int lastState) {
   state = digitalRead(buttonPin);
+  //Serial.println("Data: " + String(state) +" " + String(lastState) + " " +String(buttonPin));
 
   if(lastState!=state){
     if (state == HIGH) {
@@ -43,10 +44,6 @@ int checkState(int state, int buttonPin, int lastState) {
     delay(50);
   }
   return state;
-
-  
-
-  
 
 
 }
@@ -73,7 +70,7 @@ void setup() {
 void loop() {
   // Sends the state to a function,  Makes it more readable
 
-  delay(0);
+  delay(50);
   time += 1;
 
 
