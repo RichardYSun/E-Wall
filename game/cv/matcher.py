@@ -72,26 +72,22 @@ class Matcher:
                 sides = []
                 for i in range(4):
                     sides.append(Vector2(r[(i + 1) % 4][0] - r[i][0], r[(i + 1) % 4][1] - r[i][1]))
-                    if sides[i].sq_mag() < 1e-6:
+                    if sides[i].mag() < 1e-6:
                         is_rect = 0
 
-                if abs(math.log(sides[0].mag() / sides[2].mag())) > math.log(1.3) or abs(
-                        math.log(sides[1].mag() / sides[3].mag())) > math.log(1.3):
-                    is_rect = 0
-
-                if sides[0].angle(sides[2]) < 2.8 or sides[1].angle(sides[3]) < 2.8:
-                    is_rect = 0
-
-                x, y, w, h = cv2.boundingRect(np.int32(r))
-
-                # aspect ratio check
-                if abs(abs(math.log(w / h)) - abs(math.log((obj.img.shape[0]) / (obj.img.shape[1])))) >= math.log(1.5):
-                    is_rect = 0
-
                 if is_rect:
-                    print(abs(math.log((sides[0].mag() + sides[2].mag()) / (sides[1].mag() + sides[3].mag()))),
-                          abs(math.log(
-                              (obj.img.shape[0]) / (obj.img.shape[1]))), math.log(1.5))
+                    if abs(math.log(sides[0].mag() / sides[2].mag())) > math.log(1.3) or abs(
+                            math.log(sides[1].mag() / sides[3].mag())) > math.log(1.3):
+                        is_rect = 0
+
+                    if sides[0].angle(sides[2]) < 2.8 or sides[1].angle(sides[3]) < 2.8:
+                        is_rect = 0
+
+                    x, y, w, h = cv2.boundingRect(np.int32(r))
+
+                    # aspect ratio check
+                    if abs(abs(math.log(w / h)) - abs(math.log((obj.img.shape[0]) / (obj.img.shape[1])))) >= math.log(1.5):
+                        is_rect = 0
 
                 if is_rect:
                     if obj.appeared:
