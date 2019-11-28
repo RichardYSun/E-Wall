@@ -111,7 +111,7 @@ class TankGame2(Game):
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
         w , h = size
-        TankSize = 20 * w / self.map.surface.get_width()
+        # TankSize = 20 * w / self.map.surface.get_width()
 
         self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize*2, TankSize*2)).convert_alpha()
         self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize*2, TankSize*2)).convert_alpha()
