@@ -5,9 +5,11 @@ from cv2 import cv2
 from numpy.core.multiarray import ndarray
 
 from game.Games.Ree.bullet import Bullet, Living
+from game.Games.Ree.enemy import Enemy
 from game.Games.Ree.player import Player
 from game.cv.matcher import Matcher
 from game.game import Game, GameContext
+from game.img.images import imread
 from game.physics2.pixelphysics import PixelPhysics, check_pixel_collision
 from game.physics2.wallphysics import WallPhysics
 from game.test import test
@@ -31,6 +33,17 @@ class Ree(Game):
         self.living.append(self.player)
         self.wall_physics.objects.append(self.player)
 
+        self.matcher = Matcher()
+        self.matcher.add_obj(imread('test/book_low_res.jpg'), self.on_enemy_appear, self.on_enemy_move)
+
+        self.enemy = None
+
+    def on_enemy_appear(self, transform: ndarray, rect: List[Tuple[float, float]]):
+        self.enemy = Enemy(transform, rect, self)
+
+    def on_enemy_move(self, transform: ndarray, rect: List[Tuple[float, float]]):
+        self.enemy.update_hitbox(transform, rect)
+
     def on_resize(self, size: Tuple[int, int]):
         self.player.on_resize(size)
 
@@ -40,7 +53,7 @@ class Ree(Game):
         self.wall_physics.update_map(new_map)
         self.player.update_map(new_map)
         self.frame += 1
-        if self.frame == 48:
+        if self.frame == 24:
             self.frame = 0
             self.matcher.update_map(new_map)
 
@@ -87,9 +100,13 @@ class Ree(Game):
         for b in self.bullets:
             b.draw(self.map)
 
+        if self.enemy is not None:
+            self.enemy.update(delta_t)
+            self.enemy.draw()
+
         pygame.display.flip()
 
 
 if __name__ == "__main__":
-    test(Ree, 'kust.bmp')  # '../ree/enemies/squaredude.jpg')
+    test(Ree, None)  # '../ree/enemies/squaredude.jpg')
     # test(Ree,'smalldude3.jpg')

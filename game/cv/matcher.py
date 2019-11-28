@@ -107,9 +107,13 @@ class Matcher:
         # good = sorted(good, key=lambda x: x.distance)[:min(bf_max, len(good))]
 
         # flann
-        index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
-        search_params = dict(checks=500)
-        matches = cv2.FlannBasedMatcher(index_params, search_params).knnMatch(des1, des2, k=2)
+        try:
+            index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
+            search_params = dict(checks=500)
+            matches = cv2.FlannBasedMatcher(index_params, search_params).knnMatch(des1, des2, k=2)
+        except:
+            print('Flann stupidity')
+            return []
 
         good = []
         ratio_test = ParamWindow.get_int('ratio test', 100, 80) / 100.0
