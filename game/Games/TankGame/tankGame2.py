@@ -124,7 +124,7 @@ class TankGame2(Game):
     def update_game(self, keys_down, delta_t: int):
         if self.restartButton:
             self.initialize_objects()
-            self.initialize_buttons()
+            #self.initialize_buttons()
 
         if not self.players[0].alive:
             text = self.font.render('Player 2 Wins', True, self.textColor)
@@ -226,7 +226,7 @@ class TankGame2(Game):
 
     def checkKeys(self, delta_t):
         if self.restartButton:
-            self.initialize_buttons()
+            #self.initialize_buttons()
             self.initialize_objects()
 
         if self.right1:
