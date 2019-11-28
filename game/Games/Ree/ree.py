@@ -74,7 +74,7 @@ class Ree(Game):
         self.wall_physics.update_map(new_map)
         self.player.update_map(new_map)
         self.frame += 1
-        if self.frame == 10:
+        if self.frame == 10 :
             self.frame = 0
             self.matcher.update_map(new_map)
 
@@ -146,5 +146,5 @@ class Ree(Game):
 
 
 if __name__ == "__main__":
-    test(Ree, None)  # '../ree/enemies/squaredude.jpg')
+    test(Ree, 'flagTest.jpg')  # '../ree/enemies/squaredude.jpg')
     # test(Ree,'smalldude3.jpg')
