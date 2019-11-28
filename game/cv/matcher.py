@@ -86,14 +86,16 @@ class Matcher:
                     x, y, w, h = cv2.boundingRect(np.int32(r))
 
                     # aspect ratio check
-                    if abs(abs(math.log(w / h)) - abs(math.log((obj.img.shape[0]) / (obj.img.shape[1])))) >= math.log(1.5):
+                    if abs(abs(math.log(w / h)) - abs(math.log((obj.img.shape[0]) / (obj.img.shape[1])))) >= math.log(
+                            1.5):
                         is_rect = 0
 
                 if is_rect:
                     if obj.appeared:
-                        obj.on_appear(M, r)
-                    else:
                         obj.on_move(M, r)
+                    else:
+                        obj.on_appear(M, r)
+                        obj.on_appear = True
 
                 # takes in an image and returns all instances of the image in the camera image
 
