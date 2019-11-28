@@ -10,7 +10,7 @@ from game.Games.Ree.flag import Flag
 from game.Games.Ree.player import Player
 from game.cv.matcher import Matcher
 from game.game import Game, GameContext
-from game.img.images import imread
+from game.img.images import imread, load_py_img
 from game.physics2.pixelphysics import PixelPhysics, check_pixel_collision
 from game.physics2.wallphysics import WallPhysics
 from game.test import test
@@ -119,7 +119,13 @@ class Ree(Game):
 
         pygame.display.flip()
 
+    def win(self):
+        surface = pygame.display.get_surface()
+        win_img = load_py_img('Win.png')
+        win_img = pygame.transform.scale(win_img, surface.get_size())
+        surface.blit(win_img, (0, 0))
+
 
 if __name__ == "__main__":
-    test(Ree, None)  # '../ree/enemies/squaredude.jpg')
+    test(Ree, 'flagTest.jpg')  # '../ree/enemies/squaredude.jpg')
     # test(Ree,'smalldude3.jpg')
