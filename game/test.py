@@ -15,6 +15,7 @@ from game.img.images import conv_cv_to_py
 
 import threading
 
+
 def derp(image_io, edge_detector, game, g_lock: threading.Lock):
     while True:
         # get new webcam image
@@ -22,6 +23,7 @@ def derp(image_io, edge_detector, game, g_lock: threading.Lock):
 
         # image processing
         edge_detector.detect_edges(ctx)
+
         # give game new edges
         game.update_map(ctx)
 
@@ -46,7 +48,7 @@ def test(G, cam='ree'):
 
     keys_down = [False] * 10
 
-    g_lock= threading.Lock()
+    g_lock = threading.RLock()
     x = threading.Thread(target=derp, args=(image_io, edge_detector, game, g_lock))
     x.start()
 
@@ -82,13 +84,15 @@ def test(G, cam='ree'):
 
         # debug
         show_edges = ParamWindow.get_int('show edges', 1, 1)
+
+        # with g_lock:
         ctx: GameContext = game.map
         # g_lock.acquire()
         if show_edges:
             pixels = pygame.transform.scale(conv_cv_to_py(ctx.edges), ctx.surface.get_size())
             ctx.surface.blit(pixels, (0, 0))
         else:
-            ctx.surface.fill((255, 255, 255))
+            ctx.surface.fill((0, 0, 0))
 
         # tell game if window has resized
         if new_sz is not None:
