@@ -44,7 +44,7 @@ def test(G, cam='ree'):
     frame_count = 0
     total_time = 0
 
-    keys_down = [False] * 10
+    keys_down = [False] * 12
 
     g_lock= threading.Lock()
     x = threading.Thread(target=derp, args=(image_io, edge_detector, game, g_lock))
