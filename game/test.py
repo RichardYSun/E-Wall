@@ -111,5 +111,6 @@ def test(G, cam='ree'):
             print(frame_count)
             total_time = 0
             frame_count = 0
+        cv2.waitKey(1)
 
     del image_io

@@ -12,7 +12,7 @@ Coordinate = Union[Vector2, Tuple[float, float]]
 
 class GameContext:
     def __init__(self, cam_img: ndarray, use_pygame=True):
-        self.downscale = 0.5  # downscale level
+        self.downscale = 1  # downscale level
         self.original_img:ndarray = cam_img
 
         h, w = cam_img.shape[0:2]

@@ -59,7 +59,10 @@ class Matcher:
             if M is None or len(M) == 0:
                 pass
             else:
-                nr = cv2.perspectiveTransform(obj.original_rect, M[0])
+                try:
+                    nr = cv2.perspectiveTransform(obj.original_rect, M[0])
+                except:
+                    return []
                 r = []
                 for a in nr:
                     x, y = a[0][0], a[0][1]
