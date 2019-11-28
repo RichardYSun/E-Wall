@@ -45,6 +45,7 @@ class Ree(Game):
 
         self.won = 0
         self.win_img = None
+        self.update_map(mp)
 
     def on_enemy_appear(self, transform: ndarray, rect: List[Tuple[float, float]]):
         self.enemy = Enemy(transform, rect, self)
@@ -59,6 +60,7 @@ class Ree(Game):
         self.flag.update_hitbox(transform, rect)
 
     def on_resize(self, size: Tuple[int, int]):
+        super().on_resize(size)
         self.player.on_resize(size)
 
     def update_map(self, new_map: GameContext):
@@ -137,5 +139,5 @@ class Ree(Game):
 
 
 if __name__ == "__main__":
-    test(Ree, 'flagTest.jpg')  # '../ree/enemies/squaredude.jpg')
+    test(Ree, None)  # '../ree/enemies/squaredude.jpg')
     # test(Ree,'smalldude3.jpg')

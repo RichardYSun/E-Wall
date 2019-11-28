@@ -23,7 +23,7 @@ class Player(Living):
         def A(nm: int):
             return AnimationState(img='ree/player/sprite_' + str(nm) + '.png',
                                   game_size=None,
-                                  scale=0.5)
+                                  scale=0.4)
 
         self.states: Dict[str, AnimationState] = {
             'rest': A(0),

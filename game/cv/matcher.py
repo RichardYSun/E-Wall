@@ -122,7 +122,7 @@ class Matcher:
                 good.append(k[0])
 
         # debugging stuff
-        show_debug = ParamWindow.get_int('debug matcher', 1, 1)
+        show_debug = ParamWindow.get_int('debug matcher', 1, 0)
         if show_debug:
             draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
                                singlePointColor=None,

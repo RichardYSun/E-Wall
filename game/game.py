@@ -34,6 +34,12 @@ class GameContext:
             self.sx = self.surface.get_width() / float(self.width)
             self.sy = self.surface.get_height() / float(self.height)
 
+    def recalc_size(self):
+        self.surface: pygame.Surface = pygame.display.get_surface()
+        self.pysize = self.surface.get_size()
+        self.sx = self.surface.get_width() / float(self.width)
+        self.sy = self.surface.get_height() / float(self.height)
+
     # convert game coords/size to pygame coords/size
     def cc(self, coord: Coordinate) -> Tuple[int, int]:
         if isinstance(coord, Vector2):
@@ -84,7 +90,7 @@ class Game:
 
     # called on window resize
     def on_resize(self, size: Tuple[int, int]):
-        pass
+        self.map.recalc_size()
 
     # called when there is a new info from image processing
     def update_map(self, new_map: GameContext):

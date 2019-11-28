@@ -3,6 +3,7 @@ import time
 import pygame as pygame
 
 from game.buttonData import button
+from game.game import GameContext
 from game.imageio import ImageIO
 from game.cv.edgedetector import EdgeDetector
 
@@ -12,7 +13,7 @@ from game.img.images import conv_cv_to_py
 
 import threading
 
-def derp(image_io,edge_detector,game):
+def derp(image_io, edge_detector, game, g_lock: threading.Lock):
     while True:
         # get new webcam image
         ctx = image_io.get_img()
@@ -21,6 +22,7 @@ def derp(image_io,edge_detector,game):
         edge_detector.detect_edges(ctx)
         # give game new edges
         game.update_map(ctx)
+
 
 def test(G, cam='ree'):
     pygame.init()
@@ -40,7 +42,8 @@ def test(G, cam='ree'):
 
     keys_down = [False] * 10
 
-    x=threading.Thread(target=derp,args=(image_io, edge_detector,game))
+    g_lock= threading.Lock()
+    x = threading.Thread(target=derp, args=(image_io, edge_detector, game, g_lock))
     x.start()
 
     last_time = time.time()
@@ -75,9 +78,10 @@ def test(G, cam='ree'):
 
         # debug
         show_edges = ParamWindow.get_int('show edges', 1, 1)
-        ctx=game.map
+        ctx: GameContext = game.map
+        # g_lock.acquire()
         if show_edges:
-            pixels = pygame.transform.scale(conv_cv_to_py(ctx.edges), ctx.surface.get_size())
+            pixels = pygame.transform.scale(conv_cv_to_py(ctx.cam_img), ctx.surface.get_size())
             ctx.surface.blit(pixels, (0, 0))
         else:
             ctx.surface.fill((255, 255, 255))
@@ -89,6 +93,7 @@ def test(G, cam='ree'):
         # update game
         cur_time = time.time()
         game.update_game(keys_down, min(cur_time - last_time, 0.1))
+        # g_lock.release()
         total_time += cur_time - last_time
 
         # print fps
