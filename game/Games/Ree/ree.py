@@ -65,7 +65,7 @@ class Ree(Game):
         self.wall_physics.update_map(new_map)
         self.player.update_map(new_map)
         self.frame += 1
-        if self.frame == 24:
+        if self.frame == 1:
             self.frame = 0
             self.matcher.update_map(new_map)
 

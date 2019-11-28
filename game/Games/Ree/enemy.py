@@ -26,7 +26,7 @@ class Enemy(PixelObject):
     def draw(self):
         surface = pygame.display.get_surface()
         pygame.draw.circle(surface, (255, 0, 0), self.game.map.cc(self.pos), 10)
-        pygame.draw.rect(surface, (255,0,0), self.game.map.crr(self.hitbox),10)
+        pygame.draw.rect(surface, (255, 0, 0), self.game.map.crr(self.hitbox), 10)
 
     def update(self, delta_t: float):
         self.lastshot += delta_t

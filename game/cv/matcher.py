@@ -4,6 +4,7 @@ from typing import Callable, Any, List, Tuple
 
 import numpy as np
 import cv2
+import pygame
 
 from game.game import GameContext
 from game.util import ParamWindow
@@ -28,7 +29,7 @@ class Matcher:
     MATCH_CNT = 10
 
     def __init__(self):
-        self.orb: cv2.ORB = cv2.ORB_create(nfeatures=self.MATCH_CNT * 100)
+        self.orb: cv2.ORB = cv2.ORB_create(nfeatures=self.MATCH_CNT * 1000)
 
         # Source images that have already had their keypoints calculated
         self.objects: List[MatchObj] = []
@@ -81,13 +82,25 @@ class Matcher:
                 if sides[0].angle(sides[2]) < 2.8 or sides[1].angle(sides[3]) < 2.8:
                     is_rect = 0
 
+                x, y, w, h = cv2.boundingRect(np.int32(r))
+
+                # aspect ratio check
+                if abs(abs(math.log(w / h)) - abs(math.log((obj.img.shape[0]) / (obj.img.shape[1])))) >= math.log(1.5):
+                    is_rect = 0
+
+                if is_rect:
+                    print(abs(math.log((sides[0].mag() + sides[2].mag()) / (sides[1].mag() + sides[3].mag()))),
+                          abs(math.log(
+                              (obj.img.shape[0]) / (obj.img.shape[1]))), math.log(1.5))
+
                 if is_rect:
                     if obj.appeared:
                         obj.on_move(M, r)
                     else:
                         obj.on_appear(M, r)
 
-    # takes in an image and returns all instances of the image in the camera image
+                # takes in an image and returns all instances of the image in the camera image
+
     def match_obj(self, obj: MatchObj):
 
         kp2, des2 = self.cam_kp, self.cam_des
@@ -131,7 +144,7 @@ class Matcher:
             cam_img = cv2.drawKeypoints(self.camera_img.copy(), kp2, None, color=(255, 0, 0), flags=0)
             obj_img = cv2.drawKeypoints(fnd.copy(), kp1, None, color=(255, 0, 0), flags=0)
             img3 = cv2.drawMatches(obj_img, kp1, cam_img, kp2, good, None, **draw_params)
-            cv2.imshow('matches', img3)
+            cv2.imshow('matcher', img3)
 
         ret = []
 
