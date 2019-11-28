@@ -17,6 +17,7 @@ class Enemy(PixelObject):
 
         self.is_rect = True
         self.hitbox: Tuple[float, float, float, float] = (x, x + w, y, y + h)
+        self.max_health: float = 50
         self.health: float = 50
         self.cooldown = 1
         self.lastshot = 0
@@ -27,6 +28,7 @@ class Enemy(PixelObject):
         surface = pygame.display.get_surface()
         pygame.draw.circle(surface, (255, 0, 0), self.game.map.cc(self.pos), 10)
         pygame.draw.rect(surface, (255, 0, 0), self.game.map.crr(self.hitbox), 10)
+        self.draw_healthbar()
 
     def update(self, delta_t: float):
         self.lastshot += delta_t
@@ -45,3 +47,12 @@ class Enemy(PixelObject):
 
     def get_bounds(self) -> Tuple[float, float, float, float]:
         return self.hitbox
+
+    def draw_healthbar(self):
+        bnds = self.get_bounds()
+        ctr_x = (bnds[0] + bnds[1]) / 2
+        bar_len, bar_w = 70, 6
+        rect = self.game.map.cr((ctr_x - bar_len / 2, bnds[2] - 6 - bar_w, bar_len, bar_w))
+        rect2 = self.game.map.cr((ctr_x - bar_len / 2, bnds[2] - 6 - bar_w, bar_len * self.health / self.max_health, bar_w))
+        pygame.draw.rect(self.game.map.surface, (255, 0, 0), rect)
+        pygame.draw.rect(self.game.map.surface, (0, 255, 0), rect2)
