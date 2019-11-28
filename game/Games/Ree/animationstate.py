@@ -10,9 +10,9 @@ from game.util.vector2 import Vector2
 
 
 class AnimationState:
-    def __init__(self, img: str, game_size: Tuple[float, float], offset: Vector2 = Vector2(0, 0),
+    def __init__(self, img: str, game_size: Tuple[float, float] = None,
                  timer: float = None,
-                 next_state: str = None):
+                 next_state: str = None, scale: float = None):
         self.o_py_img: pygame.Surface = load_py_img(img).convert_alpha()
 
         self.cv_img: ndarray = cv2.extractChannel(imread(img, cv2.IMREAD_UNCHANGED), 3)
@@ -20,10 +20,11 @@ class AnimationState:
 
         self.next_state: str = next_state
         self.timer: float = timer
-        self.offset: Vector2 = offset
         if game_size is None:
             game_size = self.o_py_img.get_size()
-        self.game_size: Vector2 = game_size
+        if scale is not None:
+            game_size = (int(game_size[0]*scale), int(game_size[1]*scale))
+        self.game_size = game_size
         self.cv_img = cv2.resize(self.cv_img, game_size)
 
     def load(self, mp: GameContext):

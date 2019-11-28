@@ -20,8 +20,11 @@ class Player(Living):
         self.game_size = (115, 150)
         self.gm = gm
 
-        def A(nm: int, off: Tuple[int, int] = (0, 0)):
-            return AnimationState('ree/player/sprite_' + str(nm) + '.png', self.game_size, Vector2(off[0], off[1]))
+
+        def A(nm: int):
+            return AnimationState(img='ree/player/sprite_' + str(nm) + '.png',
+                                  game_size=None,
+                                  scale=0.5)
 
         self.states: Dict[str, AnimationState] = {
             'rest': A(0),
@@ -40,6 +43,7 @@ class Player(Living):
 
         self.timer = 0
         # self.is_rect = True
+
         self.use_direct_img = True
         self.mp: GameContext = gm.map
         self.collision_type = COLLISION_SLIDE
@@ -55,13 +59,10 @@ class Player(Living):
         self.mp = new_map
 
     def set_state(self, state: str):
-        kstate = self.states[self.state]
-        self.pos -= kstate.offset
 
         self.state = state
 
         kstate = self.states[self.state]
-        self.pos += kstate.offset
         if kstate.timer is not None:
             self.timer = 0
 
@@ -101,6 +102,7 @@ class Player(Living):
                 elif self.state == 'jump_land':
                     if self.timer > 0.2:
                         self.timer = 0
+                        self.pos.y-=10
                         self.set_state('jump_land2')
                 elif self.state == 'jump_land2':
                     if self.timer > 0.1:
@@ -158,9 +160,9 @@ class Player(Living):
         if self.shoot_timer <= 0 and down[keys.ACTIONA1]:
             self.shoot_timer = 0.5
             if self.facing == 'left':
-                self.gm.add_bullet('1.png', self.pos + Vector2(-10, 100), bullet_vel * -1, bullet_dmg,self)
+                self.gm.add_bullet('1.png', self.pos + Vector2(0, 10), bullet_vel * -1, bullet_dmg,self)
             else:
-                self.gm.add_bullet('1.png', self.pos + Vector2(-10, 100), bullet_vel, bullet_dmg, self)
+                self.gm.add_bullet('1.png', self.pos + Vector2(0, 10), bullet_vel, bullet_dmg, self)
 
     def update(self, delta_t: float, down: List[bool]):
         self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
