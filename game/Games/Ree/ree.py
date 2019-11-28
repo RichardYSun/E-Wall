@@ -146,5 +146,5 @@ class Ree(Game):
 
 
 if __name__ == "__main__":
-    test(Ree, 'flagTest.jpg')  # '../ree/enemies/squaredude.jpg')
+    test(Ree, None)  # '../ree/enemies/squaredude.jpg')
     # test(Ree,'smalldude3.jpg')

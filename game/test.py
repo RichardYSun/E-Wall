@@ -93,7 +93,7 @@ def test(G, cam='ree'):
             ctx.surface.blit(pixels, (0, 0))
         else:
             ctx.surface.fill((0, 0, 0))
-
+        cv2.imshow('edges', ctx.edges)
         # tell game if window has resized
         if new_sz is not None:
             game.on_resize(new_sz)
