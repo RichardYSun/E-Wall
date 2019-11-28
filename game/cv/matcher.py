@@ -95,7 +95,7 @@ class Matcher:
                         obj.on_move(M, r)
                     else:
                         obj.on_appear(M, r)
-                        obj.on_appear = True
+                        obj.appeared = True
 
                 # takes in an image and returns all instances of the image in the camera image
 
