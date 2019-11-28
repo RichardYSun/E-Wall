@@ -24,13 +24,12 @@ BulletCooldown = 1
 
 
 def rotateImg(img, angle):
-    rect = img.get_rect()
-    retImg = pygame.transform.rotate(img, angle)
-    retRect = rect.copy()
-    retRect.center = retImg.get_rect().center
-    retImg = retImg.subsurface(retRect).copy()
-    return retImg
-
+    orig_rect = img.get_rect()
+    rot_image = pygame.transform.rotate(img, angle)
+    rot_rect = orig_rect.copy()
+    rot_rect.center = rot_image.get_rect().center
+    rot_image = rot_image.subsurface(rot_rect).copy()
+    return rot_image
 
 class TankGame2(Game):
 
@@ -102,8 +101,8 @@ class TankGame2(Game):
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
-        self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize, TankSize)).convert_alpha()
-        self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize, TankSize)).convert_alpha()
+        self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize*2, TankSize*2)).convert_alpha()
+        self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize*2, TankSize*2)).convert_alpha()
         self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize)).convert_alpha()
         self.winnerImg = self.map.conv_img(load_py_img('tankAssets/winner.png'), (70, 70)).convert_alpha()
         w,h = size
@@ -156,9 +155,9 @@ class TankGame2(Game):
             # ex
             #  self.map.image_py(self.tankimg, self.players[i].pos, size)
             if i == 0:
-                self.map.image_py(self.blueTankImg, self.players[i].hitBox.pos)
+                self.map.image_py(rotateImg(self.blueTankImg , -math.degrees(self.players[i].angle) % 360), self.players[i].hitBox.pos)
             elif i == 1:
-                self.map.image_py(self.greenTankImg, self.players[i].hitBox.pos)
+                self.map.image_py(rotateImg(self.greenTankImg , -math.degrees(self.players[i].angle) % 360), self.players[i].hitBox.pos)
 
             # self.players[i].hitBox.draw_hitbox(self.map.game_img)
             # cv2.line(self.map.game_img, (int(self.players[i].hitBox.pos.x), int(self.players[i].hitBox.pos.y)),
@@ -222,23 +221,9 @@ class TankGame2(Game):
 
         if self.right1:
             self.players[0].angle += self.players[0].turnSpeed * delta_t
-            # self.players[0].rotateLeft(delta_t)
-
-#           oldSurf = pygame.Surface((self.blueTankImg.hitbox.l*math.sqrt(2), self.blueTankImg.hitbox.h*math.sqrt(2)))
-
-            #Rotates image
-            oldSurf = self.players[0].hitBox
-
-            self.blueTankImg = pygame.transform.rotate(self.blueTankImg, self.players[0].turnSpeed * delta_t)
-
-            self.blueTankImg.get_rect().center = oldSurf.pos.x + oldSurf.l / 2, oldSurf.pos.x + oldSurf.h / 2
-            #Rotates hitbox
-            self.players[0].rotateRight(delta_t)
         if self.left1:
             self.players[0].angle -= self.players[0].turnSpeed * delta_t
-            # self.players[0].rotateRight(delta_t)
-            # self.blueTankImg = pygame.transform.rotate(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
-            self.blueTankImg = rotateImg(self.blueTankImg, -self.players[0].turnSpeed * delta_t)
+
         if self.up1:
             self.players[0].setSpeed(1)
         elif self.down1:
@@ -247,12 +232,8 @@ class TankGame2(Game):
             self.players[0].setSpeed(0)
         if self.right2:
             self.players[1].angle += self.players[1].turnSpeed * delta_t
-            # self.players[1].rotateLeft(delta_t)
-            self.greenTankImg = pygame.transform.rotate(self.greenTankImg, self.players[1].turnSpeed * delta_t)
         if self.left2:
             self.players[1].angle -= self.players[1].turnSpeed * delta_t
-            # self.players[1].rotateRight(delta_t)
-            self.greenTankImg = pygame.transform.rotate(self.greenTankImg, -self.players[1].turnSpeed * delta_t)
         if self.up2:
             self.players[1].setSpeed(1)
         elif self.down2:
