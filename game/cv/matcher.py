@@ -91,9 +91,9 @@ class Matcher:
 
                 if is_rect:
                     if obj.appeared:
-                        obj.on_move(M, r)
-                    else:
                         obj.on_appear(M, r)
+                    else:
+                        obj.on_move(M, r)
 
                 # takes in an image and returns all instances of the image in the camera image
 
