@@ -12,6 +12,7 @@ class PhysicsObject:
         self.touching_bottom: bool = None
         self.touching_left: bool = None
         self.touching_right: bool = None
+        self.touching_wall:bool=None
 
     # called upon unsolvable physics situation
     def kill(self):

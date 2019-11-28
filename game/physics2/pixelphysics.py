@@ -22,7 +22,7 @@ def area(a: Rect) -> int:
     return (a[1] - a[0]) * (a[3] - a[2])
 
 
-def check_collision(a: PixelObject, b: PixelObject) -> int:
+def check_pixel_collision(a: PixelObject, b: PixelObject) -> int:
     b_bounds = b.get_bounds()
     a_bounds = a.get_bounds()
     s = inter(a_bounds, b_bounds)

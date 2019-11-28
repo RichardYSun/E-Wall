@@ -66,7 +66,7 @@ class Game:
         self.map: GameContext = initial_map
 
     # should be implemented by subclasses
-    def update_game(self, keys_down: List[bool], delta_t: int):
+    def update_game(self, keys_down: List[bool], delta_t: float):
         pass
 
     # called when key is pushed down

@@ -19,7 +19,9 @@ class WallPhysics(Physics):
         if isinstance(obj, PixelObject):
             xmn, xmx, ymn, ymx = obj.get_bounds()
             obj.touching_top = self.top and ymn < 0
+
             if obj.touching_top:
+                obj.touching_wall=True
                 obj.translate(Vector2(0, -ymn + 1))
                 if obj.collision_type == COLLISION_BOUNCE:
                     obj.vel.y *= -1
@@ -27,6 +29,7 @@ class WallPhysics(Physics):
                     obj.vel.y = 0
             obj.touching_bottom = self.bottom and ymx >= self.map.height
             if obj.touching_bottom:
+                obj.touching_wall=True
                 obj.translate(Vector2(0, self.map.height - ymx))
                 if obj.collision_type == COLLISION_BOUNCE:
                     obj.vel.y *= -1
@@ -34,6 +37,7 @@ class WallPhysics(Physics):
                     obj.vel.y = 0
             obj.touching_bottom = self.left and xmn < 0
             if obj.touching_bottom:
+                obj.touching_wall=True
                 obj.translate(Vector2(-xmn + 1, 0))
                 if obj.collision_type == COLLISION_BOUNCE:
                     obj.vel.x *= -1
@@ -41,8 +45,10 @@ class WallPhysics(Physics):
                     obj.vel.x = 0
             obj.touching_right = self.right and xmx >= self.map.width
             if obj.touching_right:
+                obj.touching_wall=True
                 obj.translate(Vector2(self.map.width - xmx - 1, 0))
                 if obj.collision_type == COLLISION_BOUNCE:
                     obj.vel.x *= -1
                 else:
                     obj.vel.x = 0
+

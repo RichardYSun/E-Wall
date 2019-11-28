@@ -4,20 +4,21 @@ import pygame
 
 from game import keys
 from game.Games.Ree.animationstate import AnimationState
+from game.Games.Ree.bullet import Living
+
 from game.game import GameContext
 from game.physics2.collisiontypes import COLLISION_SLIDE
-from game.physics2.objects.pixelobject import PixelObject
 from game.util.vector2 import Vector2
 
 
-class Player(PixelObject):
+class Player(Living):
 
-    def __init__(self, pos: Vector2, mp: GameContext):
-        super().__init__(pos)
+    def __init__(self, pos: Vector2, gm):
+        super().__init__(100, pos)
         self.facing = 'right'
         self.state: str = 'rest'
         self.game_size = (115, 150)
-        self.health: float = 100
+        self.gm = gm
 
         def A(nm: int, off: Tuple[int, int] = (0, 0)):
             return AnimationState('ree/player/sprite_' + str(nm) + '.png', self.game_size, Vector2(off[0], off[1]))
@@ -40,10 +41,12 @@ class Player(PixelObject):
         self.timer = 0
         # self.is_rect = True
         self.use_direct_img = True
-        self.mp: GameContext = mp
+        self.mp: GameContext = gm.map
         self.collision_type = COLLISION_SLIDE
         self.grounded_timer = 0
         self.jmp_timer = 0
+        self.bullet_vel = Vector2(gm.map.pixels_per_meter, 0)
+        self.bullet_dmg=10
 
     def on_resize(self, size: Tuple[int, int]):
         for s in self.states.values():
@@ -73,7 +76,7 @@ class Player(PixelObject):
             self.timer = 0
             self.set_state(state.next_state)
 
-    def update_input(self, delta_t: float, down: List[bool]):
+    def update_movement(self, delta_t: float, down: List[bool]):
         w, h = self.game_size
         self.grounded_timer -= delta_t
         # self.jmp_timer -= delta_t
@@ -83,6 +86,7 @@ class Player(PixelObject):
         spd = w * 1.5
         jmp = -h * 3
         friction = 10
+
         if grounded:
 
             if self.state == 'jump_ready':
@@ -147,10 +151,18 @@ class Player(PixelObject):
                 self.set_state('jump4')
         self.timer += delta_t
 
+    def update_gun(self, down:List[bool]):
+        if down[keys.ACTIONA1]:
+            if self.facing == 'left':
+                self.gm.add_bullet('1.png', self.pos + Vector2(-10, 0), self.bullet_vel*-1,self.bullet_dmg)
+            else:
+                self.gm.add_bullet('1.png', self.pos + Vector2(50, 0), self.bullet_vel,self.bullet_dmg)
+
     def update(self, delta_t: float, down: List[bool]):
         self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
         self.pos += self.vel * delta_t
-        self.update_input(delta_t, down)
+        self.update_movement(delta_t, down)
+        self.update_gun(down)
 
     def draw(self):
         img = self.states[self.state].py_img
