@@ -4,7 +4,9 @@ import pygame
 from cv2 import cv2
 from numpy.core.multiarray import ndarray
 
+from game.Games.Ree.book import Book
 from game.Games.Ree.bullet import Bullet, Living
+from game.Games.Ree.dude import Dude
 from game.Games.Ree.enemy import Enemy
 from game.Games.Ree.flag import Flag
 from game.Games.Ree.player import Player
@@ -36,8 +38,9 @@ class Ree(Game):
 
         self.matcher = Matcher()
 
-        self.add_template('ree/enemies/dude.jpg', Enemy)
+        self.add_template('ree/enemies/dude.jpg', Dude)
         self.add_template('ree/flag.jpg', Flag)
+        self.add_template('ree/enemies/book.jpg', Book)
 
         self.templates = []
 
@@ -52,12 +55,10 @@ class Ree(Game):
         kek = []
 
         def on_appear(transform: ndarray, rect: List[Tuple[float, float]]):
-            print('appear')
             kek.append(E(transform, rect, self))
             self.templates.append(kek[0])
 
         def on_move(transform: ndarray, rect: List[Tuple[float, float]]):
-            print('move')
             ree = kek[0]
             ree.update_hitbox(transform, rect)
 
@@ -73,7 +74,7 @@ class Ree(Game):
         self.wall_physics.update_map(new_map)
         self.player.update_map(new_map)
         self.frame += 1
-        if self.frame == 1:
+        if self.frame == 10:
             self.frame = 0
             self.matcher.update_map(new_map)
 

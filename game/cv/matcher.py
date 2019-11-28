@@ -63,7 +63,7 @@ class Matcher:
                 r = []
                 for a in nr:
                     x, y = a[0][0], a[0][1]
-                    r.append((x * mp.downscale, y * mp.downscale))
+                    r.append((x*mp.downscale, y*mp.downscale))
 
                 assert len(r) == 4
 
@@ -72,7 +72,7 @@ class Matcher:
                 sides = []
                 for i in range(4):
                     sides.append(Vector2(r[(i + 1) % 4][0] - r[i][0], r[(i + 1) % 4][1] - r[i][1]))
-                    if sides[i].mag() < 1e-6:
+                    if sides[i].mag() < 5:
                         is_rect = 0
 
                 if is_rect:
@@ -92,9 +92,9 @@ class Matcher:
 
                 if is_rect:
                     if obj.appeared:
-                        obj.on_move(M, r)
+                        obj.on_move(M[0], r)
                     else:
-                        obj.on_appear(M, r)
+                        obj.on_appear(M[0], r)
                         obj.appeared = True
 
                 # takes in an image and returns all instances of the image in the camera image

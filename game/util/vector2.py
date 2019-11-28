@@ -35,7 +35,8 @@ class Vector2:
         return abs(self.x * other.y - self.y * other.x)
 
     def angle(self, other):
-        return math.acos(self.dot(other) / self.mag() / other.mag())
+        a=self.dot(other) / self.mag() / other.mag()
+        return math.acos(max(-1,min(1,a)))
 
     def unit(self):
         return self / self.mag()
