@@ -6,6 +6,7 @@ from numpy.core.multiarray import ndarray
 
 from game.Games.Ree.bullet import Bullet, Living
 from game.Games.Ree.enemy import Enemy
+from game.Games.Ree.flag import Flag
 from game.Games.Ree.player import Player
 from game.cv.matcher import Matcher
 from game.game import Game, GameContext
@@ -35,14 +36,23 @@ class Ree(Game):
 
         self.matcher = Matcher()
         self.matcher.add_obj(imread('test/book_low_res.jpg'), self.on_enemy_appear, self.on_enemy_move)
+        self.matcher.add_obj(imread('test/BoxSD.jpg'), self.on_flag_appear, self.on_flag_move)
 
         self.enemy = None
+
+        self.flag = None
 
     def on_enemy_appear(self, transform: ndarray, rect: List[Tuple[float, float]]):
         self.enemy = Enemy(transform, rect, self)
 
     def on_enemy_move(self, transform: ndarray, rect: List[Tuple[float, float]]):
         self.enemy.update_hitbox(transform, rect)
+
+    def on_flag_appear(self, transform: ndarray, rect: List[Tuple[float, float]]):
+        self.flag = Flag(transform, rect, self)
+
+    def on_flag_move(self, transform: ndarray, rect: List[Tuple[float, float]]):
+        self.flag.update_hitbox(transform, rect)
 
     def on_resize(self, size: Tuple[int, int]):
         self.player.on_resize(size)
@@ -103,6 +113,9 @@ class Ree(Game):
         if self.enemy is not None:
             self.enemy.update(delta_t)
             self.enemy.draw()
+
+        if self.flag is not None:
+            self.flag.draw()
 
         pygame.display.flip()
 
