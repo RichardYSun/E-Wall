@@ -36,6 +36,7 @@ def check_pixel_collision(a: PixelObject, b: PixelObject) -> int:
 
     if b.is_rect:  # swap so a is rect only
         a, b = b, a
+        a_bounds,b_bounds=b_bounds,a_bounds
 
     # one is image
     xmn, xmx, ymn, ymx = b_bounds

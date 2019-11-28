@@ -15,7 +15,7 @@ class Enemy(PixelObject):
         x, y, w, h = cv2.boundingRect(np.int32(hitbox))
         super().__init__(Vector2(x + w / 2, y + h / 2))
 
-        self.is_rect = 1
+        self.is_rect = True
         self.hitbox: Tuple[float, float, float, float] = (x, x + w, y, y + h)
         self.health: float = 50
         self.cooldown = 1
@@ -26,6 +26,7 @@ class Enemy(PixelObject):
     def draw(self):
         surface = pygame.display.get_surface()
         pygame.draw.circle(surface, (255, 0, 0), self.game.map.cc(self.pos), 10)
+        pygame.draw.rect(surface, (255,0,0), self.game.map.crr(self.hitbox),10)
 
     def update(self, delta_t: float):
         self.lastshot += delta_t

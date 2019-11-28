@@ -48,6 +48,11 @@ class GameContext:
         b = self.cc(r[2:4])
         return a[0], a[1], b[0], b[1]
 
+    def crr(self, r: Tuple[float, float, float, float]) -> Tuple[int, int, int, int]:
+        a = self.cc((r[0],r[2]))
+        b = self.cc((r[1],r[3]))
+        return a[0], a[1], b[0]-a[0], b[1]-a[1]
+
     # convert pygame image to game size
     def conv_img(self, img: pygame.Surface, size: Coordinate):
         return py_resize(img, self.cc(size))
