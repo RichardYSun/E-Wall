@@ -8,6 +8,7 @@ from game.Games.Ree.bullet import Living
 
 from game.game import GameContext
 from game.physics2.collisiontypes import COLLISION_SLIDE
+from game.sound.sounds import load_sound
 from game.util.vector2 import Vector2
 
 
@@ -49,6 +50,7 @@ class Player(Living):
         self.grounded_timer = 0
         self.jmp_timer = 0
         self.shoot_timer = 0
+        self.shoot_sound = load_sound('ree/fire.wav')
 
     def on_resize(self, size: Tuple[int, int]):
         for s in self.states.values():
@@ -158,6 +160,7 @@ class Player(Living):
 
         if self.shoot_timer <= 0 and down[keys.ACTIONA1]:
             self.shoot_timer = 0.5
+            self.shoot_sound.play()
             if self.facing == 'left':
                 self.gm.add_bullet('1.png', self.pos + Vector2(0, 10), bullet_vel * -1, bullet_dmg, self)
             else:
@@ -175,7 +178,7 @@ class Player(Living):
         ctr_x = (bnds[0] + bnds[1]) / 2
         bar_len, bar_w = 70, 6
         rect = self.mp.cr((ctr_x - bar_len / 2, bnds[2] - 6 - bar_w, bar_len, bar_w))
-        rect2 = self.mp.cr((ctr_x - bar_len / 2, bnds[2] - 6 - bar_w, bar_len* self.health/self.max_health, bar_w ))
+        rect2 = self.mp.cr((ctr_x - bar_len / 2, bnds[2] - 6 - bar_w, bar_len * self.health / self.max_health, bar_w))
         pygame.draw.rect(self.mp.surface, (255, 0, 0), rect)
         pygame.draw.rect(self.mp.surface, (0, 255, 0), rect2)
 
@@ -188,3 +191,6 @@ class Player(Living):
 
     def get_hitbox(self):
         return self.states[self.state].cv_img
+
+    def damage(self, damage: float):
+        super().damage(damage)

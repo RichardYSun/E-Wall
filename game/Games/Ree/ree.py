@@ -45,6 +45,9 @@ class Ree(Game):
         self.win_img = None
         self.update_map(mp)
 
+        lose_img = load_py_img('death.png')
+        self.lose_img = pygame.transform.scale(lose_img, pygame.display.get_surface().get_size())
+
     def add_template(self, img: str, E):
         kek = []
 
@@ -108,7 +111,11 @@ class Ree(Game):
                     self.remove_bullet(bul)
 
     def update_game(self, keys_down: List[bool], delta_t: float):
-        if self.won:
+        if self.player.health <= 0:
+            surface = pygame.display.get_surface()
+            surface.blit(self.lose_img, (0, 0))
+            pygame.display.update()
+        elif self.won:
             surface = pygame.display.get_surface()
             surface.blit(self.win_img, (0, 0))
             pygame.display.update()

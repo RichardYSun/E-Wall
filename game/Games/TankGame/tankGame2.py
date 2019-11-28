@@ -83,6 +83,9 @@ class TankGame2(Game):
         self.players.append(Tank(Rectangle(self.spawn1, TankSize*2, TankSize*2)))
         self.players.append(Tank(Rectangle(self.spawn2, TankSize*2, TankSize*2)))
 
+        if len(self.players) > 2:
+            self.players.remove(self.players[2])
+            self.players.remove(self.players[2])
         for tank in self.players:
             self.std_physics.objects.append(tank.hitBox)
             self.pixel_physics.objects.append(tank.hitBox)
@@ -107,12 +110,16 @@ class TankGame2(Game):
     # called upon window resize
     def on_resize(self, size: Tuple[int, int]):
         # resize tank images to correct size
+        w , h = size
+        TankSize = 20 * w / self.map.surface.get_width()
+
         self.blueTankImg = self.map.conv_img(load_py_img('tankAssets/BlueTank.png'), (TankSize*2, TankSize*2)).convert_alpha()
         self.greenTankImg = self.map.conv_img(load_py_img('tankAssets/GreenTank.png'), (TankSize*2, TankSize*2)).convert_alpha()
         self.bulletImg = self.map.conv_img(load_py_img('tankAssets/Bullet.png'), (BulletSize, BulletSize)).convert_alpha()
         self.winnerImg = self.map.conv_img(load_py_img('tankAssets/winner.png'), (70, 70)).convert_alpha()
-        w,h = size
         self.font = load_font('bit9x9.ttf', h // 8)
+
+
 
     def update_map(self, new_map: GameContext):
         super().update_map(new_map)
@@ -161,9 +168,11 @@ class TankGame2(Game):
             # ex
             #  self.map.image_py(self.tankimg, self.players[i].pos, size)
             if i == 0:
-                self.map.image_py(rotateImg(self.blueTankImg , -math.degrees(self.players[i].angle) % 360), self.players[0].hitBox.pos)
+                self.map.image_py(rotateImg(self.blueTankImg , -math.degrees(self.players[i].angle) % 360),
+                                  (self.players[0].hitBox.pos.x - TankSize, self.players[0].hitBox.pos.y - TankSize))
             elif i == 1:
-                self.map.image_py(rotateImg(self.greenTankImg , -math.degrees(self.players[i].angle) % 360), self.players[1].hitBox.pos)
+                self.map.image_py(rotateImg(self.greenTankImg , -math.degrees(self.players[i].angle) % 360),
+                                  (self.players[1].hitBox.pos.x - TankSize, self.players[1].hitBox.pos.y - TankSize))
 
             # self.players[i].hitBox.draw_hitbox(self.map.game_img)
             # cv2.line(self.map.game_img, (int(self.players[i].hitBox.pos.x), int(self.players[i].hitBox.pos.y)),
@@ -278,8 +287,8 @@ class TankGame2(Game):
         # ATM, only player 1 controls implemented, so set the "enter" key for player 1
         if key_down == keys.ACTIONA1:
             if self.bulletCooldowns[0] >= BulletCooldown:
-                bulletSpawn = Vector2(self.players[0].hitBox.pos.x + 40 * math.cos(self.players[0].angle),
-                                      self.players[0].hitBox.pos.y + 40 * math.sin(self.players[0].angle))
+                bulletSpawn = Vector2(self.players[0].hitBox.pos.x + 2*TankSize * math.cos(self.players[0].angle),
+                                      self.players[0].hitBox.pos.y + 2*TankSize * math.sin(self.players[0].angle))
                 bullet = Bullet(Circle(bulletSpawn, BulletSize), BulletSpeed, self.players[0].angle)
                 self.bullets.append(bullet)
                 self.std_physics.objects.append(bullet.hitBox)
@@ -291,8 +300,8 @@ class TankGame2(Game):
 
         if key_down == keys.ACTIONA2:
             if self.bulletCooldowns[1] >= BulletCooldown:
-                bulletSpawn = Vector2(self.players[1].hitBox.pos.x + 40 * math.cos(self.players[1].angle),
-                                      self.players[1].hitBox.pos.y + 40 * math.sin(self.players[1].angle))
+                bulletSpawn = Vector2(self.players[1].hitBox.pos.x + 2*TankSize * math.cos(self.players[1].angle),
+                                      self.players[1].hitBox.pos.y + 2*TankSize * math.sin(self.players[1].angle))
                 bullet = Bullet(Circle(bulletSpawn, BulletSize), BulletSpeed, self.players[1].angle)
                 self.bullets.append(bullet)
                 self.std_physics.objects.append(bullet.hitBox)
