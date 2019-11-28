@@ -20,7 +20,6 @@ class Ree(Game):
         super().__init__(mp)  # make sure to call superclass initializer
         self.bullets: List[Bullet] = []
         self.living: List[Living] = []
-        self.drawables = []
 
         self.pixel_physics = PixelPhysics()
         self.wall_physics = WallPhysics()
@@ -29,7 +28,6 @@ class Ree(Game):
 
         self.player = Player(Vector2(0, 0), self)
         self.pixel_physics.objects.append(self.player)
-        self.drawables.append(self.player)
         self.living.append(self.player)
         self.wall_physics.objects.append(self.player)
 
@@ -46,16 +44,14 @@ class Ree(Game):
             self.frame = 0
             self.matcher.update_map(new_map)
 
-    def add_bullet(self, img: str, pos: Vector2, vel: Vector2, damage: float):
-        b = Bullet(self.map, pos, img, damage, vel)
+    def add_bullet(self, img: str, pos: Vector2, vel: Vector2, damage: float, src, size=None):
+        b = Bullet(self.map, pos, img, damage, vel, src, size)
         self.pixel_physics.objects.append(b)
         self.bullets.append(b)
-        self.drawables.append(b)
 
     def remove_bullet(self, b: Bullet):
         self.pixel_physics.objects.remove(b)
         self.bullets.remove(b)
-        self.drawables.remove(b)
 
     def update_bullets(self, delta_t: float):
         for j in range(len(self.bullets) - 1, -1, -1):
@@ -65,7 +61,7 @@ class Ree(Game):
 
             for i in range(len(self.living) - 1, -1, -1):
                 obj = self.living[i]
-                if check_pixel_collision(obj, bul) > 0:
+                if bul.src is not obj and check_pixel_collision(obj, bul) > 0:
                     obj.damage(bul.damage)
                     if obj.health <= 0:
                         obj.die()
@@ -88,10 +84,12 @@ class Ree(Game):
         self.update_bullets(delta_t)
 
         self.player.draw()
+        for b in self.bullets:
+            b.draw(self.map)
 
         pygame.display.flip()
 
 
 if __name__ == "__main__":
-    test(Ree, None)  # '../ree/enemies/squaredude.jpg')
+    test(Ree, 'kust.bmp')  # '../ree/enemies/squaredude.jpg')
     # test(Ree,'smalldude3.jpg')

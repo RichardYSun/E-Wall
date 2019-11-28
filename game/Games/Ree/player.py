@@ -45,8 +45,7 @@ class Player(Living):
         self.collision_type = COLLISION_SLIDE
         self.grounded_timer = 0
         self.jmp_timer = 0
-        self.bullet_vel = Vector2(gm.map.pixels_per_meter, 0)
-        self.bullet_dmg=10
+        self.shoot_timer = 0
 
     def on_resize(self, size: Tuple[int, int]):
         for s in self.states.values():
@@ -151,18 +150,23 @@ class Player(Living):
                 self.set_state('jump4')
         self.timer += delta_t
 
-    def update_gun(self, down:List[bool]):
-        if down[keys.ACTIONA1]:
+    def update_gun(self, down: List[bool], delta_t: float):
+        self.shoot_timer -= delta_t
+        bullet_vel = Vector2(self.gm.map.pixels_per_meter, 0)
+        bullet_dmg = 10
+
+        if self.shoot_timer <= 0 and down[keys.ACTIONA1]:
+            self.shoot_timer = 0.5
             if self.facing == 'left':
-                self.gm.add_bullet('1.png', self.pos + Vector2(-10, 0), self.bullet_vel*-1,self.bullet_dmg)
+                self.gm.add_bullet('1.png', self.pos + Vector2(-10, 100), bullet_vel * -1, bullet_dmg,self)
             else:
-                self.gm.add_bullet('1.png', self.pos + Vector2(50, 0), self.bullet_vel,self.bullet_dmg)
+                self.gm.add_bullet('1.png', self.pos + Vector2(-10, 100), bullet_vel, bullet_dmg, self)
 
     def update(self, delta_t: float, down: List[bool]):
         self.vel.y += 9.81 * delta_t * self.mp.pixels_per_meter
         self.pos += self.vel * delta_t
         self.update_movement(delta_t, down)
-        self.update_gun(down)
+        self.update_gun(down,delta_t)
 
     def draw(self):
         img = self.states[self.state].py_img

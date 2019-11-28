@@ -18,6 +18,7 @@ class Bullet(PixelObject):
                  img: str,
                  damage: float,
                  vel: Vector2,
+                 src,
                  size=None
                  ):
         super().__init__(pos)
@@ -25,15 +26,16 @@ class Bullet(PixelObject):
         self.vel = vel
         self.damage = damage
         self.death_flag = False
+        self.src=src
 
-        cv_img = imread('ree/bullet/' + img)
+        cv_img = imread('ree/bullet/' + img, cv2.IMREAD_UNCHANGED)
         if size is None:
             size = cv_img.shape[1], cv_img.shape[0]
         else:
             cv_img = cv2.resize(cv_img, size)
 
         ang = math.atan2(vel.x, vel.y)
-
+        cv_img = cv2.extractChannel(cv_img, 3)
         self.cv_img = imutils.rotate_bound(cv_img, ang)
         # ignore resizing of window cause ppl won't notice anyways
         p = mp.conv_img(load_py_img('ree/bullet/' + img).convert_alpha(), size)

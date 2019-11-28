@@ -45,11 +45,11 @@ def check_pixel_collision(a: PixelObject, b: PixelObject) -> int:
         if b.use_direct_img:
             return cv2.countNonZero(b_sub)
         raise Exception('unsupported hitbox type: use_direct_img=false')
-
     # both images, binary and
     if a.use_direct_img:
         xmn, xmx, ymn, ymx = a_bounds
-        a_sub = b_hit[s[2] - ymn:s[3] - ymn, s[0] - xmn:s[1] - xmn]
+        a_hit=a.get_hitbox()
+        a_sub = a_hit[s[2] - ymn:s[3] - ymn, s[0] - xmn:s[1] - xmn]
         return cv2.countNonZero(cv2.bitwise_and(a_sub, b_sub))
 
     raise Exception('unsupported hitbox type: use_direct_img=false')
