@@ -27,6 +27,8 @@ def button():
         return None
     newData = (arduino.readline())
     dataDecode = newData.decode("utf-8")
+    if(dataDecode == ''):
+        return None
     splitWork = True
     button = None
     state = None
