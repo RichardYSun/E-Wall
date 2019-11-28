@@ -24,6 +24,7 @@ class Flag(PixelObject):
     def draw(self):
         surface = pygame.display.get_surface()
         pygame.draw.circle(surface, (0, 255, 0), self.game.map.cc(self.pos), 10)
+        pygame.draw.rect(surface, (255, 0, 0), self.game.map.crr(self.hitbox), 10)
 
     def update_hitbox(self, m, new_hitbox: List[Tuple[int, int]]):
         x, y, w, h = cv2.boundingRect(np.int32[new_hitbox])
@@ -33,10 +34,11 @@ class Flag(PixelObject):
 
     def rect_intersect(self, r1: List[Tuple[float, float]], r2: List[Tuple[float, float]]):
         rect = [max(r1[0], r2[0]), min(r1[1], r2[1]), max(r1[2], r2[2]), min(r1[3], r2[3])]
-        return rect[0] < rect[1] and rect[2] < rect[3]
+        return rect[0] <= rect[1] and rect[2] <= rect[3]
 
     def update(self):
         if check_pixel_collision(self, self.game.player) > 0:
+            print('win')
             self.game.win()
 
     def get_bounds(self) -> Tuple[float, float, float, float]:

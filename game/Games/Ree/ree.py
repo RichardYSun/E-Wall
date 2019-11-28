@@ -42,6 +42,9 @@ class Ree(Game):
 
         self.flag = None
 
+        self.won = 0
+        self.win_img = None
+
     def on_enemy_appear(self, transform: ndarray, rect: List[Tuple[float, float]]):
         self.enemy = Enemy(transform, rect, self)
 
@@ -99,31 +102,37 @@ class Ree(Game):
                     del self.bullets[j]
 
     def update_game(self, keys_down: List[bool], delta_t: float):
-        self.pixel_physics.update(delta_t)
-        self.wall_physics.update(delta_t)
+        if self.won:
+            surface = pygame.display.get_surface()
+            surface.blit(self.win_img, (0, 0))
+            pygame.display.update()
+        else:
+            self.pixel_physics.update(delta_t)
+            self.wall_physics.update(delta_t)
 
-        self.player.update(delta_t, keys_down)
+            self.player.update(delta_t, keys_down)
 
-        self.update_bullets(delta_t)
+            self.update_bullets(delta_t)
 
-        self.player.draw()
-        for b in self.bullets:
-            b.draw(self.map)
+            self.player.draw()
+            for b in self.bullets:
+                b.draw(self.map)
 
-        if self.enemy is not None:
-            self.enemy.update(delta_t)
-            self.enemy.draw()
+            if self.enemy is not None:
+                self.enemy.update(delta_t)
+                self.enemy.draw()
 
-        if self.flag is not None:
-            self.flag.draw()
+            if self.flag is not None:
+                self.flag.update()
+                self.flag.draw()
 
-        pygame.display.flip()
+            pygame.display.flip()
 
     def win(self):
         surface = pygame.display.get_surface()
         win_img = load_py_img('Win.png')
-        win_img = pygame.transform.scale(win_img, surface.get_size())
-        surface.blit(win_img, (0, 0))
+        self.win_img = pygame.transform.scale(win_img, surface.get_size())
+        self.won = 1
 
 
 if __name__ == "__main__":
