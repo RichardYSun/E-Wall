@@ -23,7 +23,7 @@ class GeneralEnemy(Living):
         self.game = game
         self.p_transform = m
 
-        self.s = 10
+        self.s = 20
         s = self.s
         self.hitbox: Tuple[float, float, float, float] = (x - s, x + s + w, y - s, y + s + h)
 
@@ -81,8 +81,8 @@ class GeneralEnemy(Living):
         rect = self.game.map.cr((ctr_x - bar_len / 2, bounds[2] - 6 - bar_w, bar_len, bar_w))
         rect2 = self.game.map.cr(
             (ctr_x - bar_len / 2, bounds[2] - 6 - bar_w, bar_len * self.health / self.max_health, bar_w))
-        pygame.draw.rect(self.game.map.surface, (255, 255, 255), rect)
         pygame.draw.rect(self.game.map.surface, (255, 255, 255), rect2)
+        pygame.draw.rect(self.game.map.surface, (255, 255, 255), rect,2)
 
     def damage(self, damage: float):
         super().damage(damage)

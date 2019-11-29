@@ -15,7 +15,7 @@ from game.util.vector2 import Vector2
 class Player(Living):
 
     def __init__(self, pos: Vector2, gm):
-        super().__init__(100, pos)
+        super().__init__(2000, pos)
         self.facing = 'right'
         self.state: str = 'rest'
         self.game_size = (115, 150)
@@ -156,7 +156,7 @@ class Player(Living):
     def update_gun(self, down: List[bool], delta_t: float):
         self.shoot_timer -= delta_t
         bullet_vel = Vector2(self.gm.map.pixels_per_meter, 0)
-        bullet_dmg = 10
+        bullet_dmg = 100
 
         if self.shoot_timer <= 0 and down[keys.ACTIONA1]:
             self.shoot_timer = 0.5
