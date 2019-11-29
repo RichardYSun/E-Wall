@@ -11,7 +11,7 @@ class AreaSelectWindow:
         self.t = 0
         self.l = 0
         self.r = w
-        self.b = h
+        self.b = h-400
         self.w = w
         self.h = h
 

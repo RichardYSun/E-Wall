@@ -38,8 +38,8 @@ class Ree(Game):
 
         self.matcher = Matcher()
 
-        self.add_template('ree/enemies/dude.jpg', Dude)
-        # self.add_template('ree/flag.jpg', Flag)
+        # self.add_template('ree/enemies/dude.jpg', Dude)
+        self.add_template('ree/flag2.jpg', Flag)
         # self.add_template('ree/enemies/book.jpg', Book)
 
         self.templates = []
