@@ -39,8 +39,8 @@ class Ree(Game):
         self.matcher = Matcher()
 
         self.add_template('ree/enemies/dude.jpg', Dude)
-        self.add_template('ree/flag.jpg', Flag)
-        self.add_template('ree/enemies/book.jpg', Book)
+        # self.add_template('ree/flag.jpg', Flag)
+        # self.add_template('ree/enemies/book.jpg', Book)
 
         self.templates = []
 
@@ -55,6 +55,7 @@ class Ree(Game):
         kek = []
 
         def on_appear(transform: ndarray, rect: List[Tuple[float, float]]):
+            print('appear')
             kek.append(E(transform, rect, self))
             self.templates.append(kek[0])
 
@@ -135,11 +136,6 @@ class Ree(Game):
             for k in self.templates:
                 k.update(delta_t)
                 k.draw()
-
-            pygame.surfarray.pixels_green(self.map.surface).fill(0)
-            pygame.surfarray.pixels_blue(self.map.surface).fill(0)
-
-            pygame.display.flip()
 
     def win(self):
         surface = pygame.display.get_surface()

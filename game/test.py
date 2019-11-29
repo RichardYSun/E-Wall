@@ -109,6 +109,11 @@ def test(G, cam='ree'):
         # update game
         cur_time = time.time()
         game.update_game(keys_down, min(cur_time - last_time, 0.1))
+
+        pygame.surfarray.pixels_green(ctx.surface).fill(0)
+        pygame.surfarray.pixels_blue(ctx.surface).fill(0)
+
+        pygame.display.flip()
         # g_lock.release()
         total_time += cur_time - last_time
 
