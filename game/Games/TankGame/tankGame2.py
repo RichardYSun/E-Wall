@@ -83,9 +83,6 @@ class TankGame2(Game):
         self.players.append(Tank(Rectangle(self.spawn1, TankSize*2, TankSize*2)))
         self.players.append(Tank(Rectangle(self.spawn2, TankSize*2, TankSize*2)))
 
-        if len(self.players) > 2:
-            self.players.remove(self.players[2])
-            self.players.remove(self.players[2])
         for tank in self.players:
             self.std_physics.objects.append(tank.hitBox)
             self.pixel_physics.objects.append(tank.hitBox)
@@ -176,11 +173,12 @@ class TankGame2(Game):
                 rot_image = pygame.transform.rotate(self.greenTankImg, -math.degrees(self.players[i].angle) % 360)
                 rect = rot_image.get_rect()
                 rect.center = self.map.cc(self.players[i].hitBox.pos)
+                self.map.surface.blit(rot_image, rect)
 
             # self.players[i].hitBox.draw_hitbox(self.map.game_img)
             # cv2.line(self.map.game_img, (int(self.players[i].hitBox.pos.x), int(self.players[i].hitBox.pos.y)),
             #          (int(self.players[i].hitBox.pos.x + 12*math.cos(self.players[i].angle)),
-            #             int(self.players[i].hitBox.pos.y + 12*math.sin(self.players[i].angle))), (69,42,210), 4)
+            #          int(self.players[i].hitBox.pos.y + 12*math.sin(self.players[i].angle))), (69,42,210), 4)
 
         for bullet in self.bullets:
             bullet.timer -= 1
