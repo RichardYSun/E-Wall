@@ -179,8 +179,8 @@ class Player(Living):
         bar_len, bar_w = 70, 6
         rect = self.mp.cr((ctr_x - bar_len / 2, bnds[2] - 6 - bar_w, bar_len, bar_w))
         rect2 = self.mp.cr((ctr_x - bar_len / 2, bnds[2] - 6 - bar_w, bar_len * self.health / self.max_health, bar_w))
-        pygame.draw.rect(self.mp.surface, (255, 0, 0), rect)
-        pygame.draw.rect(self.mp.surface, (0, 255, 0), rect2)
+        pygame.draw.rect(self.mp.surface, (255, 255, 255), rect2)
+        pygame.draw.rect(self.mp.surface, (255, 255, 255), rect,2)
 
     def draw(self):
         img = self.states[self.state].py_img
