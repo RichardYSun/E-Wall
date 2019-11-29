@@ -31,14 +31,14 @@ class EdgeDetector:
 
     def detect_edges(self, mp: GameContext):
         frame = mp.cam_img
-        algorithm = ParamWindow.get_int('algorithm', 2, 2)
+        algorithm = 2  # ParamWindow.get_int('algorithm', 2, 2)
 
-        color_space = ParamWindow.get_int('color space', 1, 0)
+        color_space = 0  # ParamWindow.get_int('color space', 1, 0)
         if color_space == hsv:
             cv2.cvtColor(frame, cv2.COLOR_BGR2HSV, dst=frame)
 
         # filter
-        blur_radius = ParamWindow.get_int('blur radius', 3, 3) * 2 + 1
+        blur_radius = 3 * 2 + 1  # ParamWindow.get_int('blur radius', 3, 3) * 2 + 1
         if blur_radius > 2:
             cv2.GaussianBlur(frame, (blur_radius, blur_radius), 0, dst=frame)
 
@@ -66,7 +66,7 @@ class EdgeDetector:
             rc = ParamWindow.get_int('r(v)', 255, 76)
             res = bc * b + gc * g + rc * r
 
-            thresholding = ParamWindow.get_int('thresholding', 2, 1)
+            thresholding = 1  # ParamWindow.get_int('thresholding', 2, 1)
             if thresholding == thres_none:
                 res = res.astype(np.uint8)
             elif thresholding == thres:
@@ -91,7 +91,7 @@ class EdgeDetector:
             res = cv2.Canny(frame, canny_lower, canny_higher)
 
         # detect lines
-        do_lsd = 0#ParamWindow.get_int('do lsd', 1, 0)
+        do_lsd = 0  # ParamWindow.get_int('do lsd', 1, 0)
         if do_lsd == 1:
             lines = self.lsd.detect(res)
             if lines is not None:
@@ -114,6 +114,6 @@ class EdgeDetector:
         # removes noise
         max_sz = ParamWindow.get_int('noise', 11, 3) | 1
         it = ParamWindow.get_int('it', 5, 0)
-        if it>0:
+        if it > 0:
             kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (max_sz, max_sz))
             mp.edges = cv2.morphologyEx(mp.edges, cv2.MORPH_OPEN, kernel, iterations=it)
