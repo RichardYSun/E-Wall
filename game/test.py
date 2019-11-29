@@ -110,8 +110,14 @@ def test(G, cam='ree'):
         cur_time = time.time()
         game.update_game(keys_down, min(cur_time - last_time, 0.1))
 
-        pygame.surfarray.pixels_green(ctx.surface).fill(0)
-        pygame.surfarray.pixels_blue(ctx.surface).fill(0)
+
+        fr = ParamWindow.get_int('filter red', 1, 1)
+        fg = ParamWindow.get_int('filter blue', 1, 1)
+        fb = ParamWindow.get_int('filter green', 1, 1)
+
+        if fr:pygame.surfarray.pixels_red(ctx.surface).fill(0)
+        if fg:pygame.surfarray.pixels_green(ctx.surface).fill(0)
+        if fb:pygame.surfarray.pixels_blue(ctx.surface).fill(0)
 
         pygame.display.flip()
         # g_lock.release()
