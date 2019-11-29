@@ -17,9 +17,10 @@ import threading
 
 
 def derp(image_io, edge_detector, game, g_lock: threading.Lock):
+    prev_size = (0, 0)
     while True:
         # get new webcam image
-        ctx = image_io.get_img()
+        ctx: GameContext = image_io.get_img()
 
         # image processing
         edge_detector.detect_edges(ctx)
@@ -27,7 +28,14 @@ def derp(image_io, edge_detector, game, g_lock: threading.Lock):
         # give game new edges
         game.update_map(ctx)
 
+        h, w = ctx.original_img.shape[:2]
+
+        if w != prev_size[0] or h != prev_size[1]:
+            game.on_resize(ctx.pysize)
+
         cv2.waitKey(1)
+
+        prev_size = (w, h)
 
 
 def test(G, cam='ree'):

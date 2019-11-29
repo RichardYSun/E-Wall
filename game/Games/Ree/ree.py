@@ -136,6 +136,9 @@ class Ree(Game):
                 k.update(delta_t)
                 k.draw()
 
+            pygame.surfarray.pixels_green(self.map.surface).fill(0)
+            pygame.surfarray.pixels_blue(self.map.surface).fill(0)
+
             pygame.display.flip()
 
     def win(self):
