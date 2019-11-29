@@ -4,6 +4,7 @@ import pygame
 from cv2 import cv2
 from numpy.core.multiarray import ndarray
 
+from game import keys
 from game.Games.Ree.book import Book
 from game.Games.Ree.bullet import Bullet, Living
 from game.Games.Ree.dude import Dude
@@ -38,9 +39,10 @@ class Ree(Game):
 
         self.matcher = Matcher()
 
-        # self.add_template('ree/enemies/dude.jpg', Dude)
-        self.add_template('ree/flag2.jpg', Flag)
-        # self.add_template('ree/enemies/book.jpg', Book)
+        #self.add_template('ree/enemies/dude.jpg', Dude)
+        self.add_template('ree/flag3.jpg', Flag)
+        self.add_template('ree/enemies/book.jpg', Book)
+        # self.add_template('test/book.jpg', Flag)
 
         self.templates = []
 
@@ -75,7 +77,7 @@ class Ree(Game):
         self.wall_physics.update_map(new_map)
         self.player.update_map(new_map)
         self.frame += 1
-        if self.frame == 10 :
+        if self.frame == 10:
             self.frame = 0
             self.matcher.update_map(new_map)
 
@@ -113,14 +115,16 @@ class Ree(Game):
                     self.remove_bullet(bul)
 
     def update_game(self, keys_down: List[bool], delta_t: float):
+        if keys_down[keys.ACTIONB1]:
+            self.won=False
+            self.player.health=self.player.max_health
+            self.player.pos=Vector2(0,0)
         if self.player.health <= 0:
             surface = pygame.display.get_surface()
             surface.blit(self.lose_img, (0, 0))
-            pygame.display.update()
         elif self.won:
             surface = pygame.display.get_surface()
             surface.blit(self.win_img, (0, 0))
-            pygame.display.update()
         else:
             self.pixel_physics.update(delta_t)
             self.wall_physics.update(delta_t)
